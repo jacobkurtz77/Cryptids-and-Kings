@@ -1,0 +1,441 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Cryptids & Kings — Bigfoot</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#10261f;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:820px;margin:auto;padding:10px}
+.panel{background:#1e4037;border:4px solid #7a5637;border-radius:18px;padding:12px;box-shadow:inset 0 0 0 3px #10302a}
+h1{font-size:27px;margin:0 0 8px}.muted{color:#d7c89b}.section{font-size:20px;font-weight:900;margin:18px 0 7px}
+label.caption{display:block;color:#efc861;font-weight:900;margin:8px 0 4px}
+select{width:100%;background:#f4e8bd;color:#20312a;border:4px solid #865f3c;border-radius:14px;padding:12px 10px;font-size:17px;font-weight:800;-webkit-appearance:menulist}
+details{margin:11px 0;background:#17342f;border:3px solid #665039;border-radius:14px;padding:9px 12px}
+summary{font-weight:900;color:#ffd66b;font-size:17px}
+details div{padding:6px 0;border-top:1px solid #ffffff18}
+#engine{font-weight:900;margin-top:12px;color:#9be391}
+#msg{font-weight:800;margin:9px 0 12px}
+#startToggle,#cast0,#cast1,#cast2,#cast3{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+#startControl{display:block;width:100%;text-align:center;padding:17px;background:#4c8749;color:#fff0bf;border:4px solid #765137;border-radius:14px;font-size:23px;font-weight:1000;user-select:none;-webkit-user-select:none}
+#startControl:active{transform:scale(.99)}
+#game{display:none}
+#startToggle:checked ~ #setup{display:none}
+#startToggle:checked ~ #game{display:block}
+.hud{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:16px;font-weight:800;margin-bottom:8px}
+.hud b{color:white}
+#backControl{margin-left:auto;background:#f3f3f3;color:#087cff;border-radius:999px;padding:10px 17px;font-weight:800}
+.arena{position:relative;border:4px solid #785438;border-radius:17px;overflow:hidden;background:#678f59}
+canvas{display:block;width:100%;height:auto}
+#roomName{position:absolute;left:14px;top:14px;background:#17372fcc;border:3px solid #a37b4c;border-radius:10px;padding:8px 12px;font-weight:1000}
+#status{font-weight:900;font-size:16px;padding:10px 3px;min-height:42px}
+#skills{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.skill{display:block;min-height:90px;background:#28483f;border:4px solid #785438;border-radius:14px;padding:10px;color:#f6e5b4;font-weight:900;position:relative;user-select:none;-webkit-user-select:none}
+.skill.cooling{opacity:.55}
+.skill small{display:block;color:#d4c79d;font-weight:500;margin-top:4px}
+.cd{position:absolute;right:9px;top:7px;font-size:12px}
+#reward{display:none;margin-top:10px;background:#17342f;border:4px solid #785438;border-radius:15px;padding:11px}
+.upgradeRadio{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.upgrade{display:block;background:#294b40;border:3px solid #87603d;border-radius:12px;padding:11px;margin-top:8px;color:#f6e3ae;font-weight:800}
+.upgrade small{display:block;color:#d5c79e;margin-top:3px}
+@media(max-width:500px){.wrap{padding:5px}.panel{padding:9px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<input id="startToggle" type="checkbox" onchange="startToggleChanged(this)">
+
+<section id="setup" class="panel">
+<h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
+<div class="muted">Choose Bigfoot's loadout, then start the run.</div>
+
+<div class="section">BASIC ATTACK</div>
+<label class="caption">Choose 1</label>
+<select id="basic">
+<option value="swipe">Mighty Swipes — melee • every 3rd hit launches</option>
+<option value="rock">Throwing Rocks — ranged • safer spacing</option>
+</select>
+
+<div class="section">ABILITIES — PICK 3</div>
+<label class="caption">Ability 1</label>
+<select id="ability1" onchange="syncAbilityChoices()">
+<option value="slam" selected>Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="tree">Uproot — 7s • piercing tree line</option>
+<option value="honey">Honey Stash — 12s • shield + recovery boost</option>
+<option value="shroud">Forest Shroud — 11s • untargetable + bonus hit</option>
+<option value="rage">Wild Rage — 13s • attack-speed burst</option>
+<option value="wall">Boulder Wall — 12s • shield + knockback</option>
+</select>
+<label class="caption">Ability 2</label>
+<select id="ability2" onchange="syncAbilityChoices()">
+<option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="tree" selected>Uproot — 7s • piercing tree line</option>
+<option value="honey">Honey Stash — 12s • shield + recovery boost</option>
+<option value="shroud">Forest Shroud — 11s • untargetable + bonus hit</option>
+<option value="rage">Wild Rage — 13s • attack-speed burst</option>
+<option value="wall">Boulder Wall — 12s • shield + knockback</option>
+</select>
+<label class="caption">Ability 3</label>
+<select id="ability3" onchange="syncAbilityChoices()">
+<option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="tree">Uproot — 7s • piercing tree line</option>
+<option value="honey" selected>Honey Stash — 12s • shield + recovery boost</option>
+<option value="shroud">Forest Shroud — 11s • untargetable + bonus hit</option>
+<option value="rage">Wild Rage — 13s • attack-speed burst</option>
+<option value="wall">Boulder Wall — 12s • shield + knockback</option>
+</select>
+
+<details>
+<summary>Ability effects</summary>
+<div><b>Earth Slam</b> — 360° damage and strong knockback.</div>
+<div><b>Uproot</b> — throw a tree through enemies along the green aim line.</div>
+<div><b>Honey Stash</b> — shield + armor and +10% to next Camp Recovery.</div>
+<div><b>Forest Shroud</b> — brief untargetability and empowered next basic.</div>
+<div><b>Wild Rage</b> — greatly faster basics for 6 seconds.</div>
+<div><b>Boulder Wall</b> — large shield and defensive knockback blast.</div>
+</details>
+
+<div class="section">ULTIMATE</div>
+<select id="ult">
+<option value="roar">Primal Roar — damage + fear + 8s buff</option>
+<option value="avalanche" selected>Avalanche — huge instant room-wide damage</option>
+</select>
+
+<div class="section">PASSIVES — PICK 2</div>
+<label class="caption">Passive 1</label>
+<select id="passive1" onchange="syncPassiveChoices()">
+<option value="recover" selected>Cryptid Recovery — room heal becomes 20%</option>
+<option value="hide">Thick Hide — 12% less damage taken</option>
+<option value="heavy">Heavyweight — stronger knockback</option>
+<option value="instinct">Wild Instinct — big hits trigger attack speed</option>
+<option value="strength">Ancient Strength — every 3rd basic +60%</option>
+<option value="blood">Forest Blood — elites add max HP</option>
+</select>
+<label class="caption">Passive 2</label>
+<select id="passive2" onchange="syncPassiveChoices()">
+<option value="recover">Cryptid Recovery — room heal becomes 20%</option>
+<option value="hide">Thick Hide — 12% less damage taken</option>
+<option value="heavy">Heavyweight — stronger knockback</option>
+<option value="instinct">Wild Instinct — big hits trigger attack speed</option>
+<option value="strength" selected>Ancient Strength — every 3rd basic +60%</option>
+<option value="blood">Forest Blood — elites add max HP</option>
+</select>
+
+<div id="engine">ENGINE READY</div>
+<div id="msg">Duplicate abilities or passives will block the run.</div>
+<label id="startControl" for="startToggle">START RUN</label>
+</section>
+
+<section id="game">
+<div class="hud">
+<span>Wave <b id="wave">1</b>/5</span>
+<span>Lv. <b id="lvl">1</b></span>
+<span>HP <b id="hpText">800 / 800</b></span>
+<span>XP <b id="xpText">0 / 8</b></span>
+<span>Enemies <b id="left">0</b></span>
+<label id="backControl" for="startToggle">New Loadout</label>
+</div>
+
+<div class="arena">
+<canvas id="field" width="760" height="520"></canvas>
+<div id="roomName">SUNNY TRAIL</div>
+</div>
+<div id="status">Starting...</div>
+<div id="skills"></div>
+
+<div id="reward">
+<div id="camp"></div>
+<div id="rewardCards"></div>
+</div>
+</section>
+</div>
+
+<script>
+var S=null, running=false, last=0, raf=0;
+var field=document.getElementById("field");
+var ctx=null;
+
+var abilityChoices=[
+ ["slam","Earth Slam — 5s • 360° AoE + knockback"],
+ ["tree","Uproot — 7s • piercing tree line"],
+ ["honey","Honey Stash — 12s • shield + recovery boost"],
+ ["shroud","Forest Shroud — 11s • untargetable + bonus hit"],
+ ["rage","Wild Rage — 13s • attack-speed burst"],
+ ["wall","Boulder Wall — 12s • shield + knockback"]
+];
+var passiveChoices=[
+ ["recover","Cryptid Recovery — room heal becomes 20%"],
+ ["hide","Thick Hide — 12% less damage taken"],
+ ["heavy","Heavyweight — stronger knockback"],
+ ["instinct","Wild Instinct — big hits trigger attack speed"],
+ ["strength","Ancient Strength — every 3rd basic +60%"],
+ ["blood","Forest Blood — elites add max HP"]
+];
+var skillInfo={
+ slam:{name:"Earth Slam",desc:"360° damage + knockback",cd:5},
+ tree:{name:"Uproot",desc:"Piercing tree throw",cd:7},
+ honey:{name:"Honey Stash",desc:"Shield + stronger next recovery",cd:12},
+ shroud:{name:"Forest Shroud",desc:"Untargetable + empowered basic",cd:11},
+ rage:{name:"Wild Rage",desc:"6s attack-speed burst",cd:13},
+ wall:{name:"Boulder Wall",desc:"Shield + knockback blast",cd:12},
+ roar:{name:"Primal Roar",desc:"Damage + fear + combat buff",cd:24},
+ avalanche:{name:"Avalanche",desc:"Huge room-wide burst",cd:26}
+};
+
+function byId(id){return document.getElementById(id)}
+function distance(a,b){var dx=a.x-b.x,dy=a.y-b.y;return Math.sqrt(dx*dx+dy*dy)}
+
+function rebuildSelect(id,choices,used){
+ var el=byId(id),cur=el.value,html="",i,v,label;
+ for(i=0;i<choices.length;i++){
+   v=choices[i][0];label=choices[i][1];
+   if(v===cur || !used[v])html+='<option value="'+v+'"'+(v===cur?' selected':'')+'>'+label+'</option>';
+ }
+ el.innerHTML=html;
+}
+function syncAbilityChoices(){
+ var ids=["ability1","ability2","ability3"],vals={},i,j,used;
+ for(i=0;i<ids.length;i++)vals[ids[i]]=byId(ids[i]).value;
+ for(i=0;i<ids.length;i++){
+   used={};
+   for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;
+   rebuildSelect(ids[i],abilityChoices,used);
+ }
+}
+function syncPassiveChoices(){
+ var ids=["passive1","passive2"],vals={},i,j,used;
+ for(i=0;i<ids.length;i++)vals[ids[i]]=byId(ids[i]).value;
+ for(i=0;i<ids.length;i++){
+   used={};
+   for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;
+   rebuildSelect(ids[i],passiveChoices,used);
+ }
+}
+
+function readLoadout(){
+ var a=[byId("ability1").value,byId("ability2").value,byId("ability3").value];
+ var p=[byId("passive1").value,byId("passive2").value];
+ var ao={},po={},i;
+ for(i=0;i<a.length;i++)ao[a[i]]=1;
+ for(i=0;i<p.length;i++)po[p[i]]=1;
+ var ac=0,pc=0,k;
+ for(k in ao)if(ao.hasOwnProperty(k))ac++;
+ for(k in po)if(po.hasOwnProperty(k))pc++;
+ if(ac!==3){byId("msg").innerHTML="Choose 3 different abilities.";return null}
+ if(pc!==2){byId("msg").innerHTML="Choose 2 different passives.";return null}
+ return {basic:byId("basic").value,abilities:a,ult:byId("ult").value,passives:p};
+}
+
+function makeEnemy(type,x,y){
+ var d;
+ if(type==="boss")d=[2300,28,44,55];
+ else if(type==="brute")d=[340,31,24,32];
+ else if(type==="archer")d=[100,38,12,145];
+ else if(type==="mush")d=[120,36,14,38];
+ else d=[105,46,12,34];
+ return {type:type,x:x,y:y,hp:d[0],max:d[0],spd:d[1],dmg:d[2],range:d[3],atk:Math.random(),fear:0,dead:false};
+}
+function nearest(){
+ if(!S||!S.en.length)return null;
+ var best=S.en[0],bd=distance(S.h,best),i,d;
+ for(i=1;i<S.en.length;i++){d=distance(S.h,S.en[i]);if(d<bd){best=S.en[i];bd=d}}
+ return best;
+}
+function damage(e,n,k){
+ if(!e||e.dead)return;
+ e.hp-=n;
+ if(k){
+   var dx=e.x-S.h.x,dy=e.y-S.h.y,z=Math.sqrt(dx*dx+dy*dy)||1;
+   e.x+=dx/z*k;e.y+=dy/z*k;
+ }
+ S.fx.push({type:"num",x:e.x,y:e.y,n:Math.round(n),t:.45});
+ if(e.hp<=0){
+   e.dead=true;S.xp+=e.type==="brute"?3:(e.type==="boss"?15:1);
+   if(e.type==="brute"&&S.passives.indexOf("blood")>=0){S.h.max+=20;S.h.hp+=20}
+ }
+}
+function spawnWave(){
+ var counts=[9,13,16,20,1],n=counts[S.wave-1],i,a,r,t;
+ S.en=[];S.proj=[];S.fx=[];S.paused=false;S.h.x=380;S.h.y=275;
+ for(i=0;i<n;i++){
+   a=i/n*Math.PI*2+Math.random()*.3;r=205+Math.random()*75;
+   t=S.wave===5?"boss":(i%8===0?"brute":(i%5===0?"archer":(i%4===0?"mush":"gob")));
+   S.en.push(makeEnemy(t,380+Math.cos(a)*r,275+Math.sin(a)*r));
+ }
+ byId("wave").innerHTML=S.wave;
+ byId("roomName").innerHTML=["SUNNY TRAIL","GOBLIN PICNIC","MUSHROOM HOLLOW","OLD RUINS","GRUMBLEGUT"][S.wave-1];
+}
+function buildSkills(){
+ var bar=byId("skills"),all=S.abilities.concat([S.ult]),i,id,input,label;
+ bar.innerHTML="";
+ for(i=0;i<all.length;i++){
+   id=all[i];
+   input=document.createElement("input");
+   input.type="checkbox";input.id="cast"+i;input.setAttribute("data-skill",id);
+   input.onchange=function(){
+     if(this.checked){this.checked=false;cast(this.getAttribute("data-skill"))}
+   };
+   label=document.createElement("label");label.className="skill";label.htmlFor=input.id;label.setAttribute("data-skill",id);
+   label.innerHTML="<b>"+skillInfo[id].name+"</b><small>"+skillInfo[id].desc+"</small><span class='cd'>READY</span>";
+   bar.appendChild(input);bar.appendChild(label);
+ }
+}
+function cast(id){
+ if(!S||S.paused||(S.cds[id]||0)>0)return;
+ S.cds[id]=skillInfo[id].cd;
+ var h=S.h,t=nearest(),i,e,a;
+ if(id==="slam"){for(i=0;i<S.en.length;i++){e=S.en[i];if(distance(h,e)<S.mods.slamR)damage(e,125,S.passives.indexOf("heavy")>=0?95:65)}S.fx.push({type:"ring",x:h.x,y:h.y,t:.5})}
+ if(id==="tree"&&t){a=Math.atan2(t.y-h.y,t.x-h.x);S.proj.push({type:"tree",x:h.x,y:h.y,vx:Math.cos(a)*480,vy:Math.sin(a)*480,t:1.6,hits:{}})}
+ if(id==="honey"){h.shield+=120;h.armor+=22;S.honeyBoost=true}
+ if(id==="shroud"){h.inv=2.6;h.bonusNext=true}
+ if(id==="rage")h.rage=6;
+ if(id==="wall"){h.shield+=220;for(i=0;i<S.en.length;i++)if(distance(h,S.en[i])<110)damage(S.en[i],55,95)}
+ if(id==="roar"){for(i=0;i<S.en.length;i++){S.en[i].fear=2.2;damage(S.en[i],80,25)}h.rage=8;h.roarDR=8}
+ if(id==="avalanche"){for(i=0;i<S.en.length;i++)damage(S.en[i],260,35)}
+}
+function moveUnit(a,b,s,dt,away){
+ var dx=b.x-a.x,dy=b.y-a.y,z=Math.sqrt(dx*dx+dy*dy)||1,m=away?-1:1;
+ a.x=Math.max(35,Math.min(725,a.x+dx/z*s*dt*m));
+ a.y=Math.max(40,Math.min(485,a.y+dy/z*s*dt*m));
+}
+function update(dt){
+ if(!S||S.paused)return;
+ var k,h=S.h,t,d,ranged,ideal,a,mult,i,e,dmg,z,p,j,key;
+ for(k in S.cds)if(S.cds.hasOwnProperty(k))S.cds[k]=Math.max(0,S.cds[k]-dt);
+ h.atk=Math.max(0,h.atk-dt);h.rage=Math.max(0,h.rage-dt);h.inv=Math.max(0,h.inv-dt);h.roarDR=Math.max(0,h.roarDR-dt);
+ t=nearest();
+ if(t){
+   ranged=S.basic==="rock";d=distance(h,t);ideal=ranged?155:48;a=Math.atan2(t.y-h.y,t.x-h.x);h.aim=a;
+   if(d>ideal+14)moveUnit(h,t,ranged?62:76,dt,false);
+   else if(ranged&&d<105)moveUnit(h,t,68,dt,true);
+   else if(h.atk<=0){
+     h.combo++;
+     mult=S.mods.basic*((S.passives.indexOf("strength")>=0&&h.combo%3===0)?1.6:1)*(h.bonusNext?1.7:1);h.bonusNext=false;
+     if(ranged)S.proj.push({type:"rock",x:h.x,y:h.y,vx:Math.cos(a)*410,vy:Math.sin(a)*410,t:1.5,hits:{}});
+     else damage(t,h.dmg*mult,h.combo%3===0?(S.passives.indexOf("heavy")>=0?90:55):16);
+     h.atk=h.rage>0 ? 0.33 : 0.72;
+   }
+ }
+ for(i=0;i<S.en.length;i++){
+   e=S.en[i];e.atk=Math.max(0,e.atk-dt);e.fear=Math.max(0,e.fear-dt);d=distance(e,h);
+   if(e.fear>0)moveUnit(e,h,e.spd*1.6,dt,true);
+   else if(d>e.range)moveUnit(e,h,e.spd,dt,false);
+   else if(e.atk<=0&&h.inv<=0){
+     dmg=e.dmg*(S.passives.indexOf("hide")>=0 ? 0.88 : 1)*(h.roarDR>0 ? 0.75 : 1)*100/(100+h.armor);
+     if(h.shield>0){z=Math.min(h.shield,dmg);h.shield-=z;dmg-=z}
+     h.hp-=dmg;e.atk=e.type==="boss"?1.1:.9;
+     if(S.passives.indexOf("instinct")>=0&&dmg>18)h.rage=Math.max(h.rage,2.4);
+   }
+ }
+ for(i=0;i<S.proj.length;i++){
+   p=S.proj[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.t-=dt;
+   for(j=0;j<S.en.length;j++){
+     e=S.en[j];key=j+"";
+     if(!p.hits[key]&&distance(p,e)<(p.type==="tree"?S.mods.treeW+18:22)){
+       p.hits[key]=1;damage(e,p.type==="tree"?165:h.dmg*.85,p.type==="tree"?(S.passives.indexOf("heavy")>=0?95:65):12);
+       if(p.type==="rock")p.t=0;
+     }
+   }
+ }
+ S.proj=S.proj.filter(function(q){return q.t>0});
+ S.en=S.en.filter(function(q){return !q.dead});
+ while(S.xp>=S.need){S.xp-=S.need;S.level++;S.need=Math.ceil(S.need*1.28);h.max+=30;h.hp=Math.min(h.max,h.hp+30);h.dmg*=1.05}
+ if(!S.en.length&&!S.paused)showReward();
+ if(h.hp<=0){S.paused=true;running=false;byId("status").innerHTML="Bigfoot fell."}
+ updateUI();
+}
+function showReward(){
+ S.paused=true;
+ var pct=S.passives.indexOf("recover")>=0 ? 0.20 : 0.10,i,x,input,label;
+ if(S.honeyBoost){pct+=.10;S.honeyBoost=false}
+ var heal=S.h.max*pct;S.h.hp=Math.min(S.h.max,S.h.hp+heal);
+ byId("camp").innerHTML="Camp Recovery: +"+Math.round(heal)+" HP";
+ var pool=[["power","Ancient Force","Basic attacks +20%."],["health","Mountain Heart","+140 max HP."],["slam","Quake Radius","Earth Slam gets bigger."],["tree","Heavy Timber","Uproot gets wider."],["armor","Stone Fur","+12 armor."],["refresh","Wild Instincts","Refresh cooldowns."]];
+ pool.sort(function(){return Math.random()-.5});pool=pool.slice(0,3);
+ byId("rewardCards").innerHTML="";
+ for(i=0;i<pool.length;i++){
+   x=pool[i];input=document.createElement("input");input.type="radio";input.name="reward";input.className="upgradeRadio";input.id="reward"+i;input.setAttribute("data-effect",x[0]);
+   input.onchange=function(){if(this.checked)applyUpgrade(this.getAttribute("data-effect"))};
+   label=document.createElement("label");label.className="upgrade";label.htmlFor=input.id;label.innerHTML="<b>"+x[1]+"</b><small>"+x[2]+"</small>";
+   byId("rewardCards").appendChild(input);byId("rewardCards").appendChild(label);
+ }
+ byId("reward").style.display="block";
+}
+function applyUpgrade(effect){
+ if(effect==="power")S.mods.basic*=1.2;
+ if(effect==="health"){S.h.max+=140;S.h.hp+=140}
+ if(effect==="slam")S.mods.slamR+=55;
+ if(effect==="tree")S.mods.treeW+=15;
+ if(effect==="armor")S.h.armor+=12;
+ if(effect==="refresh")S.cds={};
+ byId("reward").style.display="none";
+ if(S.wave>=5){running=false;S.paused=true;byId("status").innerHTML="RUN COMPLETE — GRUMBLEGUT DEFEATED";return}
+ S.wave++;spawnWave();updateUI();
+}
+function updateUI(){
+ var labels=document.querySelectorAll(".skill"),i,id,cd;
+ byId("lvl").innerHTML=S.level;byId("hpText").innerHTML=Math.max(0,Math.ceil(S.h.hp))+" / "+Math.ceil(S.h.max)+(S.h.shield>0?" +"+Math.ceil(S.h.shield)+" shield":"");
+ byId("xpText").innerHTML=S.xp+" / "+S.need;byId("left").innerHTML=S.en.length;
+ for(i=0;i<labels.length;i++){id=labels[i].getAttribute("data-skill");cd=S.cds[id]||0;labels[i].className=cd>0?"skill cooling":"skill";labels[i].querySelector(".cd").innerHTML=cd>0?cd.toFixed(1)+"s":"READY"}
+}
+function drawBackground(){
+ var i,x,y;
+ ctx.fillStyle="#6e955b";ctx.fillRect(0,0,760,520);
+ ctx.fillStyle="#ae9568";ctx.beginPath();ctx.ellipse(380,270,290,205,0,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle="#315e38";ctx.lineWidth=3;
+ for(i=0;i<36;i++){x=(i*181+20)%750;y=(i*109+15)%510;ctx.beginPath();ctx.moveTo(x,y+7);ctx.lineTo(x-4,y-4);ctx.moveTo(x,y+7);ctx.lineTo(x+3,y-7);ctx.stroke()}
+}
+function drawHero(){
+ var h=S.h;
+ ctx.save();ctx.translate(h.x,h.y);ctx.rotate(h.aim+Math.PI/2);if(h.inv>0)ctx.globalAlpha=.45;
+ ctx.strokeStyle="#573520";ctx.lineWidth=17;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(-18,7);ctx.lineTo(-35,-20);ctx.moveTo(18,7);ctx.lineTo(35,-20);ctx.stroke();
+ ctx.fillStyle="#56351f";ctx.beginPath();ctx.arc(0,8,30,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#70462c";ctx.beginPath();ctx.arc(0,-5,26,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#a36d47";ctx.beginPath();ctx.arc(0,-8,14,0,Math.PI*2);ctx.fill();ctx.restore();
+}
+function drawEnemy(e){
+ var s=e.type==="boss"?39:(e.type==="brute"?24:16);
+ ctx.fillStyle=e.type==="mush"?"#ad4b43":(e.type==="boss"?"#567240":"#65934e");ctx.beginPath();ctx.arc(e.x,e.y,e.type==="mush"?20:s,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#452f2b";ctx.fillRect(e.x-18,e.y-s-13,36,4);ctx.fillStyle="#bd4c41";ctx.fillRect(e.x-18,e.y-s-13,36*Math.max(0,e.hp/e.max),4);
+}
+function drawAim(){
+ if(S.abilities.indexOf("tree")<0||(S.cds.tree||0)>0)return;
+ var t=nearest();if(!t)return;var h=S.h,a=Math.atan2(t.y-h.y,t.x-h.x);
+ ctx.strokeStyle="#39c954";ctx.lineWidth=7;ctx.setLineDash([12,7]);ctx.beginPath();ctx.moveTo(h.x+Math.cos(a)*36,h.y+Math.sin(a)*36);ctx.lineTo(h.x+Math.cos(a)*190,h.y+Math.sin(a)*190);ctx.stroke();ctx.setLineDash([]);
+}
+function draw(){
+ if(!ctx||!S)return;
+ var i,p,f;
+ drawBackground();for(i=0;i<S.en.length;i++)drawEnemy(S.en[i]);drawAim();drawHero();
+ for(i=0;i<S.proj.length;i++){p=S.proj[i];ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.atan2(p.vy,p.vx));ctx.fillStyle=p.type==="tree"?"#704526":"#777a73";if(p.type==="tree")ctx.fillRect(-31,-7,62,14);else{ctx.beginPath();ctx.arc(0,0,9,0,Math.PI*2);ctx.fill()}ctx.restore()}
+ for(i=0;i<S.fx.length;i++){f=S.fx[i];if(f.type==="num"){ctx.fillStyle="#f5cf57";ctx.font="bold 17px sans-serif";ctx.fillText(f.n,f.x,f.y-27)}}
+}
+function gameLoop(now){
+ if(!running||!S)return;
+ var dt=Math.min(.04,(now-last)/1000);last=now;
+ if(!S.paused)update(dt);
+ for(var i=0;i<S.fx.length;i++)S.fx[i].t-=dt;
+ S.fx=S.fx.filter(function(f){return f.t>0});
+ draw();
+ raf=requestAnimationFrame(gameLoop);
+}
+function startGame(){
+ var load=readLoadout();if(!load){byId("startToggle").checked=false;return}
+ try{if(!ctx)ctx=field.getContext("2d")}catch(e){ctx=null}
+ if(!ctx){byId("status").innerHTML="START ERROR: canvas unavailable";return}
+ S={basic:load.basic,abilities:load.abilities,ult:load.ult,passives:load.passives,wave:1,level:1,xp:0,need:8,paused:false,en:[],proj:[],fx:[],cds:{},honeyBoost:false,h:{x:380,y:275,hp:800,max:800,dmg:52,armor:15,shield:0,atk:0,aim:0,combo:0,rage:0,inv:0,roarDR:0,bonusNext:false},mods:{basic:1,slamR:120,treeW:22}};
+ buildSkills();spawnWave();updateUI();draw();byId("status").innerHTML="Bigfoot moves and attacks automatically. Tap abilities when ready.";
+ running=true;last=performance.now();if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(gameLoop);
+}
+function stopGame(){
+ running=false;if(raf)cancelAnimationFrame(raf);raf=0;S=null;byId("reward").style.display="none";byId("status").innerHTML="Starting...";
+}
+function startToggleChanged(el){
+ if(el.checked)startGame();else stopGame();
+}
+syncAbilityChoices();
+syncPassiveChoices();
+</script>
+</body>
+</html>
