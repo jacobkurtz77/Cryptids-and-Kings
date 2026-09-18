@@ -3,43 +3,67 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Bigfoot</title>
+<title>Cryptids & Kings — Bigfoot Run Expansion</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#10261f;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
-.wrap{max-width:820px;margin:auto;padding:10px}
-.panel{background:#1e4037;border:4px solid #7a5637;border-radius:18px;padding:12px;box-shadow:inset 0 0 0 3px #10302a}
-h1{font-size:27px;margin:0 0 8px}.muted{color:#d7c89b}.section{font-size:20px;font-weight:900;margin:18px 0 7px}
-label.caption{display:block;color:#efc861;font-weight:900;margin:8px 0 4px}
+html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+body{padding:6px}
+.wrap{max-width:860px;margin:auto}
+.panel{background:linear-gradient(#21483e,#17372f);border:4px solid #7a5637;border-radius:18px;padding:12px;box-shadow:inset 0 0 0 3px #0f2d27,0 8px 24px #0005}
+h1{font-size:28px;margin:0 0 6px;letter-spacing:.5px}
+.muted{color:#d8cb9f;line-height:1.35}
+.section{font-size:20px;font-weight:1000;margin:18px 0 7px;color:#ffd66b}
+.caption{display:block;color:#efc861;font-weight:900;margin:8px 0 4px}
 select{width:100%;background:#f4e8bd;color:#20312a;border:4px solid #865f3c;border-radius:14px;padding:12px 10px;font-size:17px;font-weight:800;-webkit-appearance:menulist}
-details{margin:11px 0;background:#17342f;border:3px solid #665039;border-radius:14px;padding:9px 12px}
+details{margin:11px 0;background:#15332e;border:3px solid #665039;border-radius:14px;padding:9px 12px}
 summary{font-weight:900;color:#ffd66b;font-size:17px}
 details div{padding:6px 0;border-top:1px solid #ffffff18}
 #engine{font-weight:900;margin-top:12px;color:#9be391}
 #msg{font-weight:800;margin:9px 0 12px}
-#startToggle,#cast0,#cast1,#cast2,#cast3{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-#startControl{display:block;width:100%;text-align:center;padding:17px;background:#4c8749;color:#fff0bf;border:4px solid #765137;border-radius:14px;font-size:23px;font-weight:1000;user-select:none;-webkit-user-select:none}
+#startToggle{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+#startControl{display:block;width:100%;text-align:center;padding:17px;background:linear-gradient(#5d9e56,#447a42);color:#fff0bf;border:4px solid #765137;border-radius:14px;font-size:23px;font-weight:1000;user-select:none;-webkit-user-select:none;box-shadow:inset 0 0 0 2px #8ed37d55}
 #startControl:active{transform:scale(.99)}
 #game{display:none}
 #startToggle:checked ~ #setup{display:none}
 #startToggle:checked ~ #game{display:block}
-.hud{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:16px;font-weight:800;margin-bottom:8px}
+.hud{display:flex;gap:7px;flex-wrap:wrap;align-items:center;font-size:14px;font-weight:800;margin-bottom:8px}
+.pill{background:#17352f;border:2px solid #6c5138;border-radius:999px;padding:6px 9px}
 .hud b{color:white}
-#backControl{margin-left:auto;background:#f3f3f3;color:#087cff;border-radius:999px;padding:10px 17px;font-weight:800}
-.arena{position:relative;border:4px solid #785438;border-radius:17px;overflow:hidden;background:#678f59}
-canvas{display:block;width:100%;height:auto}
-#roomName{position:absolute;left:14px;top:14px;background:#17372fcc;border:3px solid #a37b4c;border-radius:10px;padding:8px 12px;font-weight:1000}
-#status{font-weight:900;font-size:16px;padding:10px 3px;min-height:42px}
-#skills{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.skill{display:block;min-height:90px;background:#28483f;border:4px solid #785438;border-radius:14px;padding:10px;color:#f6e5b4;font-weight:900;position:relative;user-select:none;-webkit-user-select:none}
-.skill.cooling{opacity:.55}
-.skill small{display:block;color:#d4c79d;font-weight:500;margin-top:4px}
-.cd{position:absolute;right:9px;top:7px;font-size:12px}
-#reward{display:none;margin-top:10px;background:#17342f;border:4px solid #785438;border-radius:15px;padding:11px}
-.upgradeRadio{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-.upgrade{display:block;background:#294b40;border:3px solid #87603d;border-radius:12px;padding:11px;margin-top:8px;color:#f6e3ae;font-weight:800}
-.upgrade small{display:block;color:#d5c79e;margin-top:3px}
-@media(max-width:500px){.wrap{padding:5px}.panel{padding:9px}h1{font-size:24px}}
+#backControl{margin-left:auto;background:#f3f3f3;color:#087cff;border-radius:999px;padding:8px 14px;font-weight:800}
+.arena{position:relative;border:4px solid #785438;border-radius:17px;overflow:hidden;background:#678f59;box-shadow:inset 0 0 35px #0005}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+#roomName{position:absolute;left:10px;top:10px;background:#17372fee;border:2px solid #b28a54;border-radius:10px;padding:6px 9px;font-weight:1000;font-size:13px;max-width:72%}
+#itemBadge{position:absolute;right:10px;top:10px;background:#362b1fed;border:2px solid #e5bd5b;border-radius:10px;padding:6px 9px;font-weight:1000;font-size:12px;display:none}
+#status{font-weight:900;font-size:15px;padding:9px 3px;min-height:40px;color:#f5dfaa}
+#skills{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.skill{min-height:84px;background:linear-gradient(#31554a,#223f39);border:4px solid #785438;border-radius:14px;padding:10px;color:#f6e5b4;font-weight:900;position:relative;text-align:left;touch-action:manipulation}
+.skill.ready{box-shadow:inset 0 0 0 2px #7ddf7555}
+.skill.cooling{opacity:.58}
+.skill small{display:block;color:#d4c79d;font-weight:500;margin-top:4px;line-height:1.2}
+.cd{position:absolute;right:9px;top:7px;font-size:12px;color:#fff}
+#decision{display:none;margin-top:10px;background:linear-gradient(#17342f,#102a26);border:4px solid #785438;border-radius:15px;padding:11px}
+#decision h2{margin:0 0 3px;font-size:23px}
+#decisionText{color:#dccca2;margin-bottom:8px;line-height:1.35}
+.cards{display:grid;grid-template-columns:1fr;gap:8px}
+.card{display:block;width:100%;text-align:left;background:linear-gradient(#315246,#244139);border:3px solid #8a633e;border-radius:13px;padding:10px;color:#f6e3ae;font-weight:800;min-height:90px}
+.card strong{display:block;font-size:18px;color:#ffe08a}
+.card small{display:block;color:#d6c79c;margin-top:4px;line-height:1.3}
+.card .tag{font-size:11px;color:#d2a951;letter-spacing:.7px;margin-bottom:3px}
+.card.elite{border-color:#ba6e4c;background:linear-gradient(#573b34,#342b29)}
+.card.treasure{border-color:#d4ad4f;background:linear-gradient(#544827,#3b3422)}
+.card.event{border-color:#7ba7bd;background:linear-gradient(#304b54,#263a40)}
+.card.shrine{border-color:#9e7bd1;background:linear-gradient(#46395c,#302b3d)}
+.card.item{border-color:#e2bd63;background:linear-gradient(#57482a,#352f22)}
+.runTip{margin-top:8px;color:#c9bb91;font-size:12px;text-align:center}
+@media(min-width:700px){
+  #skills{grid-template-columns:repeat(4,1fr)}
+  .cards.two{grid-template-columns:repeat(2,1fr)}
+  .cards.three{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:520px){
+ body{padding:3px}.panel{padding:9px}h1{font-size:24px}.hud{font-size:12px}.pill{padding:5px 7px}
+ #roomName{font-size:11px}.skill{min-height:78px;padding:8px}.card{min-height:84px}
+}
 </style>
 </head>
 <body>
@@ -48,7 +72,7 @@ canvas{display:block;width:100%;height:auto}
 
 <section id="setup" class="panel">
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Choose Bigfoot's loadout, then start the run.</div>
+<div class="muted">Expanded run build: branching rooms, elite fights, events, item hunts, wolves, hooks, and stronger enemy animation.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -88,73 +112,75 @@ canvas{display:block;width:100%;height:auto}
 
 <details>
 <summary>Ability effects</summary>
-<div><b>Earth Slam</b> — 360° damage and strong knockback.</div>
-<div><b>Uproot</b> — throw a tree through enemies along the green aim line.</div>
-<div><b>Honey Stash</b> — shield + armor and +10% to next Camp Recovery.</div>
-<div><b>Forest Shroud</b> — brief untargetability and empowered next basic.</div>
-<div><b>Wild Rage</b> — greatly faster basics for 6 seconds.</div>
-<div><b>Boulder Wall</b> — large shield and defensive knockback blast.</div>
+<div><b>Earth Slam</b> — 360° damage and heavy knockback.</div>
+<div><b>Uproot</b> — throw a tree exactly down the live green aim line.</div>
+<div><b>Honey Stash</b> — gain shield + armor and empower the next Camp Recovery.</div>
+<div><b>Forest Shroud</b> — brief untargetability and a heavily empowered next basic.</div>
+<div><b>Wild Rage</b> — greatly faster basic attacks for 6 seconds.</div>
+<div><b>Boulder Wall</b> — large shield plus defensive knockback burst.</div>
 </details>
 
 <div class="section">ULTIMATE</div>
 <select id="ult">
-<option value="roar">Primal Roar — damage + fear + 8s buff</option>
+<option value="roar">Primal Roar — damage + fear + 8s combat buff</option>
 <option value="avalanche" selected>Avalanche — huge instant room-wide damage</option>
 </select>
 
 <div class="section">PASSIVES — PICK 2</div>
 <label class="caption">Passive 1</label>
 <select id="passive1" onchange="syncPassiveChoices()">
-<option value="recover" selected>Cryptid Recovery — room heal becomes 20%</option>
+<option value="recover" selected>Cryptid Recovery — Camp Recovery becomes 20%</option>
 <option value="hide">Thick Hide — 12% less damage taken</option>
 <option value="heavy">Heavyweight — stronger knockback</option>
 <option value="instinct">Wild Instinct — big hits trigger attack speed</option>
 <option value="strength">Ancient Strength — every 3rd basic +60%</option>
-<option value="blood">Forest Blood — elites add max HP</option>
+<option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 <label class="caption">Passive 2</label>
 <select id="passive2" onchange="syncPassiveChoices()">
-<option value="recover">Cryptid Recovery — room heal becomes 20%</option>
+<option value="recover">Cryptid Recovery — Camp Recovery becomes 20%</option>
 <option value="hide">Thick Hide — 12% less damage taken</option>
 <option value="heavy">Heavyweight — stronger knockback</option>
 <option value="instinct">Wild Instinct — big hits trigger attack speed</option>
 <option value="strength" selected>Ancient Strength — every 3rd basic +60%</option>
-<option value="blood">Forest Blood — elites add max HP</option>
+<option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 
-<div id="engine">ENGINE READY</div>
-<div id="msg">Duplicate abilities or passives will block the run.</div>
+<div id="engine">ENGINE READY · 12 ROOM RUN</div>
+<div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
 
 <section id="game">
 <div class="hud">
-<span>Wave <b id="wave">1</b>/5</span>
-<span>Lv. <b id="lvl">1</b></span>
-<span>HP <b id="hpText">800 / 800</b></span>
-<span>XP <b id="xpText">0 / 8</b></span>
-<span>Enemies <b id="left">0</b></span>
+<span class="pill">Room <b id="roomNum">1</b>/12</span>
+<span class="pill">Lv. <b id="lvl">1</b></span>
+<span class="pill">HP <b id="hpText">800 / 800</b></span>
+<span class="pill">XP <b id="xpText">0 / 8</b></span>
+<span class="pill">Enemies <b id="left">0</b></span>
 <label id="backControl" for="startToggle">New Loadout</label>
 </div>
 
 <div class="arena">
 <canvas id="field" width="760" height="520"></canvas>
-<div id="roomName">SUNNY TRAIL</div>
+<div id="roomName">SUNNY TRAIL · COMBAT</div>
+<div id="itemBadge"></div>
 </div>
 <div id="status">Starting...</div>
 <div id="skills"></div>
 
-<div id="reward">
-<div id="camp"></div>
-<div id="rewardCards"></div>
-</div>
+<section id="decision">
+<h2 id="decisionTitle"></h2>
+<div id="decisionText"></div>
+<div id="decisionCards" class="cards"></div>
+</section>
+<div class="runTip">Camp Recovery triggers after every completed room. Bigfoot item hunts begin after the first boss.</div>
 </section>
 </div>
 
 <script>
-var S=null, running=false, last=0, raf=0;
-var field=document.getElementById("field");
-var ctx=null;
+var S=null,running=false,last=0,raf=0;
+var field=document.getElementById("field"),ctx=null;
 
 var abilityChoices=[
  ["slam","Earth Slam — 5s • 360° AoE + knockback"],
@@ -165,12 +191,12 @@ var abilityChoices=[
  ["wall","Boulder Wall — 12s • shield + knockback"]
 ];
 var passiveChoices=[
- ["recover","Cryptid Recovery — room heal becomes 20%"],
+ ["recover","Cryptid Recovery — Camp Recovery becomes 20%"],
  ["hide","Thick Hide — 12% less damage taken"],
  ["heavy","Heavyweight — stronger knockback"],
  ["instinct","Wild Instinct — big hits trigger attack speed"],
  ["strength","Ancient Strength — every 3rd basic +60%"],
- ["blood","Forest Blood — elites add max HP"]
+ ["blood","Forest Blood — elites permanently add max HP"]
 ];
 var skillInfo={
  slam:{name:"Earth Slam",desc:"360° damage + knockback",cd:5},
@@ -179,263 +205,689 @@ var skillInfo={
  shroud:{name:"Forest Shroud",desc:"Untargetable + empowered basic",cd:11},
  rage:{name:"Wild Rage",desc:"6s attack-speed burst",cd:13},
  wall:{name:"Boulder Wall",desc:"Shield + knockback blast",cd:12},
- roar:{name:"Primal Roar",desc:"Damage + fear + combat buff",cd:24},
+ roar:{name:"Primal Roar",desc:"Damage + fear + 8s combat buff",cd:24},
  avalanche:{name:"Avalanche",desc:"Huge room-wide burst",cd:26}
+};
+var roomNames={
+ combat:["FERNWOOD PATH","MOSSY CROSSING","BLACKBERRY TRAIL","FALLEN CEDARS","MOONLIT GROVE","HOLLOW OAKS"],
+ elite:["BRUTE CAMP","IRONCAP PATROL","OGRE CUTTING","HUNTER'S CLEARING"],
+ treasure:["ABANDONED CACHE","OLD HUNTER'S CAMP","RIVER STASH"],
+ event:["RUSTLING BRUSH","STRANGE FOOTPRINTS","QUIET CAMPSITE"],
+ shrine:["STONE SHRINE","WHISPERING OAK","MOSS ALTAR"],
+ ambush:["THICKET AMBUSH","GOBLIN TRAP","MUSHROOM RUSH"]
 };
 
 function byId(id){return document.getElementById(id)}
-function distance(a,b){var dx=a.x-b.x,dy=a.y-b.y;return Math.sqrt(dx*dx+dy*dy)}
+function rnd(a,b){return a+Math.random()*(b-a)}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function dist(a,b){var dx=a.x-b.x,dy=a.y-b.y;return Math.sqrt(dx*dx+dy*dy)}
+function pickOne(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
 
 function rebuildSelect(id,choices,used){
  var el=byId(id),cur=el.value,html="",i,v,label;
- for(i=0;i<choices.length;i++){
-   v=choices[i][0];label=choices[i][1];
-   if(v===cur || !used[v])html+='<option value="'+v+'"'+(v===cur?' selected':'')+'>'+label+'</option>';
- }
+ for(i=0;i<choices.length;i++){v=choices[i][0];label=choices[i][1];if(v===cur||!used[v])html+='<option value="'+v+'"'+(v===cur?' selected':'')+'>'+label+'</option>'}
  el.innerHTML=html;
 }
 function syncAbilityChoices(){
  var ids=["ability1","ability2","ability3"],vals={},i,j,used;
  for(i=0;i<ids.length;i++)vals[ids[i]]=byId(ids[i]).value;
- for(i=0;i<ids.length;i++){
-   used={};
-   for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;
-   rebuildSelect(ids[i],abilityChoices,used);
- }
+ for(i=0;i<ids.length;i++){used={};for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;rebuildSelect(ids[i],abilityChoices,used)}
 }
 function syncPassiveChoices(){
  var ids=["passive1","passive2"],vals={},i,j,used;
  for(i=0;i<ids.length;i++)vals[ids[i]]=byId(ids[i]).value;
- for(i=0;i<ids.length;i++){
-   used={};
-   for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;
-   rebuildSelect(ids[i],passiveChoices,used);
- }
+ for(i=0;i<ids.length;i++){used={};for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;rebuildSelect(ids[i],passiveChoices,used)}
 }
-
 function readLoadout(){
  var a=[byId("ability1").value,byId("ability2").value,byId("ability3").value];
- var p=[byId("passive1").value,byId("passive2").value];
- var ao={},po={},i;
- for(i=0;i<a.length;i++)ao[a[i]]=1;
- for(i=0;i<p.length;i++)po[p[i]]=1;
- var ac=0,pc=0,k;
- for(k in ao)if(ao.hasOwnProperty(k))ac++;
- for(k in po)if(po.hasOwnProperty(k))pc++;
+ var p=[byId("passive1").value,byId("passive2").value],ao={},po={},i,k,ac=0,pc=0;
+ for(i=0;i<a.length;i++)ao[a[i]]=1;for(i=0;i<p.length;i++)po[p[i]]=1;
+ for(k in ao)if(ao.hasOwnProperty(k))ac++;for(k in po)if(po.hasOwnProperty(k))pc++;
  if(ac!==3){byId("msg").innerHTML="Choose 3 different abilities.";return null}
  if(pc!==2){byId("msg").innerHTML="Choose 2 different passives.";return null}
- return {basic:byId("basic").value,abilities:a,ult:byId("ult").value,passives:p};
+ return{basic:byId("basic").value,abilities:a,ult:byId("ult").value,passives:p};
 }
 
-function makeEnemy(type,x,y){
- var d;
- if(type==="boss")d=[2300,28,44,55];
- else if(type==="brute")d=[340,31,24,32];
- else if(type==="archer")d=[100,38,12,145];
- else if(type==="mush")d=[120,36,14,38];
- else d=[105,46,12,34];
- return {type:type,x:x,y:y,hp:d[0],max:d[0],spd:d[1],dmg:d[2],range:d[3],atk:Math.random(),fear:0,dead:false};
-}
-function nearest(){
- if(!S||!S.en.length)return null;
- var best=S.en[0],bd=distance(S.h,best),i,d;
- for(i=1;i<S.en.length;i++){d=distance(S.h,S.en[i]);if(d<bd){best=S.en[i];bd=d}}
- return best;
-}
-function damage(e,n,k){
- if(!e||e.dead)return;
- e.hp-=n;
- if(k){
-   var dx=e.x-S.h.x,dy=e.y-S.h.y,z=Math.sqrt(dx*dx+dy*dy)||1;
-   e.x+=dx/z*k;e.y+=dy/z*k;
+function showDecision(title,text,cards,cols){
+ var box=byId("decisionCards"),i,b,c;
+ byId("decisionTitle").innerHTML=title;byId("decisionText").innerHTML=text;box.innerHTML="";
+ box.className="cards "+(cols===3?"three":(cols===2?"two":""));
+ for(i=0;i<cards.length;i++){
+   c=cards[i];b=document.createElement("button");b.type="button";b.className="card "+(c.cls||"");
+   b.innerHTML='<div class="tag">'+(c.tag||"CHOICE")+'</div><strong>'+c.title+'</strong><small>'+c.text+'</small>';
+   b.onclick=c.go;box.appendChild(b);
  }
- S.fx.push({type:"num",x:e.x,y:e.y,n:Math.round(n),t:.45});
- if(e.hp<=0){
-   e.dead=true;S.xp+=e.type==="brute"?3:(e.type==="boss"?15:1);
-   if(e.type==="brute"&&S.passives.indexOf("blood")>=0){S.h.max+=20;S.h.hp+=20}
- }
+ byId("decision").style.display="block";
 }
-function spawnWave(){
- var counts=[9,13,16,20,1],n=counts[S.wave-1],i,a,r,t;
- S.en=[];S.proj=[];S.fx=[];S.paused=false;S.h.x=380;S.h.y=275;
- for(i=0;i<n;i++){
-   a=i/n*Math.PI*2+Math.random()*.3;r=205+Math.random()*75;
-   t=S.wave===5?"boss":(i%8===0?"brute":(i%5===0?"archer":(i%4===0?"mush":"gob")));
-   S.en.push(makeEnemy(t,380+Math.cos(a)*r,275+Math.sin(a)*r));
- }
- byId("wave").innerHTML=S.wave;
- byId("roomName").innerHTML=["SUNNY TRAIL","GOBLIN PICNIC","MUSHROOM HOLLOW","OLD RUINS","GRUMBLEGUT"][S.wave-1];
-}
+function hideDecision(){byId("decision").style.display="none";byId("decisionCards").innerHTML=""}
+
 function buildSkills(){
- var bar=byId("skills"),all=S.abilities.concat([S.ult]),i,id,input,label;
+ var all=S.abilities.concat([S.ult]),bar=byId("skills"),i,id,b;
  bar.innerHTML="";
  for(i=0;i<all.length;i++){
-   id=all[i];
-   input=document.createElement("input");
-   input.type="checkbox";input.id="cast"+i;input.setAttribute("data-skill",id);
-   input.onchange=function(){
-     if(this.checked){this.checked=false;cast(this.getAttribute("data-skill"))}
-   };
-   label=document.createElement("label");label.className="skill";label.htmlFor=input.id;label.setAttribute("data-skill",id);
-   label.innerHTML="<b>"+skillInfo[id].name+"</b><small>"+skillInfo[id].desc+"</small><span class='cd'>READY</span>";
-   bar.appendChild(input);bar.appendChild(label);
+   id=all[i];b=document.createElement("button");b.type="button";b.className="skill ready";b.setAttribute("data-skill",id);
+   b.innerHTML="<b>"+skillInfo[id].name+"</b><small>"+skillInfo[id].desc+"</small><span class='cd'>READY</span>";
+   b.onclick=(function(skill){return function(){cast(skill)}})(id);bar.appendChild(b);
  }
 }
+
+function enemyStats(type,scale){
+ var d;
+ if(type==="gob")d=[105,47,12,34];
+ else if(type==="archer")d=[90,39,14,170];
+ else if(type==="mush")d=[135,33,15,46];
+ else if(type==="brute")d=[360,28,29,48];
+ else if(type==="miniboss")d=[1900,27,39,62];
+ else d=[4700,29,44,66];
+ return[d[0]*scale,d[1],d[2]*(1+(scale-1)*.55),d[3]];
+}
+function makeEnemy(type,x,y){
+ var scale=1+(S.room-1)*.055,d=enemyStats(type,scale);
+ return{type:type,x:x,y:y,hp:d[0],max:d[0],spd:d[1],dmg:d[2],range:d[3],atk:rnd(.1,.8),wind:0,windMax:0,winding:false,attackAnim:0,
+ fear:0,dead:false,flash:0,kbx:0,kby:0,hooks:[],chargeCd:rnd(4.5,6.5),chargeWind:0,chargeTime:0,chargeDir:0,chargeHit:false,
+ shockCd:rnd(4,6),summonCd:rnd(7,9)};
+}
+function nearestTo(p){
+ if(!S.en.length)return null;var best=null,bd=1e9,i,d,e;
+ for(i=0;i<S.en.length;i++){e=S.en[i];if(e.dead)continue;d=dist(p,e);if(d<bd){bd=d;best=e}}
+ return best;
+}
+function isElite(e){return e.type==="brute"||e.type==="miniboss"||e.type==="boss"}
+
+function knockEnemy(e,k,sx,sy){
+ if(!k)return;var dx=e.x-sx,dy=e.y-sy,z=Math.sqrt(dx*dx+dy*dy)||1,m=S.passives.indexOf("heavy")>=0?1.35:1;
+ e.kbx+=dx/z*k*6*m;e.kby+=dy/z*k*6*m;
+}
+function deathFx(e){
+ S.fx.push({type:"death",sub:e.type,x:e.x,y:e.y,t:.65,max:.65,rot:rnd(-1,1)});
+ for(var i=0;i<7;i++)S.fx.push({type:"particle",x:e.x,y:e.y,vx:rnd(-95,95),vy:rnd(-95,95),t:rnd(.25,.55),c:e.type==="mush"?"#d96b5e":"#86aa63"});
+}
+function gainXP(n){
+ S.xp+=n;
+ while(S.xp>=S.need){
+   S.xp-=S.need;S.level++;S.need=Math.ceil(S.need*1.28);S.h.max+=32;S.h.hp=Math.min(S.h.max,S.h.hp+20);S.h.dmg*=1.055;S.h.armor+=1;
+   S.fx.push({type:"level",x:S.h.x,y:S.h.y,t:1});byId("status").innerHTML="LEVEL UP! Bigfoot grows stronger.";
+ }
+}
+function damageEnemy(e,n,k,sx,sy){
+ if(!e||e.dead)return;
+ e.hp-=n;e.flash=.13;S.fx.push({type:"num",x:e.x,y:e.y,n:Math.round(n),t:.48});
+ for(var i=0;i<4;i++)S.fx.push({type:"particle",x:e.x,y:e.y,vx:rnd(-55,55),vy:rnd(-55,55),t:rnd(.14,.32),c:"#f0c66b"});
+ knockEnemy(e,k,sx==null?S.h.x:sx,sy==null?S.h.y:sy);
+ if(e.hp<=0){
+   e.dead=true;gainXP(e.type==="boss"?20:(e.type==="miniboss"?12:(e.type==="brute"?3:1)));deathFx(e);
+   if(isElite(e)&&S.passives.indexOf("blood")>=0){S.h.max+=22;S.h.hp+=22}
+ }
+}
+function hurtHero(n,source){
+ var h=S.h,red=S.passives.indexOf("hide")>=0 ? .88 : 1;
+ if(h.roarDR>0)red*=.75;n*=red*100/(100+h.armor);
+ if(h.shield>0){var z=Math.min(h.shield,n);h.shield-=z;n-=z}
+ if(n>0)h.hp-=n;
+ if(source)S.fx.push({type:"hurt",x:h.x,y:h.y,n:Math.round(n),t:.35});
+ S.shake=Math.max(S.shake,.12);
+ if(S.passives.indexOf("instinct")>=0&&n>20)h.rage=Math.max(h.rage,2.5);
+}
+
+function addEnemy(type,x,y){S.en.push(makeEnemy(type,x,y))}
+function spawnAround(type,count,rmin,rmax){
+ for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.25,.25),r=rnd(rmin,rmax);addEnemy(type,380+Math.cos(a)*r,270+Math.sin(a)*r)}
+}
+function spawnCombat(kind){
+ S.en=[];S.proj=[];S.fx=[];S.hazards=[];S.h.x=380;S.h.y=270;S.h.kb=0;S.paused=false;S.roomKind=kind;
+ var n=7+Math.floor(S.room*1.45),i,a,r,t,close=kind==="ambush";
+ if(kind==="elite"){
+   spawnAround("brute",Math.max(2,Math.floor(S.room/3)),close?120:185,close?180:250);
+   spawnAround("archer",2+Math.floor(S.room/4),175,260);
+   spawnAround("gob",Math.max(3,Math.floor(n*.45)),150,270);
+ }else{
+   for(i=0;i<n;i++){
+     a=i/n*Math.PI*2+rnd(-.3,.3);r=rnd(close?95:175,close?185:285);
+     if(S.room>7&&i%7===0)t="brute";else if(i%5===0)t="archer";else if(i%4===0)t="mush";else t="gob";
+     addEnemy(t,380+Math.cos(a)*r,270+Math.sin(a)*r);
+   }
+ }
+ byId("status").innerHTML=kind==="ambush"?"AMBUSH! Enemies crash out of the brush.":(kind==="elite"?"Elite enemies guard this clearing.":"The clearing erupts into a fight.");
+}
+function enterFixedBoss(){
+ S.en=[];S.proj=[];S.fx=[];S.hazards=[];S.h.x=380;S.h.y=355;S.paused=false;
+ if(S.room===5){
+   S.roomKind="boss";addEnemy("miniboss",380,130);spawnAround("gob",4,150,220);
+   S.currentName="TROLL BRIDGE · MOSSBACK";byId("status").innerHTML="Mossback blocks the bridge. Break through him.";
+ }else{
+   S.roomKind="boss";addEnemy("boss",380,125);
+   S.currentName="GRUMBLEGUT'S HOLLOW · FINAL BOSS";byId("status").innerHTML="GRUMBLEGUT enters the clearing. This is the end of the run.";
+ }
+}
+function updateRoomLabel(){
+ byId("roomNum").innerHTML=S.room;byId("roomName").innerHTML=S.currentName+" · "+S.roomKind.toUpperCase();
+}
+function enterRoom(opt){
+ hideDecision();S.currentName=opt.name;S.roomKind=opt.kind;updateRoomLabel();
+ if(opt.kind==="combat"||opt.kind==="elite"||opt.kind==="ambush")spawnCombat(opt.kind);
+ else if(opt.kind==="treasure")showTreasure();
+ else if(opt.kind==="event")showEvent();
+ else if(opt.kind==="shrine")showShrine();
+ updateUI();
+}
+
+function campRecovery(){
+ var pct=S.passives.indexOf("recover")>=0 ? .20 : .10;
+ if(S.honeyBoost){pct+=S.mods.honeyCamp;S.honeyBoost=false}
+ var before=S.h.hp,heal=S.h.max*pct;S.h.hp=Math.min(S.h.max,S.h.hp+heal);
+ return Math.round(S.h.hp-before);
+}
+function completeRoom(){
+ if(S.paused)return;S.paused=true;
+ var heal=campRecovery();
+ if(S.room>=12){showVictory(heal);return}
+ if(S.roomKind==="combat"||S.roomKind==="elite"||S.roomKind==="ambush"||S.roomKind==="boss")showUpgrade(heal);
+ else showPathChoice("Camp Recovery restored "+heal+" HP.");
+}
+function finishNonCombat(text){
+ var heal=campRecovery();byId("status").innerHTML=text+" Camp Recovery +"+heal+" HP.";showPathChoice(text+"<br><b>Camp Recovery:</b> +"+heal+" HP.");
+}
+
+var upgrades=[
+ {id:"power",tag:"BIGFOOT",title:"Ancient Force",text:"All basic attacks deal +18% damage."},
+ {id:"heart",tag:"BIGFOOT",title:"Mountain Heart",text:"+150 max HP and heal 150."},
+ {id:"armor",tag:"BIGFOOT",title:"Stone Fur",text:"+14 armor permanently."},
+ {id:"quick",tag:"BIGFOOT",title:"Long Stride",text:"+12% movement speed."},
+ {id:"cleave",need:"swipe",tag:"MIGHTY SWIPES",title:"Wide Backhand",text:"Swipes clip nearby enemies."},
+ {id:"colossal",need:"swipe",tag:"MIGHTY SWIPES",title:"Colossal Combo",text:"Every third swing becomes a circular smash."},
+ {id:"doubleRock",need:"rock",tag:"THROWING ROCKS",title:"Double Trouble",text:"Throw two rocks every basic attack."},
+ {id:"ricochet",need:"rock",tag:"THROWING ROCKS",title:"Ricochet",text:"Rocks bounce into one extra enemy."},
+ {id:"slamWide",need:"slam",tag:"EARTH SLAM",title:"Fault Line",text:"Earth Slam radius becomes much larger."},
+ {id:"aftershock",need:"slam",tag:"EARTH SLAM",title:"Aftershock",text:"Earth Slam leaves a delayed second quake."},
+ {id:"timber",need:"tree",tag:"UPROOT",title:"Heavy Timber",text:"The thrown tree becomes much wider."},
+ {id:"splinter",need:"tree",tag:"UPROOT",title:"Splintering Impact",text:"Tree hits burst into damaging wood shards."},
+ {id:"royal",need:"honey",tag:"HONEY STASH",title:"Royal Reserve",text:"Honey adds another +10% to the next Camp Recovery."},
+ {id:"predator",need:"shroud",tag:"FOREST SHROUD",title:"Ambush Predator",text:"The empowered post-Shroud basic becomes much stronger."},
+ {id:"unleashed",need:"rage",tag:"WILD RAGE",title:"Unleashed",text:"Wild Rage lasts longer and boosts basic damage."},
+ {id:"fort",need:"wall",tag:"BOULDER WALL",title:"Mountain Hide",text:"Boulder Wall grants a much larger shield."},
+ {id:"terror",need:"roar",tag:"PRIMAL ROAR",title:"King of the Woods",text:"Roar deals more damage and its buff lasts longer."},
+ {id:"mountain",need:"avalanche",tag:"AVALANCHE",title:"Falling Mountain",text:"Avalanche damage +40%."},
+ {id:"barbed",item:"fishing",tag:"FISHING GEAR",title:"Barbed Hooks",text:"Hook damage over time +60%."},
+ {id:"deepSet",item:"fishing",tag:"FISHING GEAR",title:"Deep Set",text:"Hooks stay embedded 3 seconds longer."},
+ {id:"doubleHook",item:"fishing",tag:"FISHING GEAR",title:"Double Cast",text:"Bigfoot throws two hooks at once."},
+ {id:"fastReel",item:"fishing",tag:"FISHING GEAR",title:"Old Reel",text:"Automatic hook throws happen 35% faster."},
+ {id:"packBond",item:"bones",tag:"SKELETAL REMAINS",title:"Pack Bond",text:"A second wolf joins Bigfoot."},
+ {id:"alpha",item:"bones",tag:"SKELETAL REMAINS",title:"Alpha Instinct",text:"Wolf attack damage +45%."},
+ {id:"dire",item:"bones",tag:"SKELETAL REMAINS",title:"Dire Growth",text:"Wolves become larger, faster, and hit harder."}
+];
+function upgradeEligible(u){
+ if(S.owned[u.id])return false;
+ if(u.item&&S.item!==u.item)return false;
+ if(u.need){
+   if(u.need==="swipe"||u.need==="rock")return S.basic===u.need;
+   if(u.need==="roar"||u.need==="avalanche")return S.ult===u.need;
+   return S.abilities.indexOf(u.need)>=0;
+ }
+ return true;
+}
+function getUpgradeChoices(){
+ var pool=[],itemPool=[],i,u;
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(upgradeEligible(u)){pool.push(u);if(u.item&&u.item===S.item)itemPool.push(u)}}
+ shuffle(pool);var out=[];
+ if(S.item&&itemPool.length){shuffle(itemPool);out.push(itemPool[0])}
+ for(i=0;i<pool.length&&out.length<3;i++){if(out.indexOf(pool[i])<0)out.push(pool[i])}
+ return out;
+}
+function showUpgrade(heal){
+ var choices=getUpgradeChoices(),cards=[],i,u;
+ for(i=0;i<choices.length;i++){u=choices[i];cards.push((function(up){return{
+   tag:up.tag+" · EVOLUTION",title:up.title,text:up.text,go:function(){applyUpgrade(up.id)}
+ }})(u))}
+ showDecision("ROOM CLEARED","Camp Recovery restored <b>"+heal+" HP</b>. Choose one evolution.",cards,3);
+}
+function applyUpgrade(id){
+ S.owned[id]=true;
+ if(id==="power")S.mods.basic*=1.18;
+ if(id==="heart"){S.h.max+=150;S.h.hp=Math.min(S.h.max,S.h.hp+150)}
+ if(id==="armor")S.h.armor+=14;
+ if(id==="quick")S.mods.move*=1.12;
+ if(id==="cleave")S.mods.cleave=true;
+ if(id==="colossal")S.mods.spin=true;
+ if(id==="doubleRock")S.mods.rocks=2;
+ if(id==="ricochet")S.mods.rockBounce=1;
+ if(id==="slamWide")S.mods.slamR+=60;
+ if(id==="aftershock")S.mods.aftershock=true;
+ if(id==="timber")S.mods.treeW+=19;
+ if(id==="splinter")S.mods.splinter=true;
+ if(id==="royal")S.mods.honeyCamp=.20;
+ if(id==="predator")S.mods.shroudMult=2.6;
+ if(id==="unleashed"){S.mods.rageDur=8;S.mods.rageDmg=1.24}
+ if(id==="fort")S.mods.wallShield+=150;
+ if(id==="terror"){S.mods.roarPower=1.4;S.mods.roarDur=10}
+ if(id==="mountain")S.mods.avPower=1.4;
+ if(id==="barbed")S.hook.damage*=1.6;
+ if(id==="deepSet")S.hook.duration+=3;
+ if(id==="doubleHook")S.hook.count=2;
+ if(id==="fastReel")S.hook.rate*=.65;
+ if(id==="packBond")addWolf();
+ if(id==="alpha")S.wolf.damage*=1.45;
+ if(id==="dire"){S.wolf.damage*=1.35;S.wolf.speed*=1.18;S.wolf.size*=1.2}
+ if(S.room===5&&!S.item)showItemHunt();else showPathChoice("Choose where Bigfoot goes next.");
+}
+function showItemHunt(){
+ showDecision("BIGFOOT ITEM HUNT","The first boss is down. Choose what Bigfoot tracks through the woods. This item opens its own upgrade tree.",[
+  {cls:"item",tag:"UNIQUE ITEM",title:"Fishing Gear",text:"Bigfoot automatically throws hooks that stick in enemies and deal damage over time. Future upgrades improve hooks.",go:function(){chooseItem("fishing")}},
+  {cls:"item",tag:"UNIQUE ITEM",title:"Skeletal Remains",text:"The bones attract a wolf companion that hunts beside Bigfoot. Future upgrades grow the pack.",go:function(){chooseItem("bones")}}
+ ],2);
+}
+function chooseItem(item){
+ S.item=item;
+ if(item==="fishing"){S.hook={timer:.6,rate:2.7,damage:10,duration:6,count:1};byId("itemBadge").innerHTML="FISHING GEAR · HOOK HUNT";byId("status").innerHTML="Fishing Gear found. Hooks now stick in enemies and bleed them over time."}
+ else{S.wolf={damage:34,speed:105,size:1};addWolf();byId("itemBadge").innerHTML="SKELETAL REMAINS · WOLF PACK";byId("status").innerHTML="Skeletal Remains found. A wolf answers Bigfoot's call."}
+ byId("itemBadge").style.display="block";showPathChoice("The item changes the rest of this run.");
+}
+function addWolf(){
+ var a=Math.random()*Math.PI*2;
+ S.wolves.push({x:S.h.x+Math.cos(a)*55,y:S.h.y+Math.sin(a)*55,atk:rnd(0,.5),face:0,anim:0});
+}
+
+function pathOption(kind){
+ var nm=pickOne(roomNames[kind]||["FOREST PATH"]),tag="",text="",cls=kind;
+ if(kind==="combat"){tag="COMBAT";text="Standard battle. Reliable evolution reward.";cls=""}
+ if(kind==="elite"){tag="ELITE";text="Fewer but much stronger enemies. Forest Blood can thrive here."}
+ if(kind==="treasure"){tag="TREASURE";text="No fight. Choose from useful supplies and permanent run bonuses."}
+ if(kind==="event"){tag="WEIRD EVENT";text="A short choice with a benefit, risk, or tradeoff."}
+ if(kind==="shrine"){tag="SHRINE";text="Trade health or safety for a stronger permanent blessing."}
+ if(kind==="ambush"){tag="AMBUSH";text="Enemies begin dangerously close, but the room still grants an evolution."}
+ return{kind:kind,name:nm,tag:tag,text:text,cls:cls};
+}
+function showPathChoice(extra){
+ if(S.room>=12)return;
+ if(S.room===4){
+   showDecision("THE BRIDGE AHEAD",extra||"The woods go quiet.",[
+    {cls:"elite",tag:"BOSS ROOM",title:"Troll Bridge — Mossback",text:"A massive forest brute blocks the only way forward.",go:function(){S.room=5;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}
+   ],1);return;
+ }
+ if(S.room===11){
+   showDecision("THE LAST CLEARING",extra||"A roar shakes the forest.",[
+    {cls:"elite",tag:"FINAL BOSS",title:"Grumblegut's Hollow",text:"The Goblin King waits with a crown, a club, and an army close behind.",go:function(){S.room=12;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}
+   ],1);return;
+ }
+ var kinds=S.room<5?["combat","elite","treasure","event","ambush"]:["combat","elite","treasure","event","shrine","ambush"];
+ shuffle(kinds);var opts=[pathOption(kinds[0]),pathOption(kinds[1])],cards=[],i,o;
+ for(i=0;i<opts.length;i++){o=opts[i];cards.push((function(p){return{
+   cls:p.cls,tag:p.tag,title:p.name,text:p.text,go:function(){S.room++;enterRoom(p)}
+ }})(o))}
+ showDecision("CHOOSE THE NEXT PATH",extra||"Two trails split through the woods.",cards,2);
+}
+function showTreasure(){
+ S.paused=true;
+ showDecision("TREASURE — "+S.currentName,"Bigfoot finds supplies hidden beneath leaves and rotten boards.",[
+  {cls:"treasure",tag:"CACHE",title:"Heavy Rations",text:"+140 max HP and heal 140.",go:function(){S.h.max+=140;S.h.hp=Math.min(S.h.max,S.h.hp+140);finishNonCombat("Bigfoot loads up on food.")}},
+  {cls:"treasure",tag:"CACHE",title:"Hunter's Charm",text:"Basic attack damage +16%.",go:function(){S.mods.basic*=1.16;finishNonCombat("A strange old charm hums with strength.")}},
+  {cls:"treasure",tag:"CACHE",title:"Golden Honey",text:"Gain 220 shield and empower the next Camp Recovery.",go:function(){S.h.shield+=220;S.honeyBoost=true;finishNonCombat("The honey is impossibly fresh.")}}
+ ],3);
+}
+function showEvent(){
+ S.paused=true;var which=Math.floor(Math.random()*3);
+ if(which===0){
+  showDecision("WEIRD EVENT — ABANDONED CAMPSITE","A fire still smolders, but nobody is here.",[
+   {cls:"event",tag:"EVENT",title:"Eat the Food",text:"Heal 30% max HP immediately.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.30);finishNonCombat("Bigfoot eats first and asks questions never.")}},
+   {cls:"event",tag:"EVENT",title:"Take the Supplies",text:"+12 permanent armor.",go:function(){S.h.armor+=12;finishNonCombat("Bigfoot finds useful protection in the abandoned gear.")}}
+  ],2);
+ }else if(which===1){
+  showDecision("WEIRD EVENT — STRANGE FOOTPRINTS","The tracks are too large to be human and too neat to be an animal.",[
+   {cls:"event",tag:"EVENT",title:"Follow Them",text:"Basic damage +20%, but lose 12% current HP.",go:function(){S.mods.basic*=1.20;S.h.hp=Math.max(1,S.h.hp-S.h.max*.12);finishNonCombat("Whatever made the tracks is gone. Bigfoot comes back angrier.")}},
+   {cls:"event",tag:"EVENT",title:"Leave Them Alone",text:"+100 max HP. Sometimes caution wins.",go:function(){S.h.max+=100;S.h.hp+=100;finishNonCombat("Bigfoot keeps moving and conserves his strength.")}}
+  ],2);
+ }else{
+  showDecision("WEIRD EVENT — RUSTLING BRUSH","Something circles the clearing without showing itself.",[
+   {cls:"event",tag:"EVENT",title:"Roar Back",text:"Refresh every cooldown and gain 120 shield.",go:function(){S.cds={};S.h.shield+=120;finishNonCombat("The woods answer with silence.")}},
+   {cls:"event",tag:"EVENT",title:"Wait Patiently",text:"+10% movement speed and +8 armor.",go:function(){S.mods.move*=1.10;S.h.armor+=8;finishNonCombat("Patience pays off. Bigfoot studies the forest instead of chasing shadows.")}}
+  ],2);
+ }
+}
+function showShrine(){
+ S.paused=true;
+ showDecision("SHRINE — "+S.currentName,"An old stone altar feels older than the forest around it.",[
+  {cls:"shrine",tag:"SHRINE",title:"Blood for Strength",text:"Lose 15% max HP now. Basic damage +25% permanently.",go:function(){var loss=S.h.max*.15;S.h.max=Math.max(300,S.h.max-loss);S.h.hp=Math.min(S.h.hp,S.h.max);S.mods.basic*=1.25;finishNonCombat("The shrine drinks the offering.")}},
+  {cls:"shrine",tag:"SHRINE",title:"Protect the Pack",text:"+180 max HP and +10 armor.",go:function(){S.h.max+=180;S.h.hp+=180;S.h.armor+=10;finishNonCombat("The old stones warm beneath Bigfoot's hand.")}}
+ ],2);
+}
+function showVictory(heal){
+ running=false;S.paused=true;
+ showDecision("RUN COMPLETE","Camp Recovery restored "+heal+" HP. Grumblegut is down and the forest belongs to Bigfoot.",[
+  {cls:"item",tag:"VICTORY",title:"THE FOREST IS YOURS",text:"Start another run and try a different loadout or item hunt.",go:function(){byId("startToggle").checked=false;stopGame()}}
+ ],1);
+ byId("status").innerHTML="GRUMBLEGUT DEFEATED — RUN COMPLETE";
+}
+
 function cast(id){
  if(!S||S.paused||(S.cds[id]||0)>0)return;
- S.cds[id]=skillInfo[id].cd;
- var h=S.h,t=nearest(),i,e,a;
- if(id==="slam"){for(i=0;i<S.en.length;i++){e=S.en[i];if(distance(h,e)<S.mods.slamR)damage(e,125,S.passives.indexOf("heavy")>=0?95:65)}S.fx.push({type:"ring",x:h.x,y:h.y,t:.5})}
- if(id==="tree"&&t){a=Math.atan2(t.y-h.y,t.x-h.x);S.proj.push({type:"tree",x:h.x,y:h.y,vx:Math.cos(a)*480,vy:Math.sin(a)*480,t:1.6,hits:{}})}
- if(id==="honey"){h.shield+=120;h.armor+=22;S.honeyBoost=true}
- if(id==="shroud"){h.inv=2.6;h.bonusNext=true}
- if(id==="rage")h.rage=6;
- if(id==="wall"){h.shield+=220;for(i=0;i<S.en.length;i++)if(distance(h,S.en[i])<110)damage(S.en[i],55,95)}
- if(id==="roar"){for(i=0;i<S.en.length;i++){S.en[i].fear=2.2;damage(S.en[i],80,25)}h.rage=8;h.roarDR=8}
- if(id==="avalanche"){for(i=0;i<S.en.length;i++)damage(S.en[i],260,35)}
+ S.cds[id]=skillInfo[id].cd;var h=S.h,t=nearestTo(h),i,e,a;
+ if(id==="slam"){
+   for(i=0;i<S.en.length;i++){e=S.en[i];if(dist(h,e)<S.mods.slamR)damageEnemy(e,128,78,h.x,h.y)}
+   S.fx.push({type:"ring",x:h.x,y:h.y,r:S.mods.slamR,t:.55,max:.55});S.shake=.22;
+   if(S.mods.aftershock)S.hazards.push({type:"aftershock",x:h.x,y:h.y,r:S.mods.slamR+18,t:.48,done:false});
+ }
+ if(id==="tree"&&t){a=Math.atan2(t.y-h.y,t.x-h.x);S.proj.push({type:"tree",x:h.x,y:h.y,vx:Math.cos(a)*500,vy:Math.sin(a)*500,t:1.65,hits:{},rot:a})}
+ if(id==="honey"){h.shield+=150;h.armorTemp+=24;h.armorTempT=6;S.honeyBoost=true;S.fx.push({type:"honey",x:h.x,y:h.y,t:1})}
+ if(id==="shroud"){h.inv=2.6;h.bonusNext=true;S.fx.push({type:"mist",x:h.x,y:h.y,t:2.6})}
+ if(id==="rage"){h.rage=S.mods.rageDur;S.fx.push({type:"rage",x:h.x,y:h.y,t:S.mods.rageDur})}
+ if(id==="wall"){h.shield+=S.mods.wallShield;for(i=0;i<S.en.length;i++)if(dist(h,S.en[i])<120)damageEnemy(S.en[i],55,100,h.x,h.y);S.fx.push({type:"wall",x:h.x,y:h.y,t:.7});S.shake=.18}
+ if(id==="roar"){for(i=0;i<S.en.length;i++){S.en[i].fear=2.2;damageEnemy(S.en[i],82*S.mods.roarPower,28,h.x,h.y)}h.rage=S.mods.roarDur;h.roarDR=S.mods.roarDur;S.fx.push({type:"roar",x:h.x,y:h.y,t:.9});S.shake=.4}
+ if(id==="avalanche"){for(i=0;i<S.en.length;i++)damageEnemy(S.en[i],265*S.mods.avPower,40,h.x,h.y);S.fx.push({type:"avalanche",t:1});S.shake=.65}
 }
 function moveUnit(a,b,s,dt,away){
  var dx=b.x-a.x,dy=b.y-a.y,z=Math.sqrt(dx*dx+dy*dy)||1,m=away?-1:1;
- a.x=Math.max(35,Math.min(725,a.x+dx/z*s*dt*m));
- a.y=Math.max(40,Math.min(485,a.y+dy/z*s*dt*m));
+ a.x=clamp(a.x+dx/z*s*dt*m,35,725);a.y=clamp(a.y+dy/z*s*dt*m,42,485);
+}
+function startEnemyWind(e,wind){
+ e.wind=wind;e.windMax=wind;e.winding=true;
+}
+function enemyAttack(e){
+ var h=S.h,a;
+ e.attackAnim=.22;S.shake=Math.max(S.shake,(e.type==="brute"||e.type==="boss") ? .14 : .05);
+ if(e.type==="archer"){
+   a=Math.atan2(h.y-e.y,h.x-e.x);S.proj.push({type:"arrow",x:e.x,y:e.y,vx:Math.cos(a)*340,vy:Math.sin(a)*340,t:2.4,enemy:true,rot:a});
+ }else if(e.type==="mush"){
+   if(dist(e,h)<58)hurtHero(e.dmg,e);S.fx.push({type:"spore",x:e.x,y:e.y,t:.65});
+ }else if(e.type==="brute"||e.type==="miniboss"||e.type==="boss"){
+   if(dist(e,h)<e.range+24)hurtHero(e.dmg,e);S.fx.push({type:"club",x:e.x,y:e.y,t:.35});S.hazards.push({type:"dust",x:e.x,y:e.y,r:e.type==="boss"?95:68,t:.3,done:true});
+ }else{
+   if(dist(e,h)<e.range+16)hurtHero(e.dmg,e);S.fx.push({type:"slash",x:e.x,y:e.y,t:.25});
+ }
+}
+function updateBossSpecial(e,dt){
+ if(e.type!=="boss"&&e.type!=="miniboss")return false;
+ if(e.chargeWind>0){
+   e.chargeWind-=dt;
+   if(e.chargeWind<=0){e.chargeTime=e.type==="boss" ? .72 : .52;e.chargeHit=false}
+   return true;
+ }
+ if(e.chargeTime>0){
+   e.chargeTime-=dt;e.x=clamp(e.x+Math.cos(e.chargeDir)*(e.type==="boss" ? 300 : 240)*dt,40,720);e.y=clamp(e.y+Math.sin(e.chargeDir)*(e.type==="boss" ? 300 : 240)*dt,45,480);
+   if(!e.chargeHit&&dist(e,S.h)<58){hurtHero(e.type==="boss" ? 48 : 36,e);e.chargeHit=true}
+   return true;
+ }
+ e.chargeCd-=dt;e.shockCd-=dt;e.summonCd-=dt;
+ if(e.chargeCd<=0){e.chargeDir=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.chargeWind=.8;e.chargeCd=e.type==="boss" ? 6.8 : 8.5;return true}
+ if(e.shockCd<=0){S.hazards.push({type:"bossShock",x:e.x,y:e.y,r:e.type==="boss" ? 145 : 112,t:.85,done:false});e.shockCd=e.type==="boss" ? 6.1 : 8;return true}
+ if(e.type==="boss"&&e.summonCd<=0){
+   for(var i=0;i<4;i++){var a=i/4*Math.PI*2;addEnemy(i%2?"gob":"archer",e.x+Math.cos(a)*90,e.y+Math.sin(a)*90)}
+   e.summonCd=9.5;S.fx.push({type:"summon",x:e.x,y:e.y,t:.8});
+ }
+ return false;
+}
+function updateHooks(e,dt){
+ if(!e.hooks.length)return;
+ for(var i=e.hooks.length-1;i>=0;i--){
+   var h=e.hooks[i];h.t-=dt;h.tick-=dt;
+   if(h.tick<=0){h.tick=.6;damageEnemy(e,S.hook.damage,0,e.x,e.y);S.fx.push({type:"hooktick",x:e.x,y:e.y,t:.25})}
+   if(h.t<=0)e.hooks.splice(i,1);
+ }
+}
+function throwAutoHooks(dt){
+ if(S.item!=="fishing"||!S.hook)return;
+ S.hook.timer-=dt;if(S.hook.timer>0)return;S.hook.timer=S.hook.rate;
+ var list=S.en.filter(function(e){return !e.dead}).sort(function(a,b){return dist(S.h,b)-dist(S.h,a)}),count=Math.min(S.hook.count,list.length);
+ for(var i=0;i<count;i++){var t=list[i],a=Math.atan2(t.y-S.h.y,t.x-S.h.x);S.proj.push({type:"hook",x:S.h.x,y:S.h.y,vx:Math.cos(a)*390,vy:Math.sin(a)*390,t:1.7,target:t,hits:{},rot:a})}
+}
+function updateWolves(dt){
+ if(S.item!=="bones")return;
+ for(var i=0;i<S.wolves.length;i++){
+   var w=S.wolves[i],t=nearestTo(w);w.atk=Math.max(0,w.atk-dt);w.anim=Math.max(0,w.anim-dt);
+   if(!t){moveUnit(w,S.h,S.wolf.speed*.8,dt,false);continue}
+   w.face=Math.atan2(t.y-w.y,t.x-w.x);
+   if(dist(w,t)>38*S.wolf.size)moveUnit(w,t,S.wolf.speed,dt,false);
+   else if(w.atk<=0){damageEnemy(t,S.wolf.damage,14,w.x,w.y);w.atk=.75;w.anim=.22;S.fx.push({type:"wolfbite",x:t.x,y:t.y,t:.25})}
+ }
+}
+function updateHazards(dt){
+ for(var i=S.hazards.length-1;i>=0;i--){
+   var h=S.hazards[i];h.t-=dt;
+   if(!h.done&&h.t<=0){
+     h.done=true;
+     if(h.type==="bossShock"&&dist(h,S.h)<h.r)hurtHero(46,null);
+     if(h.type==="aftershock"){
+       for(var j=0;j<S.en.length;j++)if(dist(h,S.en[j])<h.r)damageEnemy(S.en[j],78,45,h.x,h.y);
+       S.shake=.22;
+     }
+     h.t=-.25;
+   }
+   if(h.t<-.24)S.hazards.splice(i,1);
+ }
 }
 function update(dt){
  if(!S||S.paused)return;
- var k,h=S.h,t,d,ranged,ideal,a,mult,i,e,dmg,z,p,j,key;
+ var k,h=S.h,t,d,ranged,ideal,a,mult,i,e,p,j,key;
  for(k in S.cds)if(S.cds.hasOwnProperty(k))S.cds[k]=Math.max(0,S.cds[k]-dt);
- h.atk=Math.max(0,h.atk-dt);h.rage=Math.max(0,h.rage-dt);h.inv=Math.max(0,h.inv-dt);h.roarDR=Math.max(0,h.roarDR-dt);
- t=nearest();
+ h.atk=Math.max(0,h.atk-dt);h.rage=Math.max(0,h.rage-dt);h.inv=Math.max(0,h.inv-dt);h.roarDR=Math.max(0,h.roarDR-dt);h.swing=Math.max(0,h.swing-dt);
+ if(h.armorTempT>0){h.armorTempT-=dt;if(h.armorTempT<=0)h.armorTemp=0}
+ S.shake=Math.max(0,S.shake-dt);
+ t=nearestTo(h);
  if(t){
-   ranged=S.basic==="rock";d=distance(h,t);ideal=ranged?155:48;a=Math.atan2(t.y-h.y,t.x-h.x);h.aim=a;
-   if(d>ideal+14)moveUnit(h,t,ranged?62:76,dt,false);
-   else if(ranged&&d<105)moveUnit(h,t,68,dt,true);
+   ranged=S.basic==="rock";d=dist(h,t);ideal=ranged?160:52;a=Math.atan2(t.y-h.y,t.x-h.x);h.aim=a;
+   if(d>ideal+15)moveUnit(h,t,(ranged?65:80)*S.mods.move,dt,false);
+   else if(ranged&&d<110)moveUnit(h,t,70*S.mods.move,dt,true);
    else if(h.atk<=0){
-     h.combo++;
-     mult=S.mods.basic*((S.passives.indexOf("strength")>=0&&h.combo%3===0)?1.6:1)*(h.bonusNext?1.7:1);h.bonusNext=false;
-     if(ranged)S.proj.push({type:"rock",x:h.x,y:h.y,vx:Math.cos(a)*410,vy:Math.sin(a)*410,t:1.5,hits:{}});
-     else damage(t,h.dmg*mult,h.combo%3===0?(S.passives.indexOf("heavy")>=0?90:55):16);
-     h.atk=h.rage>0 ? 0.33 : 0.72;
+     h.combo++;h.swing=.22;
+     mult=S.mods.basic*(h.rage>0?S.mods.rageDmg:1)*(h.bonusNext?S.mods.shroudMult:1);h.bonusNext=false;
+     if(S.passives.indexOf("strength")>=0&&h.combo%3===0)mult*=1.6;
+     if(ranged){
+       for(i=0;i<S.mods.rocks;i++){var off=(i-(S.mods.rocks-1)/2)*.12,ang=a+off;S.proj.push({type:"rock",x:h.x,y:h.y,vx:Math.cos(ang)*430,vy:Math.sin(ang)*430,t:1.6,hits:{},rot:ang,bounce:S.mods.rockBounce,mult:mult})}
+     }else{
+       damageEnemy(t,h.dmg*mult,h.combo%3===0?62:18,h.x,h.y);
+       if(S.mods.cleave)for(i=0;i<S.en.length;i++){e=S.en[i];if(e!==t&&!e.dead&&dist(h,e)<95)damageEnemy(e,h.dmg*.52*mult,14,h.x,h.y)}
+       if(S.mods.spin&&h.combo%3===0)for(i=0;i<S.en.length;i++){e=S.en[i];if(!e.dead&&dist(h,e)<125)damageEnemy(e,h.dmg*.62*mult,38,h.x,h.y)}
+       S.fx.push({type:"swipe",x:h.x,y:h.y,a:a,t:.22,side:h.combo%2?1:-1});
+     }
+     h.atk=h.rage>0 ? .35 : .72;
    }
  }
+ throwAutoHooks(dt);updateWolves(dt);
  for(i=0;i<S.en.length;i++){
-   e=S.en[i];e.atk=Math.max(0,e.atk-dt);e.fear=Math.max(0,e.fear-dt);d=distance(e,h);
-   if(e.fear>0)moveUnit(e,h,e.spd*1.6,dt,true);
-   else if(d>e.range)moveUnit(e,h,e.spd,dt,false);
-   else if(e.atk<=0&&h.inv<=0){
-     dmg=e.dmg*(S.passives.indexOf("hide")>=0 ? 0.88 : 1)*(h.roarDR>0 ? 0.75 : 1)*100/(100+h.armor);
-     if(h.shield>0){z=Math.min(h.shield,dmg);h.shield-=z;dmg-=z}
-     h.hp-=dmg;e.atk=e.type==="boss"?1.1:.9;
-     if(S.passives.indexOf("instinct")>=0&&dmg>18)h.rage=Math.max(h.rage,2.4);
+   e=S.en[i];if(e.dead)continue;
+   e.flash=Math.max(0,e.flash-dt);e.attackAnim=Math.max(0,e.attackAnim-dt);e.atk=Math.max(0,e.atk-dt);e.fear=Math.max(0,e.fear-dt);
+   e.x=clamp(e.x+e.kbx*dt,30,730);e.y=clamp(e.y+e.kby*dt,35,490);e.kbx*=Math.max(0,1-dt*8);e.kby*=Math.max(0,1-dt*8);
+   updateHooks(e,dt);
+   if(e.dead)continue;
+   if(updateBossSpecial(e,dt))continue;
+   d=dist(e,h);
+   if(e.winding){
+     e.wind-=dt;if(e.wind<=0){e.winding=false;enemyAttack(e);e.atk=e.type==="archer"?1.25:(e.type==="brute"?1.25:.9)}
+     continue;
    }
+   if(e.fear>0){moveUnit(e,h,e.spd*1.7,dt,true);continue}
+   if(d>e.range)moveUnit(e,h,e.spd,dt,false);
+   else if(e.atk<=0&&h.inv<=0)startEnemyWind(e,e.type==="archer" ? .45 : (e.type==="brute" ? .52 : (e.type==="boss" ? .55 : .28)));
  }
  for(i=0;i<S.proj.length;i++){
    p=S.proj[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.t-=dt;
+   if(p.enemy){
+     if(dist(p,h)<18){hurtHero(16+S.room*.7,null);p.t=0;S.fx.push({type:"arrowhit",x:h.x,y:h.y,t:.2})}
+     continue;
+   }
    for(j=0;j<S.en.length;j++){
-     e=S.en[j];key=j+"";
-     if(!p.hits[key]&&distance(p,e)<(p.type==="tree"?S.mods.treeW+18:22)){
-       p.hits[key]=1;damage(e,p.type==="tree"?165:h.dmg*.85,p.type==="tree"?(S.passives.indexOf("heavy")>=0?95:65):12);
-       if(p.type==="rock")p.t=0;
+     e=S.en[j];if(e.dead)continue;key=j+"";
+     if(!p.hits[key]&&dist(p,e)<(p.type==="tree"?S.mods.treeW+20:(p.type==="hook"?22:20))){
+       p.hits[key]=1;
+       if(p.type==="tree"){
+         damageEnemy(e,170,72,p.x,p.y);
+         if(S.mods.splinter)for(var q=0;q<S.en.length;q++)if(S.en[q]!==e&&!S.en[q].dead&&dist(e,S.en[q])<82)damageEnemy(S.en[q],46,10,e.x,e.y);
+       }else if(p.type==="rock"){
+         damageEnemy(e,h.dmg*.82*p.mult,12,p.x,p.y);
+         if(p.bounce>0){p.bounce--;var nt=nearestOther(e,p.hits);if(nt){a=Math.atan2(nt.y-p.y,nt.x-p.x);p.vx=Math.cos(a)*430;p.vy=Math.sin(a)*430;p.rot=a}else p.t=0}else p.t=0;
+       }else if(p.type==="hook"){
+         e.hooks.push({t:S.hook.duration,tick:.25});damageEnemy(e,12,0,p.x,p.y);p.t=0;S.fx.push({type:"hookhit",x:e.x,y:e.y,t:.35});
+       }
      }
    }
  }
- S.proj=S.proj.filter(function(q){return q.t>0});
- S.en=S.en.filter(function(q){return !q.dead});
- while(S.xp>=S.need){S.xp-=S.need;S.level++;S.need=Math.ceil(S.need*1.28);h.max+=30;h.hp=Math.min(h.max,h.hp+30);h.dmg*=1.05}
- if(!S.en.length&&!S.paused)showReward();
- if(h.hp<=0){S.paused=true;running=false;byId("status").innerHTML="Bigfoot fell."}
+ S.proj=S.proj.filter(function(p0){return p0.t>0&&p0.x>-50&&p0.x<810&&p0.y>-50&&p0.y<570});
+ S.en=S.en.filter(function(e0){return !e0.dead});
+ updateHazards(dt);
+ for(i=S.fx.length-1;i>=0;i--){S.fx[i].t-=dt;if(S.fx[i].type==="particle"){S.fx[i].x+=S.fx[i].vx*dt;S.fx[i].y+=S.fx[i].vy*dt;S.fx[i].vy+=70*dt}if(S.fx[i].t<=0)S.fx.splice(i,1)}
+ if(!S.en.length&&!S.paused)completeRoom();
+ if(h.hp<=0){S.paused=true;running=false;byId("status").innerHTML="Bigfoot fell. The run is over.";showDecision("RUN ENDED","Bigfoot was overwhelmed in room "+S.room+".",[{cls:"elite",tag:"DEFEAT",title:"Try Another Run",text:"Change the loadout or chase a different item.",go:function(){byId("startToggle").checked=false;stopGame()}}],1)}
  updateUI();
 }
-function showReward(){
- S.paused=true;
- var pct=S.passives.indexOf("recover")>=0 ? 0.20 : 0.10,i,x,input,label;
- if(S.honeyBoost){pct+=.10;S.honeyBoost=false}
- var heal=S.h.max*pct;S.h.hp=Math.min(S.h.max,S.h.hp+heal);
- byId("camp").innerHTML="Camp Recovery: +"+Math.round(heal)+" HP";
- var pool=[["power","Ancient Force","Basic attacks +20%."],["health","Mountain Heart","+140 max HP."],["slam","Quake Radius","Earth Slam gets bigger."],["tree","Heavy Timber","Uproot gets wider."],["armor","Stone Fur","+12 armor."],["refresh","Wild Instincts","Refresh cooldowns."]];
- pool.sort(function(){return Math.random()-.5});pool=pool.slice(0,3);
- byId("rewardCards").innerHTML="";
- for(i=0;i<pool.length;i++){
-   x=pool[i];input=document.createElement("input");input.type="radio";input.name="reward";input.className="upgradeRadio";input.id="reward"+i;input.setAttribute("data-effect",x[0]);
-   input.onchange=function(){if(this.checked)applyUpgrade(this.getAttribute("data-effect"))};
-   label=document.createElement("label");label.className="upgrade";label.htmlFor=input.id;label.innerHTML="<b>"+x[1]+"</b><small>"+x[2]+"</small>";
-   byId("rewardCards").appendChild(input);byId("rewardCards").appendChild(label);
- }
- byId("reward").style.display="block";
+function nearestOther(from,hits){
+ var best=null,bd=1e9,i,e,d;for(i=0;i<S.en.length;i++){e=S.en[i];if(e.dead||hits[i+""])continue;d=dist(from,e);if(d<bd){bd=d;best=e}}return best;
 }
-function applyUpgrade(effect){
- if(effect==="power")S.mods.basic*=1.2;
- if(effect==="health"){S.h.max+=140;S.h.hp+=140}
- if(effect==="slam")S.mods.slamR+=55;
- if(effect==="tree")S.mods.treeW+=15;
- if(effect==="armor")S.h.armor+=12;
- if(effect==="refresh")S.cds={};
- byId("reward").style.display="none";
- if(S.wave>=5){running=false;S.paused=true;byId("status").innerHTML="RUN COMPLETE — GRUMBLEGUT DEFEATED";return}
- S.wave++;spawnWave();updateUI();
-}
-function updateUI(){
- var labels=document.querySelectorAll(".skill"),i,id,cd;
- byId("lvl").innerHTML=S.level;byId("hpText").innerHTML=Math.max(0,Math.ceil(S.h.hp))+" / "+Math.ceil(S.h.max)+(S.h.shield>0?" +"+Math.ceil(S.h.shield)+" shield":"");
- byId("xpText").innerHTML=S.xp+" / "+S.need;byId("left").innerHTML=S.en.length;
- for(i=0;i<labels.length;i++){id=labels[i].getAttribute("data-skill");cd=S.cds[id]||0;labels[i].className=cd>0?"skill cooling":"skill";labels[i].querySelector(".cd").innerHTML=cd>0?cd.toFixed(1)+"s":"READY"}
-}
+
 function drawBackground(){
- var i,x,y;
- ctx.fillStyle="#6e955b";ctx.fillRect(0,0,760,520);
- ctx.fillStyle="#ae9568";ctx.beginPath();ctx.ellipse(380,270,290,205,0,0,Math.PI*2);ctx.fill();
- ctx.strokeStyle="#315e38";ctx.lineWidth=3;
- for(i=0;i<36;i++){x=(i*181+20)%750;y=(i*109+15)%510;ctx.beginPath();ctx.moveTo(x,y+7);ctx.lineTo(x-4,y-4);ctx.moveTo(x,y+7);ctx.lineTo(x+3,y-7);ctx.stroke()}
+ var kind=S.roomKind||"combat",i,x,y,shade=kind==="elite"||kind==="boss"?"#52764b":"#6d965a";
+ if(kind==="ambush")shade="#557b50";if(kind==="treasure")shade="#7b8e52";if(kind==="shrine")shade="#5d765f";
+ ctx.fillStyle=shade;ctx.fillRect(0,0,760,520);
+ var grad=ctx.createRadialGradient(380,270,70,380,270,360);grad.addColorStop(0,"#b49b69");grad.addColorStop(1,"#786942");ctx.fillStyle=grad;ctx.beginPath();ctx.ellipse(380,270,285,202,-.03,0,Math.PI*2);ctx.fill();
+ ctx.globalAlpha=.22;ctx.fillStyle="#5e4b34";
+ for(i=0;i<24;i++){x=(i*173+37)%700+30;y=(i*97+21)%470+25;ctx.beginPath();ctx.ellipse(x,y,20+i%4*7,6+i%3*3,i*.8,0,Math.PI*2);ctx.fill()}
+ ctx.globalAlpha=1;
+ for(i=0;i<58;i++){x=(i*137+19)%748+6;y=(i*83+9)%508+6;if(((x-380)/300)*((x-380)/300)+((y-270)/215)*((y-270)/215)<.68)continue;ctx.strokeStyle=i%3?"#315f36":"#487840";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y+7);ctx.lineTo(x-4,y-5);ctx.moveTo(x,y+7);ctx.lineTo(x+1,y-8);ctx.moveTo(x,y+7);ctx.lineTo(x+6,y-3);ctx.stroke()}
+ for(i=0;i<12;i++){x=35+(i*293)%690;y=35+(i*167)%450;ctx.strokeStyle="#5a3c27";ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(x-12,y);ctx.lineTo(x+15,y+5);ctx.stroke();ctx.fillStyle=i%2?"#b74d43":"#d7a944";ctx.beginPath();ctx.arc(x+23,y,6,Math.PI,0);ctx.fill()}
+ for(i=0;i<14;i++){x=(i*211)%720+20;y=(i*149)%480+20;ctx.fillStyle=i%2?"#7b7157":"#a67549";ctx.beginPath();ctx.ellipse(x,y,4+i%3,2+i%2,i,0,Math.PI*2);ctx.fill()}
 }
 function drawHero(){
- var h=S.h;
- ctx.save();ctx.translate(h.x,h.y);ctx.rotate(h.aim+Math.PI/2);if(h.inv>0)ctx.globalAlpha=.45;
- ctx.strokeStyle="#573520";ctx.lineWidth=17;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(-18,7);ctx.lineTo(-35,-20);ctx.moveTo(18,7);ctx.lineTo(35,-20);ctx.stroke();
- ctx.fillStyle="#56351f";ctx.beginPath();ctx.arc(0,8,30,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#70462c";ctx.beginPath();ctx.arc(0,-5,26,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#a36d47";ctx.beginPath();ctx.arc(0,-8,14,0,Math.PI*2);ctx.fill();ctx.restore();
+ var h=S.h,sw=h.swing>0?Math.sin((.22-h.swing)/.22*Math.PI):0;
+ ctx.save();ctx.translate(h.x,h.y);ctx.rotate(h.aim+Math.PI/2);if(h.inv>0)ctx.globalAlpha=.43;
+ ctx.fillStyle="#1b261d88";ctx.beginPath();ctx.ellipse(0,16,45,28,0,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle="#56341f";ctx.lineWidth=19;ctx.lineCap="round";ctx.beginPath();
+ ctx.moveTo(-23,5);ctx.lineTo(-42-(S.h.combo%2?34*sw:0),-25+20*sw);ctx.moveTo(23,5);ctx.lineTo(42+(S.h.combo%2?0:34*sw),-25+20*sw);ctx.stroke();
+ ctx.fillStyle="#4f301f";for(var i=0;i<16;i++){var a=i/16*Math.PI*2,r=33+(i%3)*4;ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r+4,10,0,Math.PI*2);ctx.fill()}
+ ctx.fillStyle="#72462d";ctx.beginPath();ctx.arc(0,-4,31,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#aa714a";ctx.beginPath();ctx.ellipse(0,-10,19,16,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#261914";ctx.beginPath();ctx.arc(-7,-14,2.5,0,Math.PI*2);ctx.arc(7,-14,2.5,0,Math.PI*2);ctx.fill();
+ if(h.shield>0){ctx.strokeStyle="#83d8dccc";ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,0,50,0,Math.PI*2);ctx.stroke()}
+ ctx.restore();
+}
+function enemyAngle(e){return Math.atan2(S.h.y-e.y,S.h.x-e.x)+Math.PI/2}
+function drawGoblin(e){
+ var swing=e.winding?(1-e.wind/e.windMax):e.attackAnim>0?1:0;
+ ctx.save();ctx.translate(e.x,e.y);ctx.rotate(enemyAngle(e));if(e.flash>0)ctx.globalAlpha=.45;
+ ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,12,26,15,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#54773c";ctx.beginPath();ctx.ellipse(0,4,18,22,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#6a934d";ctx.beginPath();ctx.arc(0,-7,18,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#466836";ctx.beginPath();ctx.moveTo(-12,-9);ctx.lineTo(-31,-20);ctx.lineTo(-16,4);ctx.moveTo(12,-9);ctx.lineTo(31,-20);ctx.lineTo(16,4);ctx.fill();
+ ctx.fillStyle="#6f4b32";ctx.beginPath();ctx.ellipse(-13,7,8,11,-.5,0,Math.PI*2);ctx.ellipse(13,7,8,11,.5,0,Math.PI*2);ctx.fill();
+ ctx.save();ctx.translate(18,-2);ctx.rotate(-.65+1.15*swing);ctx.strokeStyle="#68462f";ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-22);ctx.stroke();ctx.fillStyle="#c5c2b7";ctx.fillRect(-3,-40,6,22);ctx.restore();
+ ctx.fillStyle="#262019";ctx.beginPath();ctx.arc(-6,-10,2,0,Math.PI*2);ctx.arc(6,-10,2,0,Math.PI*2);ctx.fill();ctx.restore();
+}
+function drawArcher(e){
+ var draw=e.winding?(1-e.wind/e.windMax):0;
+ ctx.save();ctx.translate(e.x,e.y);ctx.rotate(enemyAngle(e));if(e.flash>0)ctx.globalAlpha=.45;
+ ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,12,25,14,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#364f34";ctx.beginPath();ctx.arc(0,-2,21,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#6b924e";ctx.beginPath();ctx.arc(0,-5,14,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle="#7e5835";ctx.lineWidth=4;ctx.beginPath();ctx.arc(22,-4,19,-1.4,1.4);ctx.stroke();
+ ctx.strokeStyle="#d1c6a2";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(22,-22);ctx.lineTo(22,14);ctx.stroke();
+ ctx.strokeStyle="#c5b47b";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(4,-4);ctx.lineTo(22-draw*8,-4);ctx.stroke();
+ ctx.fillStyle="#7c5737";ctx.fillRect(-16,9,8,20);ctx.restore();
+}
+function drawMush(e){
+ ctx.save();ctx.translate(e.x,e.y);if(e.flash>0)ctx.globalAlpha=.45;
+ ctx.fillStyle="#1c281e77";ctx.beginPath();ctx.ellipse(0,13,27,15,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#e7d4a9";ctx.beginPath();ctx.arc(0,8,11,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#a9443d";ctx.beginPath();ctx.arc(0,-2,26,Math.PI,0);ctx.lineTo(26,0);ctx.arc(0,0,26,0,Math.PI);ctx.fill();
+ ctx.fillStyle="#f1e1b8";for(var i=0;i<5;i++){var a=i/5*Math.PI*2;ctx.beginPath();ctx.arc(Math.cos(a)*14,Math.sin(a)*10-4,3.8,0,Math.PI*2);ctx.fill()}ctx.restore();
+}
+function drawBrute(e,boss){
+ var sc=boss?(e.type==="boss"?1.75:1.35):1,swing=e.winding?(1-e.wind/e.windMax):e.attackAnim>0?1:0;
+ ctx.save();ctx.translate(e.x,e.y);ctx.rotate(enemyAngle(e));ctx.scale(sc,sc);if(e.flash>0)ctx.globalAlpha=.45;
+ ctx.fillStyle="#19251d88";ctx.beginPath();ctx.ellipse(0,16,37,22,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle=e.type==="boss"?"#425c37":"#536f3e";ctx.beginPath();ctx.ellipse(0,5,34,30,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#6d4c34";ctx.beginPath();ctx.arc(-25,4,15,0,Math.PI*2);ctx.arc(25,4,15,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#608149";ctx.beginPath();ctx.arc(0,-10,16,0,Math.PI*2);ctx.fill();
+ if(e.type==="boss"){ctx.fillStyle="#d5aa43";ctx.beginPath();ctx.moveTo(-17,-22);ctx.lineTo(-10,-38);ctx.lineTo(-2,-24);ctx.lineTo(7,-40);ctx.lineTo(15,-22);ctx.closePath();ctx.fill();ctx.strokeStyle="#d9c9a2";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-18,-16);ctx.lineTo(-31,-29);ctx.moveTo(18,-16);ctx.lineTo(31,-29);ctx.stroke()}
+ ctx.save();ctx.translate(29,-1);ctx.rotate(-.7+1.25*swing);ctx.strokeStyle="#523821";ctx.lineWidth=10;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-34);ctx.stroke();ctx.fillStyle="#664829";ctx.fillRect(-10,-57,20,29);ctx.restore();
+ ctx.restore();
+ if(e.chargeWind>0){
+   ctx.save();ctx.strokeStyle="#ff6c4caa";ctx.lineWidth=8;ctx.setLineDash([15,10]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.chargeDir)*240,e.y+Math.sin(e.chargeDir)*240);ctx.stroke();ctx.setLineDash([]);ctx.restore();
+ }
 }
 function drawEnemy(e){
- var s=e.type==="boss"?39:(e.type==="brute"?24:16);
- ctx.fillStyle=e.type==="mush"?"#ad4b43":(e.type==="boss"?"#567240":"#65934e");ctx.beginPath();ctx.arc(e.x,e.y,e.type==="mush"?20:s,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#452f2b";ctx.fillRect(e.x-18,e.y-s-13,36,4);ctx.fillStyle="#bd4c41";ctx.fillRect(e.x-18,e.y-s-13,36*Math.max(0,e.hp/e.max),4);
+ if(e.type==="gob")drawGoblin(e);else if(e.type==="archer")drawArcher(e);else if(e.type==="mush")drawMush(e);else drawBrute(e,e.type==="miniboss"||e.type==="boss");
+ var s=e.type==="boss"?66:(e.type==="miniboss"?51:(e.type==="brute"?34:27)),w=e.type==="boss"?76:(e.type==="miniboss"?65:48);
+ ctx.fillStyle="#352822";ctx.fillRect(e.x-w/2,e.y-s,w,6);ctx.fillStyle="#d44a42";ctx.fillRect(e.x-w/2,e.y-s,w*Math.max(0,e.hp/e.max),6);
+ if(e.hooks&&e.hooks.length){ctx.strokeStyle="#d7d3c5";ctx.lineWidth=2;for(var i=0;i<e.hooks.length;i++){ctx.beginPath();ctx.arc(e.x+8+i*5,e.y-4-i*3,6,.2,Math.PI*1.5);ctx.stroke()}}
+}
+function drawWolf(w){
+ var sc=S.wolf?S.wolf.size:1;ctx.save();ctx.translate(w.x,w.y);ctx.rotate(w.face+Math.PI/2);ctx.scale(sc,sc);
+ ctx.fillStyle="#1c281e77";ctx.beginPath();ctx.ellipse(0,10,22,12,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#716b62";ctx.beginPath();ctx.ellipse(0,2,19,23,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#91877b";ctx.beginPath();ctx.ellipse(0,-16,13,16,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#59554f";ctx.beginPath();ctx.moveTo(-9,-27);ctx.lineTo(-15,-42);ctx.lineTo(-2,-31);ctx.moveTo(9,-27);ctx.lineTo(15,-42);ctx.lineTo(2,-31);ctx.fill();
+ ctx.fillStyle="#302d29";ctx.beginPath();ctx.arc(0,-24,3,0,Math.PI*2);ctx.fill();ctx.restore();
 }
 function drawAim(){
- if(S.abilities.indexOf("tree")<0||(S.cds.tree||0)>0)return;
- var t=nearest();if(!t)return;var h=S.h,a=Math.atan2(t.y-h.y,t.x-h.x);
- ctx.strokeStyle="#39c954";ctx.lineWidth=7;ctx.setLineDash([12,7]);ctx.beginPath();ctx.moveTo(h.x+Math.cos(a)*36,h.y+Math.sin(a)*36);ctx.lineTo(h.x+Math.cos(a)*190,h.y+Math.sin(a)*190);ctx.stroke();ctx.setLineDash([]);
+ if(S.abilities.indexOf("tree")<0||(S.cds.tree||0)>0||S.paused)return;
+ var t=nearestTo(S.h);if(!t)return;var h=S.h,a=Math.atan2(t.y-h.y,t.x-h.x),ex=h.x+Math.cos(a)*200,ey=h.y+Math.sin(a)*200;
+ ctx.save();ctx.globalAlpha=.78;ctx.strokeStyle="#45e566";ctx.fillStyle="#45e566";ctx.lineWidth=8;ctx.setLineDash([14,9]);ctx.beginPath();ctx.moveTo(h.x+Math.cos(a)*42,h.y+Math.sin(a)*42);ctx.lineTo(ex,ey);ctx.stroke();ctx.setLineDash([]);
+ ctx.beginPath();ctx.moveTo(ex+Math.cos(a)*13,ey+Math.sin(a)*13);ctx.lineTo(ex+Math.cos(a+2.55)*25,ey+Math.sin(a+2.55)*25);ctx.lineTo(ex+Math.cos(a-2.55)*25,ey+Math.sin(a-2.55)*25);ctx.fill();ctx.restore();
+}
+function drawProjectile(p){
+ ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot||Math.atan2(p.vy,p.vx));
+ if(p.type==="tree"){ctx.fillStyle="#674024";ctx.fillRect(-42,-9,84,18);ctx.fillStyle="#3f7d3c";for(var i=0;i<4;i++){ctx.beginPath();ctx.arc(27+i*6,-10+(i%2)*18,14,0,Math.PI*2);ctx.fill()}}
+ else if(p.type==="rock"){ctx.fillStyle="#777a73";ctx.beginPath();ctx.moveTo(-10,-7);ctx.lineTo(5,-11);ctx.lineTo(12,1);ctx.lineTo(4,10);ctx.lineTo(-11,7);ctx.closePath();ctx.fill()}
+ else if(p.type==="arrow"){ctx.strokeStyle="#8c663d";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-14,0);ctx.lineTo(12,0);ctx.stroke();ctx.fillStyle="#c7c6be";ctx.beginPath();ctx.moveTo(15,0);ctx.lineTo(7,-4);ctx.lineTo(7,4);ctx.closePath();ctx.fill()}
+ else if(p.type==="hook"){ctx.strokeStyle="#d4d2ca";ctx.lineWidth=4;ctx.beginPath();ctx.arc(4,0,9,-.2,Math.PI*1.45);ctx.stroke();ctx.strokeStyle="#9d875c";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-17,0);ctx.lineTo(-3,0);ctx.stroke()}
+ ctx.restore();
+}
+function drawHazards(){
+ for(var i=0;i<S.hazards.length;i++){var h=S.hazards[i],p=Math.max(0,h.t)/(h.type==="bossShock" ? .85 : .48);
+   if(h.type==="bossShock"&&!h.done){ctx.strokeStyle="rgba(255,93,62,"+(.4+.45*(1-p))+")";ctx.lineWidth=8;ctx.beginPath();ctx.arc(h.x,h.y,h.r,0,Math.PI*2);ctx.stroke();ctx.fillStyle="rgba(255,96,62,.08)";ctx.beginPath();ctx.arc(h.x,h.y,h.r,0,Math.PI*2);ctx.fill()}
+   if(h.type==="aftershock"&&!h.done){ctx.strokeStyle="rgba(242,192,82,.75)";ctx.lineWidth=7;ctx.beginPath();ctx.arc(h.x,h.y,h.r*(1-p*.3),0,Math.PI*2);ctx.stroke()}
+   if(h.type==="dust"){ctx.strokeStyle="rgba(190,158,99,.55)";ctx.lineWidth=10;ctx.beginPath();ctx.arc(h.x,h.y,h.r,0,Math.PI*2);ctx.stroke()}
+ }
+}
+function drawFx(){
+ for(var i=0;i<S.fx.length;i++){
+   var f=S.fx[i],alpha=Math.max(0,Math.min(1,f.t/(f.max||.5)));ctx.save();ctx.globalAlpha=alpha;
+   if(f.type==="num"||f.type==="hurt"){ctx.font="bold 19px system-ui";ctx.lineWidth=4;ctx.strokeStyle="#35271d";ctx.fillStyle=f.type==="hurt"?"#ff6a5b":"#ffd65c";ctx.strokeText((f.type==="hurt"?"-":"")+f.n,f.x,f.y-31);ctx.fillText((f.type==="hurt"?"-":"")+f.n,f.x,f.y-31)}
+   if(f.type==="particle"){ctx.fillStyle=f.c;ctx.beginPath();ctx.arc(f.x,f.y,3,0,Math.PI*2);ctx.fill()}
+   if(f.type==="death"){ctx.translate(f.x,f.y);ctx.rotate(f.rot*(1-alpha)*3);ctx.fillStyle=f.sub==="mush"?"#a94a43":"#5e7f47";ctx.beginPath();ctx.ellipse(0,0,22*(.7+alpha*.3),12*(.7+alpha*.3),0,0,Math.PI*2);ctx.fill()}
+   if(f.type==="ring"||f.type==="roar"){ctx.strokeStyle=f.type==="roar"?"#ffd560":"#e7b34f";ctx.lineWidth=10;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||250)*(1-alpha),0,Math.PI*2);ctx.stroke()}
+   if(f.type==="swipe"){ctx.translate(f.x,f.y);ctx.rotate(f.a);ctx.strokeStyle="#f5e7c3";ctx.lineWidth=9;ctx.beginPath();ctx.arc(0,0,75,f.side>0?-.8:-2.3,f.side>0 ? .9 : -.6);ctx.stroke()}
+   if(f.type==="spore"){ctx.fillStyle="rgba(214,220,161,.25)";ctx.beginPath();ctx.arc(f.x,f.y,48*(1-alpha*.3),0,Math.PI*2);ctx.fill()}
+   if(f.type==="wall"){ctx.fillStyle="#85877e";for(var j=0;j<7;j++){var a=j/7*Math.PI*2;ctx.beginPath();ctx.arc(f.x+Math.cos(a)*72,f.y+Math.sin(a)*72,16,0,Math.PI*2);ctx.fill()}}
+   if(f.type==="mist"){ctx.fillStyle="#dfe9e1aa";ctx.beginPath();ctx.arc(f.x,f.y,62,0,Math.PI*2);ctx.fill()}
+   if(f.type==="rage"){ctx.strokeStyle="#db5b43";ctx.lineWidth=7;ctx.beginPath();ctx.arc(f.x,f.y,48,0,Math.PI*2);ctx.stroke()}
+   if(f.type==="honey"){ctx.fillStyle="#f0c64e";ctx.font="bold 24px system-ui";ctx.fillText("ARMOR",f.x-42,f.y-55)}
+   if(f.type==="avalanche"){ctx.fillStyle="#777a74";for(j=0;j<15;j++){ctx.beginPath();ctx.arc(30+j*51,50+(j%5)*102,12+j%4,0,Math.PI*2);ctx.fill()}}
+   if(f.type==="level"){ctx.fillStyle="#ffe067";ctx.font="bold 32px system-ui";ctx.fillText("LEVEL UP!",f.x-83,f.y-55)}
+   if(f.type==="summon"){ctx.strokeStyle="#9bd066";ctx.lineWidth=8;ctx.beginPath();ctx.arc(f.x,f.y,80*(1-alpha),0,Math.PI*2);ctx.stroke()}
+   if(f.type==="hookhit"||f.type==="hooktick"){ctx.strokeStyle="#dedbd0";ctx.lineWidth=4;ctx.beginPath();ctx.arc(f.x,f.y,15*(1-alpha*.4),.2,Math.PI*1.5);ctx.stroke()}
+   ctx.restore();
+ }
 }
 function draw(){
- if(!ctx||!S)return;
- var i,p,f;
- drawBackground();for(i=0;i<S.en.length;i++)drawEnemy(S.en[i]);drawAim();drawHero();
- for(i=0;i<S.proj.length;i++){p=S.proj[i];ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.atan2(p.vy,p.vx));ctx.fillStyle=p.type==="tree"?"#704526":"#777a73";if(p.type==="tree")ctx.fillRect(-31,-7,62,14);else{ctx.beginPath();ctx.arc(0,0,9,0,Math.PI*2);ctx.fill()}ctx.restore()}
- for(i=0;i<S.fx.length;i++){f=S.fx[i];if(f.type==="num"){ctx.fillStyle="#f5cf57";ctx.font="bold 17px sans-serif";ctx.fillText(f.n,f.x,f.y-27)}}
+ if(!ctx||!S)return;ctx.save();if(S.shake>0)ctx.translate(rnd(-7,7)*S.shake/.2,rnd(-7,7)*S.shake/.2);
+ drawBackground();drawHazards();for(var i=0;i<S.en.length;i++)drawEnemy(S.en[i]);for(i=0;i<S.wolves.length;i++)drawWolf(S.wolves[i]);drawAim();drawHero();for(i=0;i<S.proj.length;i++)drawProjectile(S.proj[i]);drawFx();ctx.restore();
+}
+
+function updateUI(){
+ if(!S)return;var labels=document.querySelectorAll(".skill"),i,id,cd,armor=S.h.armor+S.h.armorTemp;
+ byId("lvl").innerHTML=S.level;byId("hpText").innerHTML=Math.max(0,Math.ceil(S.h.hp))+" / "+Math.ceil(S.h.max)+(S.h.shield>0?" +"+Math.ceil(S.h.shield)+" shield":"");
+ byId("xpText").innerHTML=S.xp+" / "+S.need;byId("left").innerHTML=S.en.length;
+ for(i=0;i<labels.length;i++){id=labels[i].getAttribute("data-skill");cd=S.cds[id]||0;labels[i].className=cd>0?"skill cooling":"skill ready";labels[i].querySelector(".cd").innerHTML=cd>0?cd.toFixed(1)+"s":"READY";labels[i].disabled=S.paused}
 }
 function gameLoop(now){
- if(!running||!S)return;
- var dt=Math.min(.04,(now-last)/1000);last=now;
- if(!S.paused)update(dt);
- for(var i=0;i<S.fx.length;i++)S.fx[i].t-=dt;
- S.fx=S.fx.filter(function(f){return f.t>0});
- draw();
- raf=requestAnimationFrame(gameLoop);
+ if(!running||!S)return;var dt=Math.min(.04,(now-last)/1000);last=now;update(dt);draw();raf=requestAnimationFrame(gameLoop);
 }
 function startGame(){
  var load=readLoadout();if(!load){byId("startToggle").checked=false;return}
  try{if(!ctx)ctx=field.getContext("2d")}catch(e){ctx=null}
  if(!ctx){byId("status").innerHTML="START ERROR: canvas unavailable";return}
- S={basic:load.basic,abilities:load.abilities,ult:load.ult,passives:load.passives,wave:1,level:1,xp:0,need:8,paused:false,en:[],proj:[],fx:[],cds:{},honeyBoost:false,h:{x:380,y:275,hp:800,max:800,dmg:52,armor:15,shield:0,atk:0,aim:0,combo:0,rage:0,inv:0,roarDR:0,bonusNext:false},mods:{basic:1,slamR:120,treeW:22}};
- buildSkills();spawnWave();updateUI();draw();byId("status").innerHTML="Bigfoot moves and attacks automatically. Tap abilities when ready.";
+ S={basic:load.basic,abilities:load.abilities,ult:load.ult,passives:load.passives,room:1,roomKind:"combat",currentName:"SUNNY TRAIL",level:1,xp:0,need:8,paused:false,
+ en:[],proj:[],fx:[],hazards:[],wolves:[],owned:{},item:null,cds:{},honeyBoost:false,shake:0,
+ h:{x:380,y:270,hp:820,max:820,dmg:52,armor:15,armorTemp:0,armorTempT:0,shield:0,atk:0,aim:0,combo:0,swing:0,rage:0,inv:0,roarDR:0,bonusNext:false},
+ mods:{basic:1,move:1,slamR:122,treeW:23,cleave:false,spin:false,rocks:1,rockBounce:0,aftershock:false,splinter:false,honeyCamp:.10,shroudMult:1.9,rageDur:6,rageDmg:1.12,wallShield:220,roarPower:1,roarDur:8,avPower:1},
+ hook:null,wolf:null};
+ buildSkills();updateRoomLabel();spawnCombat("combat");updateUI();draw();hideDecision();byId("itemBadge").style.display="none";
  running=true;last=performance.now();if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(gameLoop);
 }
 function stopGame(){
- running=false;if(raf)cancelAnimationFrame(raf);raf=0;S=null;byId("reward").style.display="none";byId("status").innerHTML="Starting...";
+ running=false;if(raf)cancelAnimationFrame(raf);raf=0;S=null;hideDecision();byId("skills").innerHTML="";byId("status").innerHTML="Starting...";byId("itemBadge").style.display="none";
 }
-function startToggleChanged(el){
- if(el.checked)startGame();else stopGame();
-}
-syncAbilityChoices();
-syncPassiveChoices();
+function startToggleChanged(el){if(el.checked)startGame();else stopGame()}
+
+syncAbilityChoices();syncPassiveChoices();
 </script>
 </body>
 </html>
