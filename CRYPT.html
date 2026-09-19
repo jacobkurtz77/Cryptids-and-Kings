@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Bigfoot Expansion v3</title>
+<title>Cryptids & Kings — Presentation v3.5</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -72,15 +72,116 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 #bossBar{height:12px;background:#3a2421;border:2px solid #171212;border-radius:7px;overflow:hidden}#bossFill{height:100%;width:100%;background:linear-gradient(90deg,#b93b35,#e26442,#efae4c);transition:width .12s linear}
 .eliteBonus{border-color:#e19d54!important;background:linear-gradient(#5b4131,#3c3029)!important}
 #runRules{font-size:12px;color:#cdbf95;margin:7px 0 0;text-align:center;line-height:1.35}
+
+
+/* ===== PRESENTATION UPDATE V3.5 ===== */
+#titleMenu,#characterSelect,#setup,#game{display:none!important}
+body[data-screen="menu"] #titleMenu{display:block!important}
+body[data-screen="select"] #characterSelect{display:block!important}
+body[data-screen="setup"] #setup{display:block!important}
+body[data-screen="game"] #game{display:block!important}
+body[data-screen="game"]{padding:6px}
+#titleMenu{position:relative;min-height:calc(100vh - 12px);overflow:hidden;border:4px solid #5e4935;border-radius:20px;background:linear-gradient(#071720 0%,#0b2025 35%,#102c25 72%,#152d21 100%);box-shadow:inset 0 0 70px #0009,0 10px 35px #0008;color:#f5e5b2}
+.menuSky{position:absolute;inset:0;background:radial-gradient(circle at 50% 12%,#334f54 0%,#162f35 28%,transparent 56%);overflow:hidden}
+.menuMoonGlow{position:absolute;width:220px;height:220px;border-radius:50%;left:50%;top:5%;transform:translateX(-50%);background:radial-gradient(circle,#dbe8d333 0%,#cce0da12 38%,transparent 70%);filter:blur(2px)}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#f5edc9;box-shadow:0 0 7px #fff8;animation:starTwinkle 2.8s ease-in-out infinite}
+.star.s2{width:2px;height:2px;animation-delay:-1.2s}.star.s3{width:4px;height:4px;animation-delay:-2s}
+@keyframes starTwinkle{0%,100%{opacity:.28;transform:scale(.8)}50%{opacity:1;transform:scale(1.35)}}
+.forestScroll{position:absolute;inset:-150px 0 0;animation:forestRise 4.2s cubic-bezier(.2,.75,.2,1) both}
+@keyframes forestRise{from{transform:translateY(155px)}to{transform:translateY(0)}}
+.tree{position:absolute;bottom:0;width:8px;background:#07130f;border-radius:5px 5px 0 0;transform-origin:bottom center;filter:drop-shadow(0 2px 1px #0006)}
+.tree:before,.tree:after{content:"";position:absolute;left:50%;transform:translateX(-50%);width:0;height:0;border-left:42px solid transparent;border-right:42px solid transparent;border-bottom:95px solid #0a1a14}
+.tree:before{bottom:45%}.tree:after{bottom:68%;border-left-width:31px;border-right-width:31px;border-bottom-width:76px}
+.tree.far{opacity:.52;background:#10251e}.tree.far:before,.tree.far:after{border-bottom-color:#10251e}
+.branchFrame{position:absolute;inset:0;pointer-events:none;opacity:.95}
+.branchFrame:before,.branchFrame:after{content:"";position:absolute;top:43%;width:38%;height:11px;background:#15180f;border-radius:999px;box-shadow:0 -3px 0 #30301c55;transform-origin:center}
+.branchFrame:before{left:-3%;transform:rotate(8deg)}.branchFrame:after{right:-3%;transform:rotate(-8deg)}
+.menuLeaf{position:absolute;width:13px;height:7px;border-radius:100% 0 100% 0;background:#587343;opacity:.8;animation:leafDrift 7s linear infinite}
+@keyframes leafDrift{0%{transform:translate(-20px,-40px) rotate(0deg);opacity:0}12%{opacity:.85}100%{transform:translate(115px,680px) rotate(680deg);opacity:0}}
+.menuContent{position:relative;z-index:5;min-height:calc(100vh - 20px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 18px 72px}
+.forestTitle{position:relative;font-family:Georgia,serif;font-weight:900;font-size:clamp(44px,10vw,82px);line-height:.86;letter-spacing:1px;color:#f0d98f;text-shadow:0 4px 0 #4a331e,0 8px 18px #000,0 0 22px #e8cc7355;opacity:0;transform:translateY(30px) scale(.95);animation:titleReveal 1.35s 2.65s ease-out forwards}
+.forestTitle .amp{display:inline-block;color:#d8c170;font-size:.72em;margin:0 .08em;transform:rotate(-6deg)}
+.forestTitle:before,.forestTitle:after{content:"✦  ❧  ✦";display:block;color:#cfd08b;font-size:.28em;letter-spacing:12px;text-shadow:0 0 9px #fff5;line-height:1.6}
+.forestTitle:after{content:"❦  ✦  ❦";letter-spacing:8px;color:#788f4f}
+@keyframes titleReveal{to{opacity:1;transform:translateY(0) scale(1)}}
+.menuTagline{margin-top:16px;color:#c9c69d;font-weight:800;letter-spacing:3px;font-size:11px;text-transform:uppercase;opacity:0;animation:menuReveal .9s 3.45s forwards}
+.menuButtons{width:min(360px,88vw);display:grid;gap:11px;margin-top:30px;opacity:0;transform:translateY(18px);animation:menuReveal .9s 3.85s forwards}
+@keyframes menuReveal{to{opacity:1;transform:translateY(0)}}
+.menuBtn{width:100%;padding:15px 18px;border-radius:14px;border:3px solid #87623d;background:linear-gradient(#426f47,#31583a);box-shadow:inset 0 0 0 2px #9cc47733,0 7px 18px #0007;color:#fff0bd;font-weight:1000;font-size:20px;letter-spacing:.5px;text-align:center;touch-action:manipulation}
+.menuBtn.secondary{background:linear-gradient(#304940,#243a34);color:#d9d2ad;font-size:16px}.menuBtn:active{transform:scale(.985)}
+.skipIntro{position:absolute;z-index:8;right:14px;top:14px;border:1px solid #e7dcae55;background:#091816aa;color:#d9cfaa;border-radius:999px;padding:8px 11px;font-weight:800;font-size:12px}
+#titleMenu.introDone .forestScroll{animation:none;transform:none}#titleMenu.introDone .forestTitle,#titleMenu.introDone .menuTagline,#titleMenu.introDone .menuButtons{animation:none;opacity:1;transform:none}
+#creditsModal{display:none;position:fixed;inset:0;z-index:90;background:#07110ee8;align-items:center;justify-content:center;padding:18px}#creditsModal.open{display:flex}
+.creditsCard{width:min(480px,94vw);background:linear-gradient(#21483e,#17372f);border:4px solid #7a5637;border-radius:18px;padding:20px;box-shadow:0 16px 50px #000b;text-align:center}.creditsCard h2{margin:0 0 14px;color:#ffe08a;font-size:30px}.creditsCard p{color:#d9cca5;line-height:1.5}.creditsCard strong{color:#fff0bd}.creditsClose{margin-top:16px;width:100%;padding:12px;border:3px solid #80603f;border-radius:12px;background:#f1e4bc;color:#24352e;font-weight:1000;font-size:16px}
+#characterSelect{min-height:calc(100vh - 12px);background:radial-gradient(circle at 50% 0,#274b42 0,#132c26 58%,#0b1c18 100%);border:4px solid #715139;border-radius:19px;padding:16px;box-shadow:inset 0 0 45px #0007}
+.selectTop{display:flex;align-items:center;gap:10px;margin-bottom:14px}.selectTop h1{margin:0;flex:1;text-align:center;color:#ffe09a}.smallBack{border:2px solid #74563b;border-radius:999px;background:#203c35;color:#e8d7a8;padding:8px 11px;font-weight:900}.selectSub{text-align:center;color:#c8bb94;margin:-3px 0 16px}
+.rosterGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.charCard{position:relative;min-height:170px;border:3px solid #88613d;border-radius:16px;background:linear-gradient(#27483d,#1b352f);padding:12px;text-align:center;overflow:hidden}.charCard.bigfoot{grid-column:1/-1;min-height:270px;border-color:#c39a53;background:radial-gradient(circle at 50% 40%,#557448 0,#31533e 45%,#1c342d 100%);box-shadow:inset 0 0 0 2px #e7c56b22}.charPortrait{height:150px;position:relative;margin:-4px auto 4px;width:180px}.bfBody{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);width:105px;height:112px;border-radius:48% 48% 37% 37%;background:radial-gradient(circle at 45% 25%,#986a45 0 9%,#71472f 10% 45%,#4e3325 78%);box-shadow:inset 10px -8px 0 #3a261d55,0 9px 15px #0007}.bfBody:before,.bfBody:after{content:"";position:absolute;top:47px;width:45px;height:83px;border-radius:50%;background:#68432e}.bfBody:before{left:-25px;transform:rotate(17deg)}.bfBody:after{right:-25px;transform:rotate(-17deg)}.bfFace{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:65px;height:66px;border-radius:45% 45% 50% 50%;background:#8b5c3b}.bfFace:before,.bfFace:after{content:"";position:absolute;top:22px;width:8px;height:7px;border-radius:50%;background:#e6ca75;box-shadow:0 0 7px #ffdf77}.bfFace:before{left:15px}.bfFace:after{right:15px}.charCard h2{margin:5px 0 2px;color:#ffe09a;font-size:25px}.role{color:#b9d18f;font-weight:900;font-size:12px;letter-spacing:.7px;text-transform:uppercase}.charDesc{color:#d5c9a3;line-height:1.32;margin:7px auto 12px;max-width:520px;font-size:13px}.selectBtn{width:100%;padding:12px;border-radius:12px;border:3px solid #7c5839;background:linear-gradient(#639155,#47723f);color:#fff1bf;font-size:18px;font-weight:1000}.locked{opacity:.55;border-color:#506057;background:#152d28}.locked .silhouette{height:92px;margin:9px auto 8px;width:78px;border-radius:48% 48% 38% 38%;background:#071713;position:relative}.locked .silhouette:before{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px;color:#344b42;font-weight:1000}.locked strong{color:#9f9c83}.locked small{color:#777e71}
+.loadoutBack{display:inline-block;margin-bottom:10px;border:2px solid #74563b;border-radius:999px;background:#17352f;color:#e4d5a8;padding:7px 11px;font-weight:900}
+@media(min-width:700px){.rosterGrid{grid-template-columns:repeat(3,1fr)}.charCard.bigfoot{grid-column:1/-1}.charPortrait{height:165px}}
+@media(max-width:520px){#titleMenu,#characterSelect{min-height:calc(100vh - 6px)}.forestTitle{font-size:47px}.menuContent{padding-left:10px;padding-right:10px}.rosterGrid{gap:7px}.charCard{min-height:145px;padding:8px}.charCard.bigfoot{min-height:255px}.locked .silhouette{height:72px;width:60px}.selectTop h1{font-size:22px}}
+
 </style>
 </head>
 <body>
 <div class="wrap">
 <input id="startToggle" type="checkbox" onchange="startToggleChanged(this)">
 
+
+<section id="titleMenu" aria-label="Cryptids and Kings main menu">
+  <div class="menuSky">
+    <div class="menuMoonGlow"></div>
+    <span class="star s3" style="left:12%;top:10%"></span><span class="star s2" style="left:24%;top:21%"></span><span class="star" style="left:36%;top:9%"></span><span class="star s2" style="left:47%;top:18%"></span><span class="star s3" style="left:63%;top:11%"></span><span class="star" style="left:76%;top:24%"></span><span class="star s2" style="left:88%;top:13%"></span><span class="star" style="left:17%;top:33%"></span><span class="star s2" style="left:55%;top:31%"></span><span class="star" style="left:83%;top:37%"></span>
+  </div>
+  <div class="forestScroll">
+    <div class="tree far" style="left:4%;height:55%;transform:scale(.75)"></div><div class="tree far" style="left:18%;height:47%;transform:scale(.6)"></div><div class="tree far" style="left:34%;height:58%;transform:scale(.78)"></div><div class="tree far" style="left:51%;height:50%;transform:scale(.65)"></div><div class="tree far" style="left:71%;height:57%;transform:scale(.78)"></div><div class="tree far" style="left:91%;height:48%;transform:scale(.62)"></div>
+    <div class="tree" style="left:9%;height:48%;transform:scale(1.18)"></div><div class="tree" style="left:27%;height:42%;transform:scale(1.02)"></div><div class="tree" style="left:67%;height:44%;transform:scale(1.05)"></div><div class="tree" style="left:87%;height:52%;transform:scale(1.24)"></div>
+  </div>
+  <div class="branchFrame"></div>
+  <span class="menuLeaf" style="left:8%;top:-4%;animation-delay:-1s"></span><span class="menuLeaf" style="left:24%;top:-9%;animation-delay:-4s"></span><span class="menuLeaf" style="left:58%;top:-7%;animation-delay:-2.3s"></span><span class="menuLeaf" style="left:79%;top:-12%;animation-delay:-5.5s"></span><span class="menuLeaf" style="left:92%;top:-5%;animation-delay:-3.2s"></span>
+  <button class="skipIntro" type="button" onclick="skipTitleIntro()">SKIP INTRO</button>
+  <div class="menuContent">
+    <div class="forestTitle">CRYPTIDS<br><span class="amp">&amp;</span> KINGS</div>
+    <div class="menuTagline">Legends walk among the trees</div>
+    <div class="menuButtons">
+      <button class="menuBtn" type="button" onclick="openCharacterSelect()">START GAME</button>
+      <button class="menuBtn secondary" type="button" onclick="openCredits()">CREDITS</button>
+    </div>
+  </div>
+</section>
+
+<section id="characterSelect" aria-label="Character select">
+  <div class="selectTop"><button class="smallBack" type="button" onclick="showMainMenu(true)">← MENU</button><h1>CHOOSE YOUR LEGEND</h1><span style="width:67px"></span></div>
+  <div class="selectSub">Each character brings a completely different way to survive the run.</div>
+  <div class="rosterGrid">
+    <article class="charCard bigfoot">
+      <div class="charPortrait"><div class="bfBody"><div class="bfFace"></div></div></div>
+      <h2>BIGFOOT</h2><div class="role">Bruiser · Survivalist</div>
+      <div class="charDesc">Raw strength, forest weapons, family support, and scavenged human gear. Build around huge knockback, companions, hooks, camera tricks, or a roaring chainsaw.</div>
+      <button class="selectBtn" type="button" onclick="chooseBigfoot()">SELECT BIGFOOT</button>
+    </article>
+    <article class="charCard locked"><div class="silhouette"></div><strong>LOCKED</strong><br><small>More legends are coming.</small></article>
+    <article class="charCard locked"><div class="silhouette"></div><strong>LOCKED</strong><br><small>More legends are coming.</small></article>
+    <article class="charCard locked"><div class="silhouette"></div><strong>LOCKED</strong><br><small>More legends are coming.</small></article>
+    <article class="charCard locked"><div class="silhouette"></div><strong>LOCKED</strong><br><small>More legends are coming.</small></article>
+    <article class="charCard locked"><div class="silhouette"></div><strong>LOCKED</strong><br><small>More legends are coming.</small></article>
+    <article class="charCard locked"><div class="silhouette"></div><strong>LOCKED</strong><br><small>More legends are coming.</small></article>
+  </div>
+</section>
+
+<div id="creditsModal" role="dialog" aria-modal="true" aria-label="Credits">
+  <div class="creditsCard">
+    <h2>CRYPTIDS &amp; KINGS</h2>
+    <p><strong>Created &amp; designed by Jacob Kurtz</strong></p>
+    <p>Prototype development built collaboratively with ChatGPT.</p>
+    <p style="font-size:12px;opacity:.75">Bigfoot Expansion · Presentation Build v3.5</p>
+    <button class="creditsClose" type="button" onclick="closeCredits()">BACK TO THE FOREST</button>
+  </div>
+</div>
+
 <section id="setup" class="panel">
+<button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Bigfoot Expansion v3: six unique item builds, deeper Evolutions, Bush Ambush, reworked Avalanche, family companions, build summary, and clearer mechanics.</div>
+<div class="muted">Bigfoot Expansion v3.5: six unique item builds, deeper Evolutions, family companions, and a new presentation flow.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -1541,6 +1642,42 @@ startGame=function(){_v2StartGame();if(!S)return;S.v3Boulders=[];S.v3Rubble=[];S
 /* Make the core labels match the new mechanics. */
 skillInfo.shroud.name="Bush Ambush";skillInfo.shroud.desc="Hide 1s invulnerable, then burst out";skillInfo.avalanche.desc="Telegraphed falling-boulder barrage";
 
+})();
+</script>
+
+
+<script>
+/* ===== PRESENTATION UPDATE V3.5 ===== */
+(function(){
+  var originalStopGame=stopGame;
+  function setScreen(name){
+    document.body.setAttribute("data-screen",name);
+    window.scrollTo(0,0);
+  }
+  window.setPresentationScreen=setScreen;
+  window.showMainMenu=function(skip){
+    if(window.S){try{originalStopGame()}catch(e){}}
+    var t=byId("startToggle");if(t)t.checked=false;
+    setScreen("menu");
+    var m=byId("titleMenu");
+    if(skip&&m)m.classList.add("introDone");
+  };
+  window.skipTitleIntro=function(){var m=byId("titleMenu");if(m)m.classList.add("introDone")};
+  window.openCharacterSelect=function(){closeCredits();var m=byId("titleMenu");if(m)m.classList.add("introDone");setScreen("select")};
+  window.chooseBigfoot=function(){setScreen("setup")};
+  window.openCredits=function(){byId("creditsModal").classList.add("open")};
+  window.closeCredits=function(){byId("creditsModal").classList.remove("open")};
+  window.startToggleChanged=function(el){
+    if(el.checked){setScreen("game");startGame();if(!window.S){el.checked=false;setScreen("setup")}}
+    else{originalStopGame();setScreen("setup")}
+  };
+  stopGame=function(){
+    originalStopGame();
+    var t=byId("startToggle");
+    if(t&&!t.checked&&document.body.getAttribute("data-screen")==="game")setScreen("setup");
+  };
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&byId("creditsModal").classList.contains("open"))closeCredits()});
+  document.body.setAttribute("data-screen","menu");
 })();
 </script>
 
