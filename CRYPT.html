@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Bigfoot Expansion v2</title>
+<title>Cryptids & Kings — Bigfoot Expansion v3</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -66,6 +66,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 }
 
 /* BIGFOOT EXPANSION V2 */
+/* V3 layer loaded below */
 #bossBarWrap{display:none;position:absolute;left:50%;transform:translateX(-50%);top:47px;width:min(82%,620px);background:#201a18e8;border:3px solid #d2a052;border-radius:12px;padding:5px 7px;z-index:5;box-shadow:0 4px 14px #0008}
 #bossBarName{display:flex;justify-content:space-between;font-size:11px;font-weight:1000;color:#ffe29a;margin-bottom:3px;letter-spacing:.4px}
 #bossBar{height:12px;background:#3a2421;border:2px solid #171212;border-radius:7px;overflow:hidden}#bossFill{height:100%;width:100%;background:linear-gradient(90deg,#b93b35,#e26442,#efae4c);transition:width .12s linear}
@@ -79,7 +80,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 
 <section id="setup" class="panel">
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Bigfoot Expansion v2: rarer risk/reward events, deeper item hunts, elite modifiers, new enemies, and two-phase bosses.</div>
+<div class="muted">Bigfoot Expansion v3: six unique item builds, deeper Evolutions, Bush Ambush, reworked Avalanche, family companions, build summary, and clearer mechanics.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -94,7 +95,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <option value="slam" selected>Earth Slam — 5s • 360° AoE + knockback</option>
 <option value="tree">Uproot — 7s • piercing tree line</option>
 <option value="honey">Honey Stash — 12s • shield + recovery boost</option>
-<option value="shroud">Forest Shroud — 11s • untargetable + bonus hit</option>
+<option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
 <option value="rage">Wild Rage — 13s • attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • shield + knockback</option>
 </select>
@@ -103,7 +104,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
 <option value="tree" selected>Uproot — 7s • piercing tree line</option>
 <option value="honey">Honey Stash — 12s • shield + recovery boost</option>
-<option value="shroud">Forest Shroud — 11s • untargetable + bonus hit</option>
+<option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
 <option value="rage">Wild Rage — 13s • attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • shield + knockback</option>
 </select>
@@ -112,7 +113,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
 <option value="tree">Uproot — 7s • piercing tree line</option>
 <option value="honey" selected>Honey Stash — 12s • shield + recovery boost</option>
-<option value="shroud">Forest Shroud — 11s • untargetable + bonus hit</option>
+<option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
 <option value="rage">Wild Rage — 13s • attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • shield + knockback</option>
 </select>
@@ -122,7 +123,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <div><b>Earth Slam</b> — 360° damage and heavy knockback.</div>
 <div><b>Uproot</b> — throw a tree exactly down the live green aim line.</div>
 <div><b>Honey Stash</b> — gain shield + armor and empower the next Camp Recovery.</div>
-<div><b>Forest Shroud</b> — brief untargetability and a heavily empowered next basic.</div>
+<div><b>Bush Ambush</b> — dive into a bush for about 1 second of invulnerability, then burst out for AoE damage and knockback.</div>
 <div><b>Wild Rage</b> — greatly faster basic attacks for 6 seconds.</div>
 <div><b>Boulder Wall</b> — large shield plus defensive knockback burst.</div>
 </details>
@@ -130,7 +131,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <div class="section">ULTIMATE</div>
 <select id="ult">
 <option value="roar">Primal Roar — damage + fear + 8s combat buff</option>
-<option value="avalanche" selected>Avalanche — huge instant room-wide damage</option>
+<option value="avalanche" selected>Avalanche — falling boulder barrage with warning zones</option>
 </select>
 
 <div class="section">PASSIVES — PICK 2</div>
@@ -153,7 +154,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 
-<div id="engine">ENGINE READY · BIGFOOT EXPANSION V2 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · BIGFOOT EXPANSION V3 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -193,7 +194,7 @@ var abilityChoices=[
  ["slam","Earth Slam — 5s • 360° AoE + knockback"],
  ["tree","Uproot — 7s • piercing tree line"],
  ["honey","Honey Stash — 12s • shield + recovery boost"],
- ["shroud","Forest Shroud — 11s • untargetable + bonus hit"],
+ ["shroud","Bush Ambush — 11s • hide 1s, invulnerable, burst out"],
  ["rage","Wild Rage — 13s • attack-speed burst"],
  ["wall","Boulder Wall — 12s • shield + knockback"]
 ];
@@ -209,11 +210,11 @@ var skillInfo={
  slam:{name:"Earth Slam",desc:"360° damage + knockback",cd:5},
  tree:{name:"Uproot",desc:"Piercing tree throw",cd:7},
  honey:{name:"Honey Stash",desc:"Shield + stronger next recovery",cd:12},
- shroud:{name:"Forest Shroud",desc:"Untargetable + empowered basic",cd:11},
+ shroud:{name:"Bush Ambush",desc:"Hide 1s invulnerable, then burst out",cd:11},
  rage:{name:"Wild Rage",desc:"6s attack-speed burst",cd:13},
  wall:{name:"Boulder Wall",desc:"Shield + knockback blast",cd:12},
  roar:{name:"Primal Roar",desc:"Damage + fear + 8s combat buff",cd:24},
- avalanche:{name:"Avalanche",desc:"Huge room-wide burst",cd:26}
+ avalanche:{name:"Avalanche",desc:"Telegraphed falling-boulder barrage",cd:26}
 };
 var roomNames={
  combat:["FERNWOOD PATH","MOSSY CROSSING","BLACKBERRY TRAIL","FALLEN CEDARS","MOONLIT GROVE","HOLLOW OAKS"],
@@ -1127,11 +1128,11 @@ enemyAttack=function(e){
 updateBossSpecial=function(e,dt){
  if(e.type!=="boss"&&e.type!=="miniboss")return false;
  if(e.phase===1&&e.hp/e.max<=.5){e.phase=2;e.spd*=1.18;e.dmg*=1.24;e.chargeCd=Math.min(e.chargeCd,1.6);e.shockCd=Math.min(e.shockCd,1.3);e.summonCd=Math.min(e.summonCd,2.5);S.fx.push({type:"bossRage",x:e.x,y:e.y,t:1.3,max:1.3});byId("status").innerHTML=(e.type==="boss"?"GRUMBLEGUT":"MOSSBACK")+" ENTERS PHASE II — enraged!"}
- if(e.chargeWind>0){e.chargeWind-=dt;if(e.chargeWind<=0){e.chargeTime=(e.type==="boss"?.72:.52)*(e.phase===2?.82:1);e.chargeHit=false}return true}
+ if(e.chargeWind>0){e.chargeWind-=dt;if(e.chargeWind<=0){e.chargeTime=(e.type==="boss"? .72:.52)*(e.phase===2? .82:1);e.chargeHit=false}return true}
  if(e.chargeTime>0){e.chargeTime-=dt;var sp=(e.type==="boss"?300:240)*(e.phase===2?1.22:1);e.x=clamp(e.x+Math.cos(e.chargeDir)*sp*dt,40,720);e.y=clamp(e.y+Math.sin(e.chargeDir)*sp*dt,45,480);if(!e.chargeHit&&dist(e,S.h)<58){hurtHero((e.type==="boss"?48:36)*(e.phase===2?1.18:1),e);e.chargeHit=true}return true}
  e.chargeCd-=dt;e.shockCd-=dt;e.summonCd-=dt;
- if(e.chargeCd<=0){e.chargeDir=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.chargeWind=e.phase===2?.58:.8;e.chargeCd=(e.type==="boss"?6.8:8.5)*(e.phase===2?.62:1);return true}
- if(e.shockCd<=0){var rr=(e.type==="boss"?145:112)*(e.phase===2?1.18:1);S.hazards.push({type:"bossShock",x:e.x,y:e.y,r:rr,t:e.phase===2?.68:.85,done:false});e.shockCd=(e.type==="boss"?6.1:8)*(e.phase===2?.65:1);return true}
+ if(e.chargeCd<=0){e.chargeDir=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.chargeWind=e.phase===2? .58:.8;e.chargeCd=(e.type==="boss"?6.8:8.5)*(e.phase===2? .62:1);return true}
+ if(e.shockCd<=0){var rr=(e.type==="boss"?145:112)*(e.phase===2?1.18:1);S.hazards.push({type:"bossShock",x:e.x,y:e.y,r:rr,t:e.phase===2? .68:.85,done:false});e.shockCd=(e.type==="boss"?6.1:8)*(e.phase===2? .65:1);return true}
  if(e.type==="boss"&&e.summonCd<=0){var count=e.phase===2?6:4;for(var i=0;i<count;i++){var a=i/count*Math.PI*2;addEnemy(i%3===0?"shield":(i%2?"gob":"archer"),e.x+Math.cos(a)*95,e.y+Math.sin(a)*95)}e.summonCd=e.phase===2?6.5:9.5;S.fx.push({type:"summon",x:e.x,y:e.y,t:.8})}
  return false;
 };
@@ -1189,5 +1190,359 @@ var _coreDamageEnemy=damageEnemy;
 
 })();
 </script>
+<style>
+/* ===== BIGFOOT EXPANSION V3 ===== */
+#v3BuildBtn{background:#2d4e47;color:#ffe7a3;border:2px solid #8d6841;border-radius:999px;padding:7px 11px;font-weight:900;font-size:12px}
+#v3BuildPanel{display:none;position:fixed;inset:12px;z-index:50;background:#102820f5;border:4px solid #8d6841;border-radius:18px;box-shadow:0 12px 45px #000b;overflow:auto;padding:14px;color:#f6e7b8}
+#v3BuildPanel.open{display:block}#v3BuildPanel h2{margin:0 0 8px;color:#ffd66b}#v3BuildPanel h3{margin:15px 0 5px;color:#efc861}#v3BuildPanel .buildRow{background:#1c3c34;border:2px solid #5f513b;border-radius:11px;padding:8px;margin:6px 0}#v3BuildClose{float:right;background:#f1e6bd;color:#20312a;border:0;border-radius:999px;padding:8px 12px;font-weight:900}.mechanicBox{background:#142f29;border:2px solid #5d513e;border-radius:12px;padding:10px;margin-top:8px;line-height:1.38}.mechanicBox b{color:#ffe08a}.card.statboost{border-color:#7d806f;background:linear-gradient(#3e4c42,#2d3933)}.card.advanced{border-color:#d8aa4d;background:linear-gradient(#5b4827,#3d3424);box-shadow:inset 0 0 0 1px #ffd66b55}.card.itemEvolution{border-color:#e2bd63;background:linear-gradient(#57482a,#352f22)}
+</style>
+<script>
+/* ===== BIGFOOT EXPANSION V3 LAYER ===== */
+(function(){
+var _v2Update=update,_v2Draw=draw,_v2Cast=cast,_v2DamageEnemy=damageEnemy,_v2HurtHero=hurtHero,_v2SpawnCombat=spawnCombat,_v2EnterBoss=enterFixedBoss,_v2ApplyUpgrade=applyUpgrade,_v2StartGame=startGame,_v2UpdateUI=updateUI,_v2CampRecovery=campRecovery;
+
+var V3_DEPRECATED={promise:1,steadyHands:1,homebound:1,protectiveFury:1,neverLeave:1,fastball:1,playCatch:1,luckyGlove:1,dadStrength:1,homeRun:1,predator:1,mountain:1};
+var V3_GENERIC={power:1,heart:1,armor:1,quick:1};
+var V3_CAPSTONE={ancientRedwood:1,mountainBreaker:1,oldAngler:1,thirdWolf:1,mrsPowerCouple:1,sonHomeRun:1,camProof:1,chainRedline:1,avFinale:1};
+var V3_ITEM_NAMES={fishing:"Fishing Gear",bones:"Skeletal Remains",ring:"Wedding Ring",baseball:"Baseball & Glove",camera:"Trail Camera",chainsaw:"Logger's Chainsaw"};
+
+function findV3Upgrade(id){for(var i=0;i<upgrades.length;i++)if(upgrades[i].id===id)return upgrades[i];return null}
+function addV3(u){if(!findV3Upgrade(u.id))upgrades.push(u)}
+function addMany(arr){for(var i=0;i<arr.length;i++)addV3(arr[i])}
+
+addMany([
+ /* more basic / ability evolutions */
+ {id:"followThrough",need:"swipe",tag:"MIGHTY SWIPES",title:"Follow Through",text:"After every 3rd Mighty Swipe launches an enemy, Bigfoot's next basic attack comes out 50% faster."},
+ {id:"ironMomentum",requires:"followThrough",need:"swipe",tag:"MIGHTY SWIPES",title:"Iron Momentum",text:"Every 3rd Mighty Swipe also grants 24 shield. The shield can stack."},
+ {id:"heavyArc",need:"rock",tag:"THROWING ROCKS",title:"Heavy Arc",text:"Thrown rocks deal +35% damage and knock back harder, but travel 15% slower."},
+ {id:"scatterShot",requires:"heavyArc",need:"rock",tag:"THROWING ROCKS",title:"Scattershot",text:"Every 3rd ranged basic fires 2 extra side rocks at 55% damage each."},
+ {id:"upheaval",need:"slam",tag:"EARTH SLAM",title:"Upheaval",text:"Enemies within the inner half of Earth Slam take an extra 55 damage and are launched harder."},
+ {id:"seismicMomentum",requires:"slamWide",need:"slam",tag:"EARTH SLAM",title:"Seismic Momentum",text:"Each enemy caught in Earth Slam reduces its remaining cooldown by 0.30s, up to 2.4s per cast."},
+ {id:"rootDrag",requires:"timber",need:"tree",tag:"UPROOT",title:"Root Drag",text:"Enemies touched by the flying tree are slowed by 30% for 2 seconds after impact."},
+ {id:"stickyCoat",need:"honey",tag:"HONEY STASH",title:"Sticky Coat",text:"While Honey Stash has shield remaining, melee attackers are slowed by 35% for 1.8 seconds when they hit Bigfoot."},
+ {id:"goldenReserve",requires:"royal",need:"honey",tag:"HONEY STASH",title:"Golden Reserve",text:"At Camp Recovery, leftover shield converts into healing, up to 8% of Bigfoot's max HP."},
+ {id:"lastDrop",need:"honey",tag:"HONEY STASH",title:"Last Drop",text:"When a Honey/Boulder shield is fully broken, Bigfoot gains 3 seconds of Wild Rage. 6-second internal cooldown."},
+ {id:"thickBrush",need:"shroud",tag:"BUSH AMBUSH",title:"Thick Brush",text:"Bush Ambush hides Bigfoot for 1.45s instead of 1.0s, extending the invulnerable timing window."},
+ {id:"brambleBush",need:"shroud",tag:"BUSH AMBUSH",title:"Bramble Bush",text:"While hidden, nearby enemies take 24 damage every 0.35s from thorns."},
+ {id:"wildEntrance",requires:"thickBrush",need:"shroud",tag:"BUSH AMBUSH",title:"Wild Entrance",text:"Burst-out radius +30%, damage +45%, and knockback nearly doubles."},
+ {id:"ambushPredatorV3",requires:"wildEntrance",need:"shroud",tag:"BUSH AMBUSH",title:"Ambush Predator",text:"After bursting from the bush, Bigfoot's next basic attack deals 2.25x damage."},
+ {id:"underbrush",need:"shroud",tag:"BUSH AMBUSH",title:"Underbrush",text:"Bigfoot heals 4% max HP each time he successfully emerges from Bush Ambush."},
+ {id:"rageNoPain",need:"rage",tag:"WILD RAGE",title:"No Pain",text:"Bigfoot takes 25% less damage while Wild Rage is active."},
+ {id:"chainFury",requires:"unleashed",need:"rage",tag:"WILD RAGE",title:"Chain Fury",text:"Kills during Wild Rage extend it by 0.55s, up to 4 extra seconds per activation."},
+ {id:"ragingSwings",need:"rage",tag:"WILD RAGE",title:"Raging Swings",text:"Every melee basic during Wild Rage sends a short knockback pulse around Bigfoot."},
+ {id:"rollingStones",need:"wall",tag:"BOULDER WALL",title:"Rolling Stones",text:"Casting Boulder Wall launches 6 rocks outward. Each deals 45 damage and knocks enemies back."},
+ {id:"stoneRetaliation",requires:"fort",need:"wall",tag:"BOULDER WALL",title:"Stone Retaliation",text:"If Bigfoot's shield is completely broken within 6s of Boulder Wall, nearby enemies take 90 damage and are blasted away."},
+ {id:"battleCry",need:"roar",tag:"PRIMAL ROAR",title:"Battle Cry",text:"Primal Roar immediately reduces the remaining cooldown of Bigfoot's 3 normal abilities by 2 seconds."},
+ {id:"terrifiedPrey",requires:"terror",need:"roar",tag:"PRIMAL ROAR",title:"Terrified Prey",text:"Enemies feared by Primal Roar take 18% more damage until the fear ends."},
+ {id:"avRockfall",need:"avalanche",tag:"AVALANCHE",title:"Rockfall",text:"Avalanche drops 2 additional boulders, covering more of the arena."},
+ {id:"avBigGame",need:"avalanche",tag:"AVALANCHE",title:"Big Game Hunter",text:"Avalanche adds 2 targeted boulders aimed at elites or bosses. These impacts deal +30% damage."},
+ {id:"avRubble",requires:"avRockfall",need:"avalanche",tag:"AVALANCHE",title:"Lingering Rubble",text:"Each boulder impact leaves rubble for 3 seconds that slows enemies crossing it by 30%."},
+ {id:"avFinale",requires:["avRockfall","avBigGame"],need:"avalanche",tag:"AVALANCHE",title:"The Falling Mountain",text:"Avalanche ends with one giant impact near the toughest enemy for 240 damage and massive knockback."},
+
+ /* Fishing Gear control branches */
+ {id:"tangledLine",item:"fishing",tag:"FISHING GEAR",title:"Tangled Line",text:"Any enemy with at least 1 embedded hook moves 18% slower."},
+ {id:"draggingWeight",requires:"tangledLine",item:"fishing",tag:"FISHING GEAR",title:"Dragging Weight",text:"Hooked enemies move 35% slower instead of 18%."},
+ {id:"reelThemIn",item:"fishing",tag:"FISHING GEAR",title:"Reel Them In",text:"Embedded hooks constantly tug enemies toward Bigfoot at 20 px/sec. Bosses are tugged only slightly."},
+ {id:"harpoonLine",requires:"reelThemIn",item:"fishing",tag:"FISHING GEAR",title:"Harpoon Line",text:"Pull strength more than doubles to 48 px/sec against normal enemies and 16 px/sec against elites/bosses."},
+ {id:"snagAndSmash",requires:["tangledLine","reelThemIn"],item:"fishing",need:"slam",tag:"FISHING GEAR + EARTH SLAM",title:"Snag & Smash",text:"Earth Slam deals +35% damage to enemies that currently have a hook embedded."},
+
+ /* Skeletal Remains extras */
+ {id:"wolfPounce",item:"bones",tag:"SKELETAL REMAINS",title:"Pounce",text:"When a wolf reaches a new target, its first bite deals +65% damage and knocks the target slightly."},
+ {id:"packDiscipline",requires:"alpha",item:"bones",tag:"SKELETAL REMAINS",title:"Pack Discipline",text:"Wolves attack 20% faster while they are within 130px of Bigfoot."},
+ {id:"roarWithPack",item:"bones",need:"roar",tag:"SKELETAL REMAINS + PRIMAL ROAR",title:"Answer the Roar",text:"Primal Roar gives every wolf +50% bite damage for 6 seconds."},
+
+ /* Wedding Ring / Mrs Bigfoot */
+ {id:"mrsFiveMinute",item:"ring",tag:"WEDDING RING",title:"Five-Minute Face",text:"Mrs. Bigfoot finishes getting ready in 8s instead of 12s. Her Family Assists continue even after she joins."},
+ {id:"mrsGoodEnough",requires:"mrsFiveMinute",item:"ring",tag:"WEDDING RING",title:"Good Enough!",text:"Mrs. Bigfoot joins after only 4s. Family Assists still continue for the whole room."},
+ {id:"mrsNoTime",requires:"mrsGoodEnough",item:"ring",tag:"WEDDING RING",title:"No Time for Makeup",text:"Mrs. Bigfoot joins the fight immediately at the start of every combat room."},
+ {id:"mrsLunch",item:"ring",tag:"WEDDING RING",title:"Packed His Lunch",text:"Her food assist heals 8% max HP instead of 4%."},
+ {id:"mrsCheer",item:"ring",tag:"WEDDING RING",title:"Louder Encouragement",text:"Her cheer grants 4 seconds of Wild Rage instead of 2.5 seconds."},
+ {id:"mrsPurse",item:"ring",tag:"WEDDING RING",title:"Heavy Purse",text:"Purse Toss deals 115 damage and stuns normal enemies for 0.75s."},
+ {id:"mrsPrepared",item:"ring",tag:"WEDDING RING",title:"Always Prepared",text:"Family Assists happen every 3.6s instead of every 5s, before and after she joins."},
+ {id:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"Better Half",text:"Mrs. Bigfoot's melee attacks deal 65 damage instead of 42 and she attacks 15% faster."},
+ {id:"mrsHusband",requires:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"You Hit My Husband?!",text:"When Bigfoot takes 25+ damage from one hit, Mrs. Bigfoot attacks twice as fast for 4s."},
+ {id:"mrsCombo",requires:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"Date Night",text:"Mrs. Bigfoot deals +35% damage when she and Bigfoot are focusing the same enemy."},
+ {id:"mrsSmash",requires:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"Mrs. Bigfoot SMASH",text:"Every 6s after joining, Mrs. Bigfoot slams the ground for 85 AoE damage and knockback."},
+ {id:"mrsPowerCouple",requires:["mrsPrepared","mrsBetterHalf"],item:"ring",tag:"WEDDING RING",title:"Power Couple",text:"While Mrs. Bigfoot is fighting within 120px, Bigfoot deals +15% basic damage and both attack 15% faster."},
+
+ /* Baseball & Glove / son */
+ {id:"sonGoodThrow",item:"baseball",tag:"BASEBALL & GLOVE",title:"Good Throw",text:"Bigfoot's son throws him a baseball every 5.5s instead of every 7s."},
+ {id:"sonFastball",item:"baseball",tag:"BASEBALL & GLOVE",title:"Fastball",text:"Bigfoot's return throw deals +45% damage and travels 20% faster."},
+ {id:"sonPlayCatch",item:"baseball",tag:"BASEBALL & GLOVE",title:"Play Catch",text:"After hitting its first enemy, the baseball ricochets to 1 additional enemy."},
+ {id:"sonCurveball",requires:"sonPlayCatch",item:"baseball",tag:"BASEBALL & GLOVE",title:"Curveball",text:"The baseball can ricochet to 2 additional enemies instead of 1."},
+ {id:"sonProudDad",item:"baseball",tag:"BASEBALL & GLOVE",title:"Proud Dad",text:"Each successful catch gives Bigfoot 2.5 seconds of Wild Rage before he throws the ball back."},
+ {id:"sonPerfectCatch",item:"baseball",tag:"BASEBALL & GLOVE",title:"Perfect Catch",text:"Each catch reduces all 3 normal ability cooldowns by 1.25 seconds."},
+ {id:"sonDadStrength",requires:"sonFastball",item:"baseball",tag:"BASEBALL & GLOVE",title:"Dad Strength",text:"Every 3rd baseball Bigfoot throws deals 1.8x damage and gains an extra ricochet."},
+ {id:"sonHomeRun",requires:["sonFastball","sonPlayCatch"],item:"baseball",tag:"BASEBALL & GLOVE",title:"Home Run",text:"The baseball's final impact explodes for 55% of its damage in a 95px radius and launches nearby enemies."},
+
+ /* Trail Camera */
+ {id:"camBlinding",item:"camera",tag:"TRAIL CAMERA",title:"Blinding Flash",text:"Flash radius grows from 170px to 220px and normal-enemy stun increases from 0.8s to 1.15s."},
+ {id:"camOverexposed",item:"camera",tag:"TRAIL CAMERA",title:"Overexposed",text:"Flashed enemies become Exposed for 5s and take +22% damage instead of +12%."},
+ {id:"camRapid",item:"camera",tag:"TRAIL CAMERA",title:"Rapid Recharge",text:"The camera flashes every 6s instead of every 8s."},
+ {id:"camBash",item:"camera",tag:"TRAIL CAMERA",title:"Camera Bash",text:"Every 5s Bigfoot swings the camera in a 95px arc for 80 damage and strong knockback."},
+ {id:"camHeavy",requires:"camBash",item:"camera",tag:"TRAIL CAMERA",title:"Heavy Equipment",text:"Camera Bash damage rises to 130 and knockback becomes much stronger."},
+ {id:"camTripod",requires:"camBash",item:"camera",tag:"TRAIL CAMERA",title:"Tripod Swing",text:"Camera Bash radius increases to 140px, hitting much larger groups."},
+ {id:"camFlashSmash",requires:["camBash","camBlinding"],item:"camera",tag:"TRAIL CAMERA",title:"Flash & Smash",text:"Camera Bash deals +60% damage to enemies that are currently stunned by the flash."},
+ {id:"camThrow",requires:"camBash",item:"camera",tag:"TRAIL CAMERA",title:"Throw the Camera",text:"Every 10s Bigfoot hurls the camera at the nearest enemy for 150 damage, then it snaps back to him."},
+ {id:"camNoPictures",item:"camera",tag:"TRAIL CAMERA",title:"No Pictures!",text:"When an enemy hits Bigfoot for 25+ damage, the camera counter-flashes that attacker. 5s cooldown."},
+ {id:"camProof",requires:["camOverexposed","camBash"],item:"camera",tag:"TRAIL CAMERA",title:"Proof Destroyed",text:"Every 4th flash overloads: 120 damage in the flash radius, huge knockback, and a 1.4s stun to normal enemies."},
+
+ /* Logger's Chainsaw */
+ {id:"chainFresh",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Fresh Chain",text:"Chainsaw Mode basic attacks deal +20% damage while keeping all normal basic scaling."},
+ {id:"chainQuick",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Quick Start",text:"Chainsaw Mode reactivates every 12s instead of every 15s."},
+ {id:"chainGas",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Extra Gas",text:"Chainsaw Mode lasts 7s instead of 5s."},
+ {id:"chainWide",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Wide Teeth",text:"Melee chainsaw basics splash nearby enemies. Ranged chainsaw basics fling 2 extra side rocks at 45% damage."},
+ {id:"chainDust",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Sawdust Cloud",text:"Enemies within 115px during Chainsaw Mode move 30% slower."},
+ {id:"chainChipper",requires:"chainWide",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Woodchipper",text:"Kills during Chainsaw Mode explode into debris for 55 damage to nearby enemies."},
+ {id:"chainThrottle",requires:"chainFresh",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Full Throttle",text:"Chainsaw damage ramps up over the 5-7s mode, reaching an additional +35% near the end."},
+ {id:"chainCool",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"No Time to Cool Down",text:"Each kill during Chainsaw Mode cuts 0.6s from the next activation timer."},
+ {id:"chainLogging",item:"chainsaw",need:"tree",tag:"CHAINSAW + UPROOT",title:"Logging Accident",text:"Casting Uproot during Chainsaw Mode throws a second tree at a slight angle and sprays splinters around Bigfoot."},
+ {id:"chainRedline",requires:["chainFresh","chainGas"],item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"REDLINE",text:"During the final 2s of Chainsaw Mode, basics attack about 7x normal speed and deal +35% damage."}
+]);
+
+/* Replace v2 item descriptions with six complete Bigfoot item routes. */
+showItemHunt=function(){
+ var all=[
+  {item:"fishing",title:"Fishing Gear",text:"Auto-throws hooks every 2.7s. Hooks stick for 6s and deal repeated damage. Can evolve into bleed, slowing, or pulling."},
+  {item:"bones",title:"Skeletal Remains",text:"Summons a wolf that automatically hunts enemies. Can grow into a faster, harder-hitting full pack."},
+  {item:"ring",title:"Wedding Ring",text:"Mrs. Bigfoot helps from the sideline, then joins the fight after finishing her makeup. Her assists continue all room."},
+  {item:"baseball",title:"Baseball & Glove",text:"Bigfoot's son stays safely on the sideline and periodically throws Dad a ball to catch and fire back for big damage."},
+  {item:"camera",title:"Trail Camera",text:"A stolen trail camera periodically flashes nearby enemies, stunning and Exposing them. It can evolve into a blunt weapon too."},
+  {item:"chainsaw",title:"Logger's Chainsaw",text:"Every 15s, Bigfoot enters 5s of Chainsaw Mode: his normal selected basic temporarily attacks roughly 5x faster while keeping its scaling."}
+ ];
+ shuffle(all);all=all.slice(0,3);var cards=[];
+ for(var i=0;i<all.length;i++)(function(o){cards.push({cls:"item",tag:"UNIQUE ITEM",title:o.title,text:o.text,go:function(){chooseItem(o.item)}})})(all[i]);
+ showDecision("BIGFOOT ITEM HUNT","Three of Bigfoot's six personal items have been found this run. Choose one. You will get a full mechanical explanation before continuing.",cards,3);
+};
+
+function itemTutorialData(item){
+ if(item==="fishing")return{title:"FISHING GEAR — HOOK HUNT",html:"<div class='mechanicBox'><b>Automatic attack:</b> every <b>2.7s</b>, Bigfoot throws 1 hook at an enemy.<br><b>Impact:</b> 12 damage.<br><b>Embedded:</b> the hook stays for <b>6s</b> and deals <b>10 damage every 0.6s</b>.<br><b>Important:</b> base hooks do <b>not</b> pull enemies. Evolutions can add slowing, pulling, longer duration, faster casts, more hooks, or vulnerability.</div>"};
+ if(item==="bones")return{title:"SKELETAL REMAINS — WOLF PACK",html:"<div class='mechanicBox'><b>Companion:</b> summon <b>1 wolf</b> for every combat room.<br><b>Behavior:</b> the wolf automatically chases the nearest enemy.<br><b>Bite:</b> <b>34 damage every 0.75s</b> once in range.<br><b>Important:</b> wolves act independently and cannot use Bigfoot's abilities. Evolutions can add wolves, pounces, fear, faster attacks, healing from elite kills, and much larger pack damage.</div>"};
+ if(item==="ring")return{title:"WEDDING RING — BETTER HALF",html:"<div class='mechanicBox'><b>Mrs. Bigfoot:</b> appears on the sideline at the start of every fight while doing her makeup.<br><b>Join delay:</b> after <b>12s</b>, she enters the arena and fights automatically for <b>42 damage every 0.80s</b>.<br><b>Family Assist:</b> about every <b>5s for the entire room</b>, before <i>and</i> after she joins, she randomly heals Bigfoot, cheers him into Rage, protects him briefly, or throws her purse at an enemy.<br><b>Important:</b> faster-join Evolutions never remove her sideline/support actions.</div>"};
+ if(item==="baseball")return{title:"BASEBALL & GLOVE — PLAY CATCH",html:"<div class='mechanicBox'><b>Bigfoot's son:</b> stands safely on the sideline and cannot be targeted.<br><b>Every 7s:</b> he throws a baseball toward Bigfoot.<br><b>Catch:</b> Bigfoot catches it automatically, even while moving.<br><b>Return throw:</b> Bigfoot instantly fires it at the nearest enemy for <b>1.75x current basic-attack damage</b>.<br><b>Scaling:</b> the throw uses Bigfoot's normal basic damage scaling. Evolutions add faster throws, ricochets, Rage on catch, cooldown reduction, and explosive Home Runs.</div>"};
+ if(item==="camera")return{title:"TRAIL CAMERA — SAY CHEESE",html:"<div class='mechanicBox'><b>Flash:</b> every <b>8s</b>, the stolen camera flashes enemies within <b>170px</b> of Bigfoot.<br><b>Normal enemies:</b> stunned for <b>0.8s</b>.<br><b>Bosses/elites:</b> only briefly interrupted/hampered, not fully locked down.<br><b>Exposed:</b> flashed enemies take <b>+12% damage for 4s</b>.<br><b>Evolutions:</b> bigger flashes, stronger Exposed, faster recharge, swinging the camera as a weapon, throwing it, and overloaded flash explosions.</div>"};
+ return{title:"LOGGER'S CHAINSAW — REV IT UP",html:"<div class='mechanicBox'><b>Chainsaw Mode:</b> every <b>15s</b>, Bigfoot enters Chainsaw Mode for <b>5s</b>.<br><b>Basic replacement:</b> while active, Bigfoot uses his normal selected basic at roughly <b>5x attack speed</b> while keeping its normal damage scaling.<br><b>Mighty Swipes:</b> rapid chainsaw sweeps.<br><b>Throwing Rocks:</b> the spinning chain/blades fling rocks forward in a rapid stream.<br><b>Evolutions:</b> longer mode, faster reactivation, splash, sawdust slow, kill explosions, and REDLINE.</div>"};
+}
+
+function showItemTutorial(item){var d=itemTutorialData(item);showDecision(d.title,d.html,[{cls:"item",tag:"MECHANIC EXPLAINED",title:"Continue the Hunt",text:"This item's Evolutions can now appear after combat rooms.",go:function(){showPathChoice("Unique item acquired: <b>"+V3_ITEM_NAMES[item]+"</b>.")}}],1)}
+
+chooseItem=function(item){
+ S.item=item;S.sonBalls=[];
+ if(item==="fishing"){S.hook={timer:.6,rate:2.7,damage:10,duration:6,count:1,tickRate:.6};S.fishingSlow=0;S.fishingPull=0;byId("itemBadge").innerHTML="FISHING GEAR · HOOK HUNT"}
+ if(item==="bones"){S.wolf={damage:34,speed:105,size:1,howlTimer:7,pounce:true};if(S.wolfFavor)S.wolf.damage*=1.12;addWolf();byId("itemBadge").innerHTML="SKELETAL REMAINS · WOLF PACK"}
+ if(item==="ring"){S.ring={threshold:-1,shield:0};S.ringProc=true;S.mrs={x:720,y:465,joinDelay:12,ready:12,joined:false,assistRate:5,assist:1.4,damage:42,attackRate:.8,atk:0,rage:0,slamTimer:6,face:0};byId("itemBadge").innerHTML="WEDDING RING · BETTER HALF"}
+ if(item==="baseball"){S.ball={rate:999999,damage:1.75,bounces:0,speed:560,homeRun:false};S.son={x:720,y:468,throwRate:7,timer:2.5,count:0};S.sonBalls=[];byId("itemBadge").innerHTML="BASEBALL & GLOVE · PLAY CATCH"}
+ if(item==="camera"){S.camera={rate:8,timer:2.8,radius:170,stun:.8,expose:4,vuln:.12,flashT:0,flashCount:0,bashRate:999,bashTimer:4.5,bashDamage:80,bashRadius:95,throwTimer:7,counterCd:0,x:S.h.x+38,y:S.h.y+28};byId("itemBadge").innerHTML="TRAIL CAMERA · SAY CHEESE"}
+ if(item==="chainsaw"){S.chainsaw={cycle:15,timer:15,duration:5,active:0,damage:1,rateMult:5,killGuard:false};byId("itemBadge").innerHTML="LOGGER'S CHAINSAW · REV IT UP"}
+ byId("itemBadge").style.display="block";byId("status").innerHTML=V3_ITEM_NAMES[item]+" acquired.";showItemTutorial(item);
+};
+
+function isV3Upgrade(id){return id.indexOf("mrs")===0||id.indexOf("son")===0||id.indexOf("cam")===0||id.indexOf("chain")===0||id.indexOf("av")===0||id==="followThrough"||id==="ironMomentum"||id==="heavyArc"||id==="scatterShot"||id==="upheaval"||id==="seismicMomentum"||id==="rootDrag"||id==="stickyCoat"||id==="goldenReserve"||id==="lastDrop"||id==="thickBrush"||id==="brambleBush"||id==="wildEntrance"||id==="ambushPredatorV3"||id==="underbrush"||id==="rageNoPain"||id==="chainFury"||id==="ragingSwings"||id==="rollingStones"||id==="stoneRetaliation"||id==="battleCry"||id==="terrifiedPrey"||id==="tangledLine"||id==="draggingWeight"||id==="reelThemIn"||id==="harpoonLine"||id==="snagAndSmash"||id==="wolfPounce"||id==="packDiscipline"||id==="roarWithPack"}
+
+var _v2UpgradeEligible=upgradeEligible;
+upgradeEligible=function(u){if(V3_DEPRECATED[u.id])return false;return _v2UpgradeEligible(u)};
+
+function v3UpgradeClass(u){if(V3_GENERIC[u.id])return"statboost";if(u.item)return"itemEvolution";if(u.requires||V3_CAPSTONE[u.id])return"advanced";return""}
+function v3UpgradeLabel(u){if(V3_CAPSTONE[u.id])return"CAPSTONE";if(V3_GENERIC[u.id])return"STAT BOOST";if(u.item)return"ITEM EVOLUTION";if(u.requires)return"ADVANCED EVOLUTION";if(u.need==="swipe"||u.need==="rock")return"BASIC EVOLUTION";return"ABILITY EVOLUTION"}
+
+getUpgradeChoices=function(){
+ var itemPool=[],uniquePool=[],genericPool=[],i,u,out=[];
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;if(V3_GENERIC[u.id])genericPool.push(u);else if(u.item&&u.item===S.item)itemPool.push(u);else uniquePool.push(u)}
+ shuffle(itemPool);shuffle(uniquePool);shuffle(genericPool);
+ if(S.item&&itemPool.length&&Math.random()<.82)out.push(itemPool.shift());
+ while(out.length<3&&uniquePool.length)out.push(uniquePool.shift());
+ if(genericPool.length&&Math.random()<.18){if(out.length>=3)out[2]=genericPool.shift();else out.push(genericPool.shift())}
+ while(out.length<3&&itemPool.length)out.push(itemPool.shift());
+ while(out.length<3&&genericPool.length)out.push(genericPool.shift());
+ return out;
+};
+
+showUpgrade=function(heal){var choices=getUpgradeChoices(),cards=[];for(var i=0;i<choices.length;i++)(function(up){cards.push({cls:v3UpgradeClass(up),tag:v3UpgradeLabel(up)+" · "+up.tag,title:up.title,text:up.text,go:function(){applyUpgrade(up.id)}})})(choices[i]);showDecision("ROOM CLEARED","Camp Recovery restored <b>"+heal+" HP</b>. Most rewards now alter behavior; flat stat boosts are intentionally uncommon.",cards,3)};
+
+function afterV3Upgrade(){var wasElite=S.roomKind==="elite";if(S.room===5&&!S.item)showItemHunt();else if(wasElite&&typeof showEliteBonus==="function")showEliteBonus();else showPathChoice("Evolution acquired. Choose where Bigfoot goes next.")}
+
+applyUpgrade=function(id){
+ if(!isV3Upgrade(id)){_v2ApplyUpgrade(id);return}
+ S.owned[id]=true;
+ if(id==="followThrough"){}if(id==="ironMomentum"){}if(id==="heavyArc"){}if(id==="scatterShot"){};
+ if(id==="upheaval"){}if(id==="seismicMomentum"){}if(id==="rootDrag"){};
+ if(id==="stickyCoat"){}if(id==="goldenReserve"){}if(id==="lastDrop"){};
+ if(id==="thickBrush"){}if(id==="brambleBush"){}if(id==="wildEntrance"){}if(id==="ambushPredatorV3"){}if(id==="underbrush"){};
+ if(id==="rageNoPain"){}if(id==="chainFury"){}if(id==="ragingSwings"){};
+ if(id==="rollingStones"){}if(id==="stoneRetaliation"){}if(id==="battleCry"){}if(id==="terrifiedPrey"){};
+ if(id==="avRockfall"){}if(id==="avBigGame"){}if(id==="avRubble"){}if(id==="avFinale"){};
+ if(id==="tangledLine")S.fishingSlow=.18;if(id==="draggingWeight")S.fishingSlow=.35;if(id==="reelThemIn")S.fishingPull=20;if(id==="harpoonLine")S.fishingPull=48;if(id==="snagAndSmash"){};
+ if(id==="wolfPounce"){}if(id==="packDiscipline"){}if(id==="roarWithPack"){};
+ if(id==="mrsFiveMinute")S.mrs.joinDelay=8;if(id==="mrsGoodEnough")S.mrs.joinDelay=4;if(id==="mrsNoTime")S.mrs.joinDelay=0;if(id==="mrsLunch"){}if(id==="mrsCheer"){}if(id==="mrsPurse"){}if(id==="mrsPrepared")S.mrs.assistRate=3.6;if(id==="mrsBetterHalf"){S.mrs.damage=65;S.mrs.attackRate=.68}if(id==="mrsHusband"){}if(id==="mrsCombo"){}if(id==="mrsSmash"){}if(id==="mrsPowerCouple"){};
+ if(id==="sonGoodThrow")S.son.throwRate=5.5;if(id==="sonFastball"){S.ball.damage*=1.45;S.ball.speed*=1.20}if(id==="sonPlayCatch")S.ball.bounces=1;if(id==="sonCurveball")S.ball.bounces=2;if(id==="sonProudDad"){}if(id==="sonPerfectCatch"){}if(id==="sonDadStrength"){}if(id==="sonHomeRun")S.ball.homeRun=true;
+ if(id==="camBlinding"){S.camera.radius=220;S.camera.stun=1.15}if(id==="camOverexposed"){S.camera.expose=5;S.camera.vuln=.22}if(id==="camRapid")S.camera.rate=6;if(id==="camBash"){S.camera.bashRate=5;S.camera.bashTimer=2.5}if(id==="camHeavy")S.camera.bashDamage=130;if(id==="camTripod")S.camera.bashRadius=140;if(id==="camFlashSmash"){}if(id==="camThrow")S.camera.throwTimer=3;if(id==="camNoPictures"){}if(id==="camProof"){};
+ if(id==="chainFresh")S.chainsaw.damage*=1.20;if(id==="chainQuick")S.chainsaw.cycle=12;if(id==="chainGas")S.chainsaw.duration=7;if(id==="chainWide"){}if(id==="chainDust"){}if(id==="chainChipper"){}if(id==="chainThrottle"){}if(id==="chainCool"){}if(id==="chainLogging"){}if(id==="chainRedline"){};
+ afterV3Upgrade();
+};
+
+/* Build summary UI */
+function ensureBuildUI(){
+ if(byId("v3BuildBtn"))return;var hud=document.querySelector(".hud"),btn=document.createElement("button");btn.id="v3BuildBtn";btn.type="button";btn.innerHTML="BUILD";btn.onclick=function(){renderBuildSummary();byId("v3BuildPanel").classList.add("open")};hud.insertBefore(btn,byId("backControl"));
+ var p=document.createElement("div");p.id="v3BuildPanel";p.innerHTML='<button id="v3BuildClose">CLOSE</button><h2>BIGFOOT BUILD</h2><div id="v3BuildBody"></div>';document.body.appendChild(p);byId("v3BuildClose").onclick=function(){p.classList.remove("open")};
+}
+function upgradeTitle(id){var u=findV3Upgrade(id);return u?u.title:id}
+function renderBuildSummary(){if(!S)return;var b=byId("v3BuildBody"),html="";html+='<div class="buildRow"><b>Basic:</b> '+(S.basic==="swipe"?"Mighty Swipes":"Throwing Rocks")+'</div>';html+='<div class="buildRow"><b>Abilities:</b> '+S.abilities.map(function(x){return skillInfo[x].name}).join(" · ")+'</div>';html+='<div class="buildRow"><b>Ultimate:</b> '+skillInfo[S.ult].name+'</div>';html+='<div class="buildRow"><b>Passives:</b> '+S.passives.join(" · ")+'</div>';html+='<div class="buildRow"><b>Unique Item:</b> '+(S.item?V3_ITEM_NAMES[S.item]:"Not found yet")+'</div><h3>Evolutions</h3>';var ids=[],k;for(k in S.owned)if(S.owned[k])ids.push(k);if(!ids.length)html+='<div class="buildRow">No Evolutions yet.</div>';else for(var i=0;i<ids.length;i++)html+='<div class="buildRow"><b>'+upgradeTitle(ids[i])+'</b></div>';b.innerHTML=html}
+
+/* room reset for item companions / periodic systems */
+function resetV3RoomSystems(){
+ if(!S)return;S.v3Boulders=[];S.v3Rubble=[];S.v3Fx=S.v3Fx||[];S.sonBalls=[];S.lastShield=S.h.shield;S.wallRetaliateT=0;S.lastDropCd=0;
+ if(S.item==="ring"&&S.mrs){S.mrs.x=720;S.mrs.y=465;S.mrs.ready=S.mrs.joinDelay;S.mrs.joined=S.mrs.joinDelay<=0;S.mrs.assist=1.5;S.mrs.atk=0;S.mrs.rage=0;S.mrs.slamTimer=4.5}
+ if(S.item==="baseball"&&S.son){S.son.timer=2.4;S.sonBalls=[]}
+ if(S.item==="camera"&&S.camera){S.camera.timer=2.5;S.camera.flashT=0;S.camera.bashTimer=2.8;S.camera.throwTimer=5;S.camera.counterCd=0}
+ if(S.item==="chainsaw"&&S.chainsaw){S.chainsaw.active=0;S.chainsaw.timer=S.chainsaw.cycle}
+}
+spawnCombat=function(kind){_v2SpawnCombat(kind);resetV3RoomSystems()};
+enterFixedBoss=function(){_v2EnterBoss();resetV3RoomSystems()};
+
+/* Bush Ambush and Avalanche replace their old implementations. */
+cast=function(id){
+ if(!S||S.paused||(S.cds[id]||0)>0)return;
+ if(id==="shroud"){
+  S.cds.shroud=skillInfo.shroud.cd;var dur=S.owned.thickBrush?1.45:1.0;S.h.inv=dur+.08;S.h.bushT=dur;S.h.bushTick=.01;S.h.bushX=S.h.x;S.h.bushY=S.h.y;v3Fx("bushIn",S.h.x,S.h.y,dur);byId("status").innerHTML="BUSH AMBUSH — invulnerable while hidden. Time the burst.";return;
+ }
+ if(id==="avalanche"){
+  S.cds.avalanche=skillInfo.avalanche.cd;launchAvalanche();return;
+ }
+ var beforeShield=S.h.shield;_v2Cast(id);
+ if(id==="slam"){
+  var hit=0;for(var i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<S.mods.slamR){hit++;if(S.owned.upheaval&&dist(S.h,S.en[i])<S.mods.slamR*.52)damageEnemy(S.en[i],55,55,S.h.x,S.h.y);if(S.owned.snagAndSmash&&S.en[i].hooks&&S.en[i].hooks.length)damageEnemy(S.en[i],45,0,S.h.x,S.h.y)}
+  if(S.owned.seismicMomentum)S.cds.slam=Math.max(0,S.cds.slam-Math.min(2.4,hit*.30));
+ }
+ if(id==="wall"){
+  S.wallRetaliateT=6;if(S.owned.rollingStones){for(i=0;i<6;i++){var a=i/6*Math.PI*2;S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(a)*360,vy:Math.sin(a)*360,t:1.15,hits:{},rot:a,bounce:0,mult:.9})}}
+ }
+ if(id==="roar"){
+  if(S.owned.battleCry){var names=S.abilities;for(i=0;i<names.length;i++)S.cds[names[i]]=Math.max(0,(S.cds[names[i]]||0)-2)}
+  if(S.item==="bones"&&S.owned.roarWithPack)S.wolfRally=6;
+ }
+ if(id==="tree"&&S.item==="chainsaw"&&S.chainsaw.active>0&&S.owned.chainLogging){var t=nearestTo(S.h);if(t){a=Math.atan2(t.y-S.h.y,t.x-S.h.x)-.14;S.proj.push({type:"tree",x:S.h.x,y:S.h.y,vx:Math.cos(a)*500,vy:Math.sin(a)*500,t:1.65,hits:{},rot:a});for(i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<100)damageEnemy(S.en[i],38,16,S.h.x,S.h.y)}}
+};
+
+function launchAvalanche(){
+ S.v3Boulders=[];var count=6+(S.owned.avRockfall?2:0),i,e,x,y;
+ for(i=0;i<count;i++){
+  if(i<Math.min(3,S.en.length)){e=S.en[i];x=e.x+rnd(-35,35);y=e.y+rnd(-35,35)}else{x=rnd(80,680);y=rnd(85,455)}
+  S.v3Boulders.push({x:x,y:y,t:.55+i*.20,r:54,damage:118,done:false,big:false});
+ }
+ if(S.owned.avBigGame){var tough=S.en.slice().sort(function(a,b){return b.max-a.max});for(i=0;i<Math.min(2,tough.length);i++)S.v3Boulders.push({x:tough[i].x,y:tough[i].y,t:.85+i*.42,r:60,damage:154,done:false,big:false})}
+ if(S.owned.avFinale){var tt=nearestTo(S.h);S.v3Boulders.push({x:tt?tt.x:380,y:tt?tt.y:240,t:2.25,r:88,damage:240,done:false,big:true})}
+ byId("status").innerHTML="AVALANCHE — warning circles mark where the boulders will land.";v3Fx("avStart",S.h.x,S.h.y,.7);
+}
+function updateAvalanche(dt){if(!S.v3Boulders)return;for(var i=S.v3Boulders.length-1;i>=0;i--){var b=S.v3Boulders[i];b.t-=dt;if(!b.done&&b.t<=0){b.done=true;for(var j=0;j<S.en.length;j++)if(dist(b,S.en[j])<b.r)damageEnemy(S.en[j],b.damage,b.big?115:55,b.x,b.y);S.shake=Math.max(S.shake,b.big? .55:.28);v3Fx("boulderImpact",b.x,b.y,.55,{r:b.r});if(S.owned.avRubble)S.v3Rubble.push({x:b.x,y:b.y,r:b.r*.72,t:3});b.t=-.5}if(b.t<-.45)S.v3Boulders.splice(i,1)}for(i=S.v3Rubble.length-1;i>=0;i--){S.v3Rubble[i].t-=dt;if(S.v3Rubble[i].t<=0)S.v3Rubble.splice(i,1)}}
+
+/* damage hooks for camera, chainsaw and ability secondary effects */
+damageEnemy=function(e,n,k,sx,sy){
+ if(!e||e.dead)return;var before=e.hp,wasAlive=before>0;
+ if(e.exposedT>0)n*=1+(e.exposedPct||0);
+ if(S.owned.terrifiedPrey&&e.fear>0)n*=1.18;
+ _v2DamageEnemy(e,n,k,sx,sy);
+ if(wasAlive&&e.dead){
+  if(S.h.rage>0&&S.owned.chainFury)S.h.rage=Math.min(S.h.rage+.55,S.mods.rageDur+4);
+  if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0){if(S.owned.chainCool)S.chainsaw.timer=Math.max(1,S.chainsaw.timer-.6);if(S.owned.chainChipper&&!S.chainsaw.killGuard){S.chainsaw.killGuard=true;for(var i=0;i<S.en.length;i++)if(S.en[i]!==e&&!S.en[i].dead&&dist(e,S.en[i])<85)_v2DamageEnemy(S.en[i],55,25,e.x,e.y);S.chainsaw.killGuard=false;v3Fx("debris",e.x,e.y,.45)}}
+ }
+};
+
+hurtHero=function(n,source){
+ if(S&&S.h&&S.h.bushT>0)return;
+ if(S&&S.owned.rageNoPain&&S.h.rage>0)n*=.75;
+ var oldHp=S.h.hp,oldShield=S.h.shield;
+ _v2HurtHero(n,source);
+ var taken=Math.max(0,oldHp-S.h.hp);
+ if(S.owned.stickyCoat&&oldShield>0&&source){source.slowDebuff=Math.max(source.slowDebuff||0,1.8);source.slowPct=Math.max(source.slowPct||0,.35)}
+ if(S.owned.lastDrop&&oldShield>0&&S.h.shield<=0&&S.lastDropCd<=0){S.h.rage=Math.max(S.h.rage,3);S.lastDropCd=6;v3Fx("lastDrop",S.h.x,S.h.y,.65)}
+ if(S.wallRetaliateT>0&&S.owned.stoneRetaliation&&oldShield>0&&S.h.shield<=0){for(var i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<125)damageEnemy(S.en[i],90,95,S.h.x,S.h.y);S.wallRetaliateT=0;v3Fx("wallBreak",S.h.x,S.h.y,.6)}
+ if(S.item==="ring"&&S.mrs&&taken>=25&&S.owned.mrsHusband)S.mrs.rage=4;
+ if(S.item==="camera"&&S.camera&&taken>=25&&S.owned.camNoPictures&&S.camera.counterCd<=0&&source){S.camera.counterCd=5;cameraFlashAt(source.x,source.y,90,.65,.08,2.5,true);byId("status").innerHTML="NO PICTURES! — counter-flash."}
+};
+
+campRecovery=function(){
+ if(S.owned.goldenReserve&&S.h.shield>0){var extra=Math.min(S.h.max*.08,S.h.shield*.25);S.h.hp=Math.min(S.h.max,S.h.hp+extra);S.h.shield=0}
+ return _v2CampRecovery();
+};
+
+function v3Fx(type,x,y,t,extra){if(!S.v3Fx)S.v3Fx=[];var o={type:type,x:x,y:y,t:t,max:t};if(extra)for(var k in extra)o[k]=extra[k];S.v3Fx.push(o)}
+
+/* Fishing control */
+function fishingPostUpdate(dt){if(S.item!=="fishing"||!S.hook)return;for(var i=0;i<S.en.length;i++){var e=S.en[i];if(!e.hooks||!e.hooks.length)continue;if(S.fishingPull>0){var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1,pull=(e.type==="boss"||e.type==="miniboss"||e.eliteMod)?Math.min(16,S.fishingPull*.34):S.fishingPull;e.x=clamp(e.x+dx/z*pull*dt,30,730);e.y=clamp(e.y+dy/z*pull*dt,35,490)}}}
+
+/* son / baseball */
+function throwFromSon(){if(!S.son||!S.en.length)return;S.sonBalls.push({x:S.son.x-8,y:S.son.y-20,speed:285,t:3});v3Fx("sonThrow",S.son.x,S.son.y,.35)}
+function launchSonBaseball(){if(!S.en.length)return;S.son.count++;var t=nearestTo(S.h);if(!t)return;var a=Math.atan2(t.y-S.h.y,t.x-S.h.x),dmg=S.h.dmg*S.mods.basic*S.ball.damage,bounces=S.ball.bounces;if(S.owned.sonDadStrength&&S.son.count%3===0){dmg*=1.8;bounces++}S.proj.push({type:"baseball",x:S.h.x,y:S.h.y,vx:Math.cos(a)*S.ball.speed,vy:Math.sin(a)*S.ball.speed,t:2,hits:{},v2Hits:{},rot:a,bounces:bounces,damage:dmg,homeRun:S.ball.homeRun});if(S.owned.sonProudDad)S.h.rage=Math.max(S.h.rage,2.5);if(S.owned.sonPerfectCatch){for(var i=0;i<S.abilities.length;i++)S.cds[S.abilities[i]]=Math.max(0,(S.cds[S.abilities[i]]||0)-1.25)}v3Fx("catch",S.h.x,S.h.y,.45)}
+function updateSon(dt){if(S.item!=="baseball"||!S.son)return;S.son.timer-=dt;if(S.son.timer<=0&&S.en.length){S.son.timer=S.son.throwRate;throwFromSon()}for(var i=S.sonBalls.length-1;i>=0;i--){var b=S.sonBalls[i],dx=S.h.x-b.x,dy=S.h.y-b.y,z=Math.sqrt(dx*dx+dy*dy)||1;b.x+=dx/z*b.speed*dt;b.y+=dy/z*b.speed*dt;b.t-=dt;if(z<18){S.sonBalls.splice(i,1);launchSonBaseball()}else if(b.t<=0)S.sonBalls.splice(i,1)}}
+
+/* Mrs Bigfoot */
+function mrsAssist(){if(!S.mrs||!S.en.length)return;var m=S.mrs,r=Math.floor(Math.random()*4),t=nearestTo(S.h);if(r===0){var heal=S.h.max*(S.owned.mrsLunch? .08:.04);S.h.hp=Math.min(S.h.max,S.h.hp+heal);v3Fx("lunch",S.h.x,S.h.y,.75,{n:Math.round(heal)});byId("status").innerHTML="Mrs. Bigfoot: Packed his lunch!"}else if(r===1){S.h.rage=Math.max(S.h.rage,S.owned.mrsCheer?4:2.5);v3Fx("cheer",S.h.x,S.h.y,.7);byId("status").innerHTML="Mrs. Bigfoot: GET HIM!"}else if(r===2){S.h.roarDR=Math.max(S.h.roarDR,1.8);S.h.shield+=45;v3Fx("watchOut",S.h.x,S.h.y,.7);byId("status").innerHTML="Mrs. Bigfoot: Watch out!"}else if(t){damageEnemy(t,S.owned.mrsPurse?115:65,45,m.x,m.y);if(S.owned.mrsPurse){t.stunT=Math.max(t.stunT||0,.75)}v3Fx("purse",t.x,t.y,.45);byId("status").innerHTML="Mrs. Bigfoot throws the purse."}}
+function updateMrs(dt){if(S.item!=="ring"||!S.mrs)return;var m=S.mrs;m.assist-=dt;m.rage=Math.max(0,m.rage-dt);if(m.assist<=0&&S.en.length){m.assist=m.assistRate;mrsAssist()}if(!m.joined){m.ready-=dt;if(m.ready<=0){m.joined=true;m.x=690;m.y=430;v3Fx("makeupDone",m.x,m.y,1);byId("status").innerHTML="MAKEUP'S DONE! — Mrs. Bigfoot joins the fight."}return}var t=nearestTo(m);if(!t)return;m.face=Math.atan2(t.y-m.y,t.x-m.x);m.atk=Math.max(0,m.atk-dt);var d=dist(m,t);if(d>44)moveUnit(m,t,94,dt,false);else if(m.atk<=0){var dmg=m.damage;if(S.owned.mrsCombo){var bt=nearestTo(S.h);if(bt===t)dmg*=1.35}if(S.owned.mrsPowerCouple&&dist(m,S.h)<120)dmg*=1.15;damageEnemy(t,dmg,16,m.x,m.y);m.atk=m.attackRate*(m.rage>0? .5:1)*(S.owned.mrsPowerCouple&&dist(m,S.h)<120? .85:1);v3Fx("mrsHit",t.x,t.y,.28)}if(S.owned.mrsSmash){m.slamTimer-=dt;if(m.slamTimer<=0){m.slamTimer=6;for(var i=0;i<S.en.length;i++)if(dist(m,S.en[i])<92)damageEnemy(S.en[i],85,55,m.x,m.y);v3Fx("mrsSlam",m.x,m.y,.55)}}}
+
+/* camera */
+function cameraFlashAt(x,y,radius,stun,vuln,expose,forced){for(var i=0;i<S.en.length;i++){var e=S.en[i];if(dist({x:x,y:y},e)<=radius){e.exposedT=Math.max(e.exposedT||0,expose);e.exposedPct=Math.max(e.exposedPct||0,vuln);var sd=(e.type==="boss"||e.type==="miniboss"||e.eliteMod)?stun*.28:stun;e.stunT=Math.max(e.stunT||0,sd);e.winding=false;e.atk=Math.max(e.atk,sd+.1)}}if(S.camera){S.camera.flashT=.22;S.camera.flashCount++;if(S.owned.camProof&&S.camera.flashCount%4===0){for(i=0;i<S.en.length;i++)if(dist({x:x,y:y},S.en[i])<=radius){damageEnemy(S.en[i],120,75,x,y);S.en[i].stunT=Math.max(S.en[i].stunT||0,(S.en[i].type==="boss"||S.en[i].type==="miniboss")? .35:1.4)}v3Fx("proof",x,y,.7)}}v3Fx(forced?"counterFlash":"cameraFlash",x,y,.35,{r:radius})}
+function cameraBash(){var c=S.camera,center=S.h,hit=0;for(var i=0;i<S.en.length;i++){var e=S.en[i];if(dist(center,e)<c.bashRadius){var dmg=c.bashDamage;if(S.owned.camFlashSmash&&e.stunT>0)dmg*=1.6;damageEnemy(e,dmg,75,center.x,center.y);hit++}}if(hit)v3Fx("cameraBash",center.x,center.y,.38,{r:c.bashRadius})}
+function throwCamera(){var t=nearestTo(S.h);if(!t)return;damageEnemy(t,150,85,S.h.x,S.h.y);v3Fx("cameraThrow",t.x,t.y,.5)}
+function updateCamera(dt){if(S.item!=="camera"||!S.camera)return;var c=S.camera;c.x=S.h.x+38;c.y=S.h.y+27;c.timer-=dt;c.flashT=Math.max(0,c.flashT-dt);c.counterCd=Math.max(0,c.counterCd-dt);if(c.timer<=0&&S.en.length){c.timer=c.rate;cameraFlashAt(c.x,c.y,c.radius,c.stun,c.vuln,c.expose,false)}if(S.owned.camBash){c.bashTimer-=dt;if(c.bashTimer<=0&&S.en.length){c.bashTimer=c.bashRate;cameraBash()}}if(S.owned.camThrow){c.throwTimer-=dt;if(c.throwTimer<=0&&S.en.length){c.throwTimer=10;throwCamera()}}}
+
+/* chainsaw */
+function chainDamageMult(){if(!S.chainsaw||S.chainsaw.active<=0)return 1;var m=S.chainsaw.damage;if(S.owned.chainThrottle){var elapsed=S.chainsaw.duration-S.chainsaw.active;m*=1+clamp(elapsed/S.chainsaw.duration,0,1)*.35}if(S.owned.chainRedline&&S.chainsaw.active<=2)m*=1.35;return m}
+function updateChainsawTimers(dt){if(S.item!=="chainsaw"||!S.chainsaw)return;var c=S.chainsaw;c.timer-=dt;if(c.active>0){c.active=Math.max(0,c.active-dt);if(c.active===0)v3Fx("chainsawStop",S.h.x,S.h.y,.4)}if(c.timer<=0){c.timer=c.cycle;c.active=c.duration;S.h.atk=0;v3Fx("chainsawStart",S.h.x,S.h.y,1);byId("status").innerHTML="CHAINSAW MODE — basics attacking at hyper speed."}}
+
+function applyPreEnemyControl(dt){for(var i=0;i<S.en.length;i++){var e=S.en[i];e._v3spd=e.spd;e._v3atk=e.atk;e.exposedT=Math.max(0,(e.exposedT||0)-dt);e.stunT=Math.max(0,(e.stunT||0)-dt);e.slowDebuff=Math.max(0,(e.slowDebuff||0)-dt);var slow=0;if(S.item==="fishing"&&S.fishingSlow>0&&e.hooks&&e.hooks.length)slow=Math.max(slow,S.fishingSlow);if(e.slowDebuff>0)slow=Math.max(slow,e.slowPct||.25);if(S.item==="chainsaw"&&S.owned.chainDust&&S.chainsaw.active>0&&dist(S.h,e)<115)slow=Math.max(slow,.30);if(S.v3Rubble)for(var r=0;r<S.v3Rubble.length;r++)if(dist(S.v3Rubble[r],e)<S.v3Rubble[r].r)slow=Math.max(slow,.30);if(e.stunT>0){e.spd=0;e.atk=Math.max(e.atk,.15);e.winding=false}else e.spd*=1-slow}}
+function restoreEnemyControl(){for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e._v3spd!=null)e.spd=e._v3spd;delete e._v3spd;delete e._v3atk}}
+
+/* update wrapper */
+update=function(dt){
+ if(!S||S.paused)return _v2Update(dt);
+ if(S.lastDropCd>0)S.lastDropCd=Math.max(0,S.lastDropCd-dt);if(S.wallRetaliateT>0)S.wallRetaliateT=Math.max(0,S.wallRetaliateT-dt);if(S.wolfRally>0)S.wolfRally=Math.max(0,S.wolfRally-dt);
+ updateChainsawTimers(dt);applyPreEnemyControl(dt);
+ var savedBasic=S.mods.basic,comboBefore=S.h.combo,bushBefore=S.h.bushT||0,bx=S.h.x,by=S.h.y;
+ if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0)S.mods.basic*=chainDamageMult();
+ if(S.owned.mrsPowerCouple&&S.item==="ring"&&S.mrs&&S.mrs.joined&&dist(S.mrs,S.h)<120)S.mods.basic*=1.15;
+ if(bushBefore>0)S.h.atk=Math.max(S.h.atk,bushBefore+.15);
+ _v2Update(dt);
+ S.mods.basic=savedBasic;restoreEnemyControl();if(!S||S.paused)return;
+ if(bushBefore>0){S.h.x=bx;S.h.y=by;S.h.bushT=Math.max(0,bushBefore-dt);if(S.owned.brambleBush){S.h.bushTick-=dt;if(S.h.bushTick<=0){S.h.bushTick=.35;for(var bi=0;bi<S.en.length;bi++)if(dist(S.h,S.en[bi])<78)damageEnemy(S.en[bi],24,5,S.h.x,S.h.y)}}if(S.h.bushT<=0){var radius=S.owned.wildEntrance?118:90,dmg=S.owned.wildEntrance?152:105,k=S.owned.wildEntrance?105:58;for(bi=0;bi<S.en.length;bi++)if(dist(S.h,S.en[bi])<radius)damageEnemy(S.en[bi],dmg,k,S.h.x,S.h.y);if(S.owned.ambushPredatorV3){S.h.bonusNext=true;S.mods.shroudMult=2.25}if(S.owned.underbrush)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.04);v3Fx("bushBurst",S.h.x,S.h.y,.65,{r:radius})}}
+ var comboChanged=S.h.combo!==comboBefore;
+ if(comboChanged&&S.owned.followThrough&&S.basic==="swipe"&&S.h.combo%3===0)S.h.atk=Math.min(S.h.atk,.36);
+ if(comboChanged&&S.owned.ironMomentum&&S.basic==="swipe"&&S.h.combo%3===0)S.h.shield+=24;
+ if(comboChanged&&S.basic==="rock"&&S.owned.heavyArc){for(var pi=S.proj.length-1;pi>=0;pi--){var pp=S.proj[pi];if(pp.type==="rock"&&!pp.v3Heavy){pp.v3Heavy=true;pp.vx*=.85;pp.vy*=.85;pp.mult=(pp.mult||1)*1.35;break}}}
+ if(comboChanged&&S.basic==="rock"&&S.owned.scatterShot&&S.h.combo%3===0){var aa=S.h.aim;for(var si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.16)*410,vy:Math.sin(aa+si*.16)*410,t:1.45,hits:{},rot:aa+si*.16,bounce:0,mult:S.mods.basic*.55})}
+ if(comboChanged&&S.owned.ragingSwings&&S.basic==="swipe"&&S.h.rage>0){for(var ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<80)knockEnemy(S.en[ri],20,S.h.x,S.h.y)}
+ if(comboChanged&&S.item==="chainsaw"&&S.chainsaw.active>0){var baseDelay=S.h.rage>0? .35:.72,rate=S.owned.chainRedline&&S.chainsaw.active<=2?7:S.chainsaw.rateMult;S.h.atk=Math.min(S.h.atk,baseDelay/rate);if(S.owned.chainWide){if(S.basic==="swipe"){for(ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<92)damageEnemy(S.en[ri],S.h.dmg*.30,12,S.h.x,S.h.y)}else{aa=S.h.aim;for(si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.12)*425,vy:Math.sin(aa+si*.12)*425,t:1.4,hits:{},rot:aa+si*.12,bounce:0,mult:S.mods.basic*.45})}}}
+ if(S.owned.rootDrag){for(pi=0;pi<S.proj.length;pi++)if(S.proj[pi].type==="tree")for(ri=0;ri<S.en.length;ri++)if(dist(S.proj[pi],S.en[ri])<S.mods.treeW+24){S.en[ri].slowDebuff=Math.max(S.en[ri].slowDebuff||0,2);S.en[ri].slowPct=Math.max(S.en[ri].slowPct||0,.30)}}
+ fishingPostUpdate(dt);updateSon(dt);updateMrs(dt);updateCamera(dt);updateAvalanche(dt);
+ if(S.item==="bones"&&S.wolfRally>0&&S.wolf)S.wolf.damage*=1.0001; /* rally damage is applied in wolf wrapper below */
+ if(S.v3Fx)for(var fi=S.v3Fx.length-1;fi>=0;fi--){S.v3Fx[fi].t-=dt;if(S.v3Fx[fi].t<=0)S.v3Fx.splice(fi,1)}
+};
+
+/* Wolf extra behavior without replacing the v2 pack engine. */
+var _v2UpdateWolves=updateWolves;
+updateWolves=function(dt){if(S.item!=="bones"||!S.wolf)return;var baseD=S.wolf.damage,baseS=S.wolf.speed;if(S.wolfRally>0)S.wolf.damage*=1.5;if(S.owned.packDiscipline&&S.wolves.length){var close=false;for(var q=0;q<S.wolves.length;q++)if(dist(S.wolves[q],S.h)<130){close=true;break}if(close)S.wolf.speed*=1.08}_v2UpdateWolves(dt);S.wolf.damage=baseD;S.wolf.speed=baseS};
+
+/* draw V3 mechanics */
+function drawSon(){if(S.item!=="baseball"||!S.son)return;var s=S.son;ctx.save();ctx.translate(s.x,s.y);ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,12,18,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#68422a";ctx.beginPath();ctx.arc(0,0,15,0,Math.PI*2);ctx.fill();ctx.fillStyle="#96603f";ctx.beginPath();ctx.arc(0,-9,11,0,Math.PI*2);ctx.fill();ctx.fillStyle="#f4efe1";ctx.beginPath();ctx.arc(17,-14,5,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ffe08a";ctx.font="bold 10px system-ui";ctx.textAlign="center";ctx.fillText("SON",0,30);ctx.restore();for(var i=0;i<S.sonBalls.length;i++){var b=S.sonBalls[i];ctx.fillStyle="#f4efe1";ctx.beginPath();ctx.arc(b.x,b.y,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c44f48";ctx.lineWidth=1;ctx.beginPath();ctx.arc(b.x-1,b.y,4,-1.2,1.2);ctx.stroke()}}
+function drawMrs(){if(S.item!=="ring"||!S.mrs)return;var m=S.mrs;ctx.save();ctx.translate(m.x,m.y);if(m.joined)ctx.rotate(m.face+Math.PI/2);ctx.fillStyle="#1c281e77";ctx.beginPath();ctx.ellipse(0,13,26,14,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#66402b";ctx.beginPath();ctx.arc(0,2,23,0,Math.PI*2);ctx.fill();ctx.fillStyle="#825339";ctx.beginPath();ctx.arc(0,-9,18,0,Math.PI*2);ctx.fill();ctx.fillStyle="#bd7b7a";ctx.beginPath();ctx.arc(13,-20,5,0,Math.PI*2);ctx.fill();if(!m.joined){ctx.fillStyle="#d9d5c8";ctx.fillRect(-27,-11,13,18);ctx.strokeStyle="#bba960";ctx.strokeRect(-27,-11,13,18);ctx.fillStyle="#d36c72";ctx.fillRect(17,-15,4,14);ctx.fillStyle="#ffe08a";ctx.font="bold 9px system-ui";ctx.textAlign="center";ctx.fillText("MAKEUP "+Math.max(0,m.ready).toFixed(1)+"s",0,34)}ctx.restore()}
+function drawCamera(){if(S.item!=="camera"||!S.camera)return;var c=S.camera;ctx.save();ctx.translate(c.x,c.y);ctx.fillStyle="#2b3028";ctx.fillRect(-13,-9,26,18);ctx.fillStyle="#7e876e";ctx.fillRect(-7,-5,10,8);ctx.fillStyle="#c7d5c8";ctx.beginPath();ctx.arc(8,-2,4,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#4b4434";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-8,9);ctx.lineTo(-15,25);ctx.moveTo(0,9);ctx.lineTo(0,27);ctx.moveTo(8,9);ctx.lineTo(15,25);ctx.stroke();if(c.flashT>0){ctx.fillStyle="rgba(255,255,230,"+(c.flashT/.22*.45)+")";ctx.beginPath();ctx.arc(0,0,c.radius,0,Math.PI*2);ctx.fill()}ctx.restore()}
+function drawFishingGear(){if(S.item!=="fishing")return;ctx.save();ctx.translate(S.h.x-30,S.h.y+24);ctx.strokeStyle="#d7d3c5";ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,8,.2,Math.PI*1.6);ctx.stroke();ctx.strokeStyle="#9d875c";ctx.beginPath();ctx.arc(-8,0,10,0,Math.PI*2);ctx.stroke();ctx.restore()}
+function drawChainsaw(){if(S.item!=="chainsaw"||!S.chainsaw)return;ctx.save();ctx.translate(S.h.x,S.h.y);ctx.rotate(S.h.aim);if(S.chainsaw.active>0){ctx.fillStyle="#b46f2f";ctx.fillRect(22,-9,52,18);ctx.fillStyle="#6e7470";ctx.fillRect(63,-6,45,12);ctx.strokeStyle="#d2d0c3";ctx.lineWidth=3;ctx.strokeRect(63,-8,48,16);ctx.fillStyle="#ffcc58";ctx.font="bold 12px system-ui";ctx.fillText("REV",36,-14)}else{ctx.fillStyle="#735137";ctx.fillRect(-15,26,36,9)}ctx.restore()}
+function drawBush(){if(!S.h.bushT||S.h.bushT<=0)return;ctx.save();ctx.translate(S.h.x,S.h.y);for(var i=0;i<9;i++){var a=i/9*Math.PI*2,r=23+(i%3)*8;ctx.fillStyle=i%2?"#326c39":"#467d42";ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r,18,0,Math.PI*2);ctx.fill()}ctx.restore()}
+function drawAvalanche(){if(S.v3Rubble)for(var i=0;i<S.v3Rubble.length;i++){var r=S.v3Rubble[i];ctx.fillStyle="rgba(86,82,72,.45)";for(var q=0;q<5;q++){var a=q/5*Math.PI*2;ctx.beginPath();ctx.arc(r.x+Math.cos(a)*r.r*.45,r.y+Math.sin(a)*r.r*.45,9,0,Math.PI*2);ctx.fill()}}if(!S.v3Boulders)return;for(i=0;i<S.v3Boulders.length;i++){var b=S.v3Boulders[i];if(b.done)continue;var pulse=.5+.5*Math.sin(performance.now()/90);ctx.strokeStyle="rgba(255,91,55,"+(.55+.35*pulse)+")";ctx.lineWidth=b.big?9:6;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.stroke();ctx.fillStyle="rgba(255,100,60,.09)";ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ffe2a0";ctx.font="bold 12px system-ui";ctx.textAlign="center";ctx.fillText(b.t>0?b.t.toFixed(1):"!",b.x,b.y+4)}}
+function drawV3Fx(){if(!S.v3Fx)return;for(var i=0;i<S.v3Fx.length;i++){var f=S.v3Fx[i],a=Math.max(0,Math.min(1,f.t/f.max));ctx.save();ctx.globalAlpha=a;if(f.type==="cameraFlash"||f.type==="counterFlash"){ctx.strokeStyle="#fff7cf";ctx.lineWidth=10;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||170)*(1-a*.35),0,Math.PI*2);ctx.stroke()}if(f.type==="proof"){ctx.fillStyle="rgba(255,255,235,.5)";ctx.beginPath();ctx.arc(f.x,f.y,190*(1-a*.2),0,Math.PI*2);ctx.fill()}if(f.type==="cameraBash"){ctx.strokeStyle="#d8d2b8";ctx.lineWidth=10;ctx.beginPath();ctx.arc(f.x,f.y,f.r,-1.1,1.1);ctx.stroke()}if(f.type==="cameraThrow"){ctx.fillStyle="#d8d2b8";ctx.font="bold 17px system-ui";ctx.fillText("CAMERA!",f.x-32,f.y-34)}if(f.type==="bushBurst"){ctx.strokeStyle="#79b85f";ctx.lineWidth=12;ctx.beginPath();ctx.arc(f.x,f.y,f.r*(1-a*.35),0,Math.PI*2);ctx.stroke()}if(f.type==="chainsawStart"){ctx.fillStyle="#ffcc58";ctx.font="bold 22px system-ui";ctx.textAlign="center";ctx.fillText("RRRRRRAAAAH!",f.x,f.y-58)}if(f.type==="makeupDone"){ctx.fillStyle="#ffcfda";ctx.font="bold 18px system-ui";ctx.textAlign="center";ctx.fillText("MAKEUP'S DONE!",f.x,f.y-45)}if(f.type==="lunch"){ctx.fillStyle="#ffdd77";ctx.font="bold 15px system-ui";ctx.fillText("+"+f.n+" LUNCH",f.x-35,f.y-38)}if(f.type==="cheer"){ctx.fillStyle="#ffd76a";ctx.font="bold 18px system-ui";ctx.fillText("GET HIM!",f.x-35,f.y-45)}if(f.type==="watchOut"){ctx.fillStyle="#aee5ff";ctx.font="bold 16px system-ui";ctx.fillText("WATCH OUT!",f.x-40,f.y-42)}if(f.type==="purse"){ctx.fillStyle="#cc7f91";ctx.fillRect(f.x-13,f.y-10,26,20)}if(f.type==="mrsSlam"){ctx.strokeStyle="#d7a86b";ctx.lineWidth=9;ctx.beginPath();ctx.arc(f.x,f.y,95*(1-a),0,Math.PI*2);ctx.stroke()}if(f.type==="catch"){ctx.fillStyle="#fff0b1";ctx.font="bold 16px system-ui";ctx.textAlign="center";ctx.fillText("CATCH!",f.x,f.y-43)}if(f.type==="debris"){ctx.strokeStyle="#a87542";ctx.lineWidth=7;ctx.beginPath();ctx.arc(f.x,f.y,85*(1-a),0,Math.PI*2);ctx.stroke()}if(f.type==="boulderImpact"){ctx.strokeStyle="#817b6c";ctx.lineWidth=12;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||55)*(1-a*.3),0,Math.PI*2);ctx.stroke()}if(f.type==="lastDrop"){ctx.fillStyle="#f3c857";ctx.font="bold 17px system-ui";ctx.fillText("LAST DROP!",f.x-42,f.y-44)}if(f.type==="wallBreak"){ctx.strokeStyle="#aaa89b";ctx.lineWidth=11;ctx.beginPath();ctx.arc(f.x,f.y,125*(1-a),0,Math.PI*2);ctx.stroke()}ctx.restore()}}
+
+draw=function(){_v2Draw();if(!S)return;drawAvalanche();drawFishingGear();drawSon();drawMrs();drawCamera();drawChainsaw();drawBush();drawV3Fx()};
+
+/* update skill / build UI */
+updateUI=function(){_v2UpdateUI();if(S&&S.item==="chainsaw"&&S.chainsaw){var badge=byId("itemBadge");if(S.chainsaw.active>0)badge.innerHTML="LOGGER'S CHAINSAW · ACTIVE "+S.chainsaw.active.toFixed(1)+"s";else badge.innerHTML="LOGGER'S CHAINSAW · REV IN "+Math.max(0,S.chainsaw.timer).toFixed(1)+"s"}if(S&&S.item==="ring"&&S.mrs&&!S.mrs.joined)byId("itemBadge").innerHTML="WEDDING RING · MRS. BIGFOOT IN "+Math.max(0,S.mrs.ready).toFixed(1)+"s"};
+
+startGame=function(){_v2StartGame();if(!S)return;S.v3Boulders=[];S.v3Rubble=[];S.v3Fx=[];S.sonBalls=[];S.lastDropCd=0;S.wallRetaliateT=0;S.wolfRally=0;S.h.bushT=0;ensureBuildUI()};
+
+/* Make the core labels match the new mechanics. */
+skillInfo.shroud.name="Bush Ambush";skillInfo.shroud.desc="Hide 1s invulnerable, then burst out";skillInfo.avalanche.desc="Telegraphed falling-boulder barrage";
+
+})();
+</script>
+
 </body>
 </html>
