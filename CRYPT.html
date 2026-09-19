@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Systems & Rewards v3.7.1</title>
+<title>Cryptids & Kings — Combat Intelligence v3.8</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -115,7 +115,7 @@ body[data-screen="game"]{padding:6px}
 .creditsCard{width:min(480px,94vw);background:linear-gradient(#21483e,#17372f);border:4px solid #7a5637;border-radius:18px;padding:20px;box-shadow:0 16px 50px #000b;text-align:center}.creditsCard h2{margin:0 0 14px;color:#ffe08a;font-size:30px}.creditsCard p{color:#d9cca5;line-height:1.5}.creditsCard strong{color:#fff0bd}.creditsClose{margin-top:16px;width:100%;padding:12px;border:3px solid #80603f;border-radius:12px;background:#f1e4bc;color:#24352e;font-weight:1000;font-size:16px}
 #characterSelect{min-height:calc(100vh - 12px);background:radial-gradient(circle at 50% 0,#274b42 0,#132c26 58%,#0b1c18 100%);border:4px solid #715139;border-radius:19px;padding:16px;box-shadow:inset 0 0 45px #0007}
 .selectTop{display:flex;align-items:center;gap:10px;margin-bottom:14px}.selectTop h1{margin:0;flex:1;text-align:center;color:#ffe09a}.smallBack{border:2px solid #74563b;border-radius:999px;background:#203c35;color:#e8d7a8;padding:8px 11px;font-weight:900}.selectSub{text-align:center;color:#c8bb94;margin:-3px 0 16px}
-.rosterGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.charCard{position:relative;min-height:170px;border:3px solid #88613d;border-radius:16px;background:linear-gradient(#27483d,#1b352f);padding:12px;text-align:center;overflow:hidden}.charCard.bigfoot{grid-column:1/-1;min-height:270px;border-color:#c39a53;background:radial-gradient(circle at 50% 40%,#557448 0,#31533e 45%,#1c342d 100%);box-shadow:inset 0 0 0 2px #e7c56b22}.charPortrait{height:150px;position:relative;margin:-4px auto 4px;width:180px}.bfBody{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);width:105px;height:112px;border-radius:48% 48% 37% 37%;background:radial-gradient(circle at 45% 25%,#986a45 0 9%,#71472f 10% 45%,#4e3325 78%);box-shadow:inset 10px -8px 0 #3a261d55,0 9px 15px #0007}.bfBody:before,.bfBody:after{content:"";position:absolute;top:47px;width:45px;height:83px;border-radius:50%;background:#68432e}.bfBody:before{left:-25px;transform:rotate(17deg)}.bfBody:after{right:-25px;transform:rotate(-17deg)}.bfFace{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:65px;height:66px;border-radius:45% 45% 50% 50%;background:#8b5c3b}.bfFace:before,.bfFace:after{content:"";position:absolute;top:22px;width:8px;height:7px;border-radius:50%;background:#e6ca75;box-shadow:0 0 7px #ffdf77}.bfFace:before{left:15px}.bfFace:after{right:15px}.charCard h2{margin:5px 0 2px;color:#ffe09a;font-size:25px}.role{color:#b9d18f;font-weight:900;font-size:12px;letter-spacing:.7px;text-transform:uppercase}.charDesc{color:#d5c9a3;line-height:1.32;margin:7px auto 12px;max-width:520px;font-size:13px}.selectBtn{width:100%;padding:12px;border-radius:12px;border:3px solid #7c5839;background:linear-gradient(#639155,#47723f);color:#fff1bf;font-size:18px;font-weight:1000}.locked{opacity:.55;border-color:#506057;background:#152d28}.locked .silhouette{height:92px;margin:9px auto 8px;width:78px;border-radius:48% 48% 38% 38%;background:#071713;position:relative}.locked .silhouette:before{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px;color:#344b42;font-weight:1000}.locked strong{color:#9f9c83}.locked small{color:#777e71}
+.rosterGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.charCard{position:relative;min-height:170px;border:3px solid #88613d;border-radius:16px;background:linear-gradient(#27483d,#1b352f);padding:12px;text-align:center;overflow:hidden}.charCard.bigfoot{grid-column:1/-1;min-height:270px;border-color:#c39a53;background:radial-gradient(circle at 50% 40%,#557448 0,#31533e 45%,#1c342d 100%);box-shadow:inset 0 0 0 2px #e7c56b22}.charPortrait{height:150px;position:relative;margin:-4px auto 4px;width:180px}.bfBody{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);width:105px;height:112px;border-radius:48% 48% 37% 37%;background:linear-gradient(155deg,#76503a 0%,#67422e 48%,#4e3325 100%);box-shadow:inset 10px -8px 0 #3a261d55,0 9px 15px #0007}.bfBody:before,.bfBody:after{content:"";position:absolute;top:47px;width:45px;height:83px;border-radius:50%;background:#68432e}.bfBody:before{left:-25px;transform:rotate(17deg)}.bfBody:after{right:-25px;transform:rotate(-17deg)}.bfFace{position:absolute;left:50%;top:28px;transform:translateX(-50%);width:65px;height:66px;border-radius:45% 45% 50% 50%;background:#8b5c3b}.bfFace:before,.bfFace:after{content:"";position:absolute;top:22px;width:8px;height:7px;border-radius:50%;background:#e6ca75;box-shadow:0 0 7px #ffdf77}.bfFace:before{left:15px}.bfFace:after{right:15px}.charCard h2{margin:5px 0 2px;color:#ffe09a;font-size:25px}.role{color:#b9d18f;font-weight:900;font-size:12px;letter-spacing:.7px;text-transform:uppercase}.charDesc{color:#d5c9a3;line-height:1.32;margin:7px auto 12px;max-width:520px;font-size:13px}.selectBtn{width:100%;padding:12px;border-radius:12px;border:3px solid #7c5839;background:linear-gradient(#639155,#47723f);color:#fff1bf;font-size:18px;font-weight:1000}.locked{opacity:.55;border-color:#506057;background:#152d28}.locked .silhouette{height:92px;margin:9px auto 8px;width:78px;border-radius:48% 48% 38% 38%;background:#071713;position:relative}.locked .silhouette:before{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px;color:#344b42;font-weight:1000}.locked strong{color:#9f9c83}.locked small{color:#777e71}
 .loadoutBack{display:inline-block;margin-bottom:10px;border:2px solid #74563b;border-radius:999px;background:#17352f;color:#e4d5a8;padding:7px 11px;font-weight:900}
 @media(min-width:700px){.rosterGrid{grid-template-columns:repeat(3,1fr)}.charCard.bigfoot{grid-column:1/-1}.charPortrait{height:165px}}
 @media(max-width:520px){#titleMenu,#characterSelect{min-height:calc(100vh - 6px)}.forestTitle{font-size:47px}.menuContent{padding-left:10px;padding-right:10px}.rosterGrid{gap:7px}.charCard{min-height:145px;padding:8px}.charCard.bigfoot{min-height:255px}.locked .silhouette{height:72px;width:60px}.selectTop h1{font-size:22px}}
@@ -178,7 +178,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Systems & Rewards v3.7: named run stats, temporary shields, room-start cooldowns, elite trophies, clearer scaling, and longer fights.</div>
+<div class="muted">Combat Intelligence v3.8: smarter enemies, cooldown abilities, readable telegraphs, cleaner spacing, stronger impact feedback, and core-system polish.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -252,7 +252,7 @@ body[data-screen="game"]{padding:6px}
 <option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 
-<div id="engine">ENGINE READY · SYSTEMS & REWARDS V3.7.1 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · COMBAT INTELLIGENCE V3.8 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -1108,7 +1108,7 @@ var _enterBoss=enterFixedBoss;
 enterFixedBoss=function(){_enterBoss();S.ringProc=false;var b=null;for(var i=0;i<S.en.length;i++)if(S.en[i].type==="boss"||S.en[i].type==="miniboss"){b=S.en[i];break}if(b){b.phase=1;b.scale=b.type==="boss"?1.1:1.05}}
 
 function weightedKind(list){var total=0,i,r;for(i=0;i<list.length;i++)total+=list[i][1];r=Math.random()*total;for(i=0;i<list.length;i++){r-=list[i][1];if(r<=0)return list[i][0]}return list[0][0]}
-pathOption=function(kind){var nm=pickOne(roomNames[kind]||["FOREST PATH"]),tag="",text="",cls=kind;if(kind==="combat"){tag="COMBAT";text="Guaranteed Evolution after the fight.";cls=""}if(kind==="elite"){tag="ELITE";text="Modified enemies. Evolution + a smaller bonus reward."}if(kind==="treasure"){tag="TREASURE";text="Useful supplies, but no Evolution from this room."}if(kind==="event"){tag="WEIRD EVENT";text="Rare. Tradeoffs, gambles, and consequences — no Evolution."}if(kind==="shrine"){tag="SHRINE";text="Power always has a cost. No Evolution from this room."}if(kind==="ambush"){tag="AMBUSH";text="Dangerous starting position, but a guaranteed Evolution."}return{kind:kind,name:nm,tag:tag,text:text,cls:cls}}
+pathOption=function(kind){var nm=pickOne(roomNames[kind]||["FOREST PATH"]),tag="",text="",cls=kind;if(kind==="combat"){tag="COMBAT";text="Guaranteed Evolution after the fight.";cls=""}if(kind==="elite"){tag="ELITE";text="Modified enemies use stronger combat kits. Win an Evolution + permanent Elite Trophy."}if(kind==="treasure"){tag="TREASURE";text="Useful supplies, but no Evolution from this room."}if(kind==="event"){tag="WEIRD EVENT";text="Rare. Tradeoffs, gambles, and consequences — no Evolution."}if(kind==="shrine"){tag="SHRINE";text="Power always has a cost. No Evolution from this room."}if(kind==="ambush"){tag="AMBUSH";text="Dangerous starting position, but a guaranteed Evolution."}return{kind:kind,name:nm,tag:tag,text:text,cls:cls}}
 showPathChoice=function(extra){
  if(S.room>=12)return;
  if(S.room===4){showDecision("THE BRIDGE AHEAD",extra||"The woods go quiet.",[{cls:"elite",tag:"BOSS ROOM",title:"Troll Bridge — Mossback",text:"A two-phase forest brute blocks the only way forward.",go:function(){S.room=5;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}],1);return}
@@ -1859,6 +1859,217 @@ renderBuildSummary=function(){if(!S)return;ensureStats();var b=byId("v3BuildBody
 updateUI=function(){_v37UpdateUI();if(!S)return;var hp=byId("hpText");if(S.h.shield>0&&hp)hp.innerHTML=Math.max(0,Math.ceil(S.h.hp))+" / "+Math.ceil(S.h.max)+" +"+Math.ceil(S.h.shield)+" shield <span class='shieldTime'>"+Math.max(0,S.h.shieldT||0).toFixed(1)+"s</span>"};
 
 startGame=function(){_v37Start();if(!S)return;ensureStats();S.h.hp=Math.min(800,S.h.hp);S.h.max=800;S.h.shield=0;S.h.shieldT=0;resetRoomCombatState();updateUI()};
+})();
+</script>
+
+
+
+<style>
+/* ===== COMBAT INTELLIGENCE V3.8 ===== */
+.v38Tag{color:#f0c66b;font-weight:900}.v38BuildNote{border-left:4px solid #bd6b43!important;background:#1a312d!important}
+</style>
+<script>
+/* ===== COMBAT INTELLIGENCE V3.8 ===== */
+(function(){
+var _v38Update=update,
+    _v38Draw=draw,
+    _v38DrawHazards=drawHazards,
+    _v38DrawEnemy=drawEnemy,
+    _v38MakeEnemy=makeEnemy,
+    _v38Spawn=spawnCombat,
+    _v38Boss=enterFixedBoss,
+    _v38Damage=damageEnemy,
+    _v38Hurt=hurtHero,
+    _v38RenderBuild=renderBuildSummary;
+
+function v38Ensure(){
+ if(!S)return;
+ if(!S.v38Shots)S.v38Shots=[];
+ if(!S.v38Clouds)S.v38Clouds=[];
+ if(!S.v38Impacts)S.v38Impacts=[];
+ if(S.v38RoomIntro==null)S.v38RoomIntro=0;
+}
+function v38ClampArena(e){e.x=clamp(e.x,35,725);e.y=clamp(e.y,40,485)}
+function v38Find(uid){for(var i=0;i<S.en.length;i++)if(S.en[i].uid===uid&&!S.en[i].dead)return S.en[i];return null}
+function v38RangedAlly(e){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){var o=S.en[i];if(o===e||o.dead)continue;if(o.type!=="archer"&&o.type!=="poison"&&o.type!=="mush")continue;var d=dist(e,o);if(d<bd){bd=d;best=o}}return best}
+function v38SetTemp(e,k,v){var q="_v38Orig_"+k;if(e[q]===undefined)e[q]=e[k];e[k]=v}
+function v38Lock(e){v38SetTemp(e,"spd",0);v38SetTemp(e,"range",999);e.atk=Math.max(e.atk||0,.24)}
+function v38RestoreTemps(){if(!S)return;for(var i=0;i<S.en.length;i++){var e=S.en[i],keys=["spd","range"];for(var j=0;j<keys.length;j++){var k=keys[j],q="_v38Orig_"+k;if(e[q]!==undefined){e[k]=e[q];delete e[q]}}}}
+function v38PushHero(e,amount){if(!S||!S.h||!e)return;var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1;S.h.x=clamp(S.h.x+dx/z*amount,35,725);S.h.y=clamp(S.h.y+dy/z*amount,40,485)}
+function v38Fx(x,y,r,kind){v38Ensure();S.v38Impacts.push({x:x,y:y,r:r||35,t:.32,max:.32,kind:kind||"hit"})}
+
+function v38InitEnemy(e){
+ if(!e||e.v38)return e;
+ e.v38={cd:{},cast:null,motion:null,recover:0,evade:0,guardT:0,guardFrom:0};
+ if(e.type==="archer"){e.v38.cd.dash=rnd(3.5,5.5);e.v38.cd.aim=rnd(2.0,4.2)}
+ else if(e.type==="spear"){e.v38.cd.lunge=rnd(2.4,4.4);e.v38.cd.retreat=rnd(4.5,7)}
+ else if(e.type==="shield"){e.v38.cd.guard=rnd(2.5,5);e.v38.cd.charge=rnd(4,7)}
+ else if(e.type==="poison"){e.v38.cd.cloud=rnd(2.8,5);e.v38.cd.burrow=rnd(5,8)}
+ else if(e.type==="brute"){e.v38.cd.slam=rnd(2.8,5);e.v38.cd.rush=rnd(4.5,7.5)}
+ return e;
+}
+makeEnemy=function(type,x,y){return v38InitEnemy(_v38MakeEnemy(type,x,y))};
+
+function v38StartCast(e,kind,wind,data){
+ e.v38.cast={kind:kind,t:wind,max:wind,data:data||{}};
+ e.winding=false;e.wind=0;e.v38.recover=Math.max(e.v38.recover,.05);
+}
+function v38StartMotion(e,kind,dur,speed,a,damage){
+ e.v38.motion={kind:kind,t:dur,max:dur,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,hit:false,damage:damage||0};
+}
+function v38FireAimed(e,a){
+ v38Ensure();S.v38Shots.push({kind:"aimed",x:e.x,y:e.y,vx:Math.cos(a)*430,vy:Math.sin(a)*430,t:1.55,rot:a,dmg:25+S.room*1.05,r:8});
+ S.fx.push({type:"arrowhit",x:e.x,y:e.y,t:.16});
+}
+function v38ExecuteCast(e,c){
+ var d=c.data||{},a=d.a||0,t;
+ if(c.kind==="archerDash"){v38StartMotion(e,"dash",.24,500,a,0);e.v38.evade=.30;v38Fx(e.x,e.y,26,"dash")}
+ else if(c.kind==="aimedShot"){v38FireAimed(e,a);v38Fx(e.x,e.y,24,"shot")}
+ else if(c.kind==="spearLunge"){v38StartMotion(e,"lunge",.42,360,a,22+S.room*.9)}
+ else if(c.kind==="spearRetreat"){v38StartMotion(e,"retreat",.22,340,a,0)}
+ else if(c.kind==="shieldCharge"){v38StartMotion(e,"shieldCharge",.46,320,a,24+S.room*1.0)}
+ else if(c.kind==="guardAlly"){
+   t=v38Find(d.target);if(t){v38InitEnemy(t);t.v38.guardT=Math.max(t.v38.guardT,4.2);t.v38.guardFrom=e.uid;v38Fx(t.x,t.y,38,"guard")}
+ }
+ else if(c.kind==="toxicCloud"){
+   v38Ensure();S.v38Clouds.push({x:d.x,y:d.y,r:72,t:4.2,max:4.2,tick:.15});v38Fx(d.x,d.y,70,"poison")
+ }
+ else if(c.kind==="burrow"){
+   var away=Math.atan2(e.y-S.h.y,e.x-S.h.x)+rnd(-.55,.55),rr=rnd(145,205);e.x=clamp(S.h.x+Math.cos(away)*rr,50,710);e.y=clamp(S.h.y+Math.sin(away)*rr,55,470);e.v38.evade=.22;v38Fx(e.x,e.y,40,"burrow")
+ }
+ else if(c.kind==="bruteSlam"){
+   if(dist(e,S.h)<112&&S.h.inv<=0){hurtHero(e.dmg*1.45+5,e);v38PushHero(e,34)}S.shake=Math.max(S.shake,.34);v38Fx(e.x,e.y,112,"slam")
+ }
+ else if(c.kind==="bruteRush"){v38StartMotion(e,"bruteRush",.62,330,a,e.dmg*1.25)}
+ e.v38.recover=Math.max(e.v38.recover,.18);
+}
+function v38TickMotion(e,dt){
+ var m=e.v38.motion;if(!m)return false;
+ v38Lock(e);m.t-=dt;e.x+=m.vx*dt;e.y+=m.vy*dt;v38ClampArena(e);
+ if((m.kind==="lunge"||m.kind==="shieldCharge"||m.kind==="bruteRush")&&!m.hit&&dist(e,S.h)<54&&S.h.inv<=0){hurtHero(m.damage,e);m.hit=true;v38PushHero(e,m.kind==="bruteRush"?42:28);S.shake=Math.max(S.shake,m.kind==="bruteRush"?.28:.17);v38Fx(S.h.x,S.h.y,36,"enemyHit");if(m.kind!=="bruteRush")m.t=Math.min(m.t,.08)}
+ if(m.t<=0){e.v38.motion=null;e.v38.recover=Math.max(e.v38.recover,.20)}
+ return true;
+}
+function v38TickCast(e,dt){
+ var c=e.v38.cast;if(!c)return false;
+ if((e.stunT||0)>0||(e.fear||0)>0){e.v38.cast=null;e.v38.recover=.35;return false}
+ v38Lock(e);c.t-=dt;if(c.t<=0){e.v38.cast=null;v38ExecuteCast(e,c)}return true;
+}
+function v38TickCooldowns(e,dt){for(var k in e.v38.cd)if(e.v38.cd.hasOwnProperty(k))e.v38.cd[k]=Math.max(0,e.v38.cd[k]-dt);e.v38.recover=Math.max(0,e.v38.recover-dt);e.v38.evade=Math.max(0,e.v38.evade-dt);e.v38.guardT=Math.max(0,e.v38.guardT-dt)}
+function v38NormalArcherSpacing(e,dt,d){
+ if(d<122){var a=Math.atan2(e.y-S.h.y,e.x-S.h.x);e.x+=Math.cos(a)*e.spd*1.28*dt;e.y+=Math.sin(a)*e.spd*1.28*dt;v38ClampArena(e);v38Lock(e)}
+ else if(d<235)v38SetTemp(e,"range",235);
+}
+function v38Think(e,dt){
+ v38InitEnemy(e);v38TickCooldowns(e,dt);
+ if(v38TickMotion(e,dt))return;
+ if(v38TickCast(e,dt))return;
+ if((e.stunT||0)>0||(e.fear||0)>0||e.winding||e.v38.recover>0)return;
+ if(e.type==="boss"||e.type==="miniboss")return;
+ var d=dist(e,S.h),a,t;
+ if(e.type==="archer"){
+   if(d<96&&e.v38.cd.dash<=0){a=Math.atan2(e.y-S.h.y,e.x-S.h.x);e.v38.cd.dash=10;v38StartCast(e,"archerDash",.14,{a:a});return}
+   if(d>=128&&d<=285&&e.v38.cd.aim<=0){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.v38.cd.aim=7;v38StartCast(e,"aimedShot",.80,{a:a});return}
+   v38NormalArcherSpacing(e,dt,d);return;
+ }
+ if(e.type==="spear"){
+   if(d<54&&e.v38.cd.retreat<=0){a=Math.atan2(e.y-S.h.y,e.x-S.h.x);e.v38.cd.retreat=9;v38StartCast(e,"spearRetreat",.12,{a:a});return}
+   if(d>=72&&d<=215&&e.v38.cd.lunge<=0){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.v38.cd.lunge=6;v38StartCast(e,"spearLunge",.48,{a:a});return}
+ }
+ if(e.type==="shield"){
+   t=v38RangedAlly(e);if(t&&dist(e,t)<220&&e.v38.cd.guard<=0&&(t.v38?t.v38.guardT:0)<=.2){e.v38.cd.guard=8;v38StartCast(e,"guardAlly",.42,{target:t.uid});return}
+   if(d>=88&&d<=220&&e.v38.cd.charge<=0){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.v38.cd.charge=10;v38StartCast(e,"shieldCharge",.55,{a:a});return}
+ }
+ if(e.type==="poison"){
+   if(d<88&&e.v38.cd.burrow<=0){e.v38.cd.burrow=12;v38StartCast(e,"burrow",.28,{});return}
+   if(d<=230&&e.v38.cd.cloud<=0){e.v38.cd.cloud=9;v38StartCast(e,"toxicCloud",.62,{x:S.h.x,y:S.h.y});return}
+   if(d<118){a=Math.atan2(e.y-S.h.y,e.x-S.h.x);e.x+=Math.cos(a)*e.spd*.85*dt;e.y+=Math.sin(a)*e.spd*.85*dt;v38ClampArena(e);v38Lock(e);return}
+ }
+ if(e.type==="brute"){
+   if(d<118&&e.v38.cd.slam<=0){e.v38.cd.slam=8;v38StartCast(e,"bruteSlam",.78,{});return}
+   if(d>=125&&d<=285&&e.v38.cd.rush<=0){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.v38.cd.rush=12;v38StartCast(e,"bruteRush",.66,{a:a});return}
+ }
+}
+
+function v38UpdateShots(dt){
+ v38Ensure();for(var i=S.v38Shots.length-1;i>=0;i--){var p=S.v38Shots[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.t-=dt;if(dist(p,S.h)<20&&S.h.inv<=0){hurtHero(p.dmg,null);v38PushHero({x:p.x-p.vx*.02,y:p.y-p.vy*.02},18);S.fx.push({type:"arrowhit",x:S.h.x,y:S.h.y,t:.24});S.shake=Math.max(S.shake,.15);v38Fx(S.h.x,S.h.y,32,"enemyHit");p.t=0}if(p.t<=0||p.x<-40||p.x>800||p.y<-40||p.y>560)S.v38Shots.splice(i,1)}
+}
+function v38UpdateClouds(dt){
+ v38Ensure();for(var i=S.v38Clouds.length-1;i>=0;i--){var c=S.v38Clouds[i];c.t-=dt;c.tick-=dt;if(c.tick<=0){c.tick=.72;if(dist(c,S.h)<c.r&&S.h.inv<=0){hurtHero(8+S.room*.30,null);S.fx.push({type:"poisonHurt",x:S.h.x,y:S.h.y,t:.28,max:.28})}}if(c.t<=0)S.v38Clouds.splice(i,1)}
+}
+function v38Separate(dt){
+ if(!S)return;for(var i=0;i<S.en.length;i++){var a=S.en[i];if(a.dead||a.type==="boss"||a.type==="miniboss")continue;for(var j=i+1;j<S.en.length;j++){var b=S.en[j];if(b.dead||b.type==="boss"||b.type==="miniboss")continue;var dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy)||.01,min=(a.type==="brute"||b.type==="brute")?48:34;if(d<min){var push=(min-d)*.42*dt*12,nx=dx/d,ny=dy/d;a.x+=nx*push;a.y+=ny*push;b.x-=nx*push;b.y-=ny*push;v38ClampArena(a);v38ClampArena(b)}}}
+}
+function v38Pre(dt){
+ v38Ensure();v38UpdateShots(dt);v38UpdateClouds(dt);if(S.v38RoomIntro>0)S.v38RoomIntro=Math.max(0,S.v38RoomIntro-dt);
+ for(var i=0;i<S.en.length;i++){var e=S.en[i];if(!e.dead)v38Think(e,dt)}
+}
+function v38Post(dt){
+ v38RestoreTemps();v38Separate(dt);for(var i=S.v38Impacts.length-1;i>=0;i--){S.v38Impacts[i].t-=dt;if(S.v38Impacts[i].t<=0)S.v38Impacts.splice(i,1)}
+}
+
+/* Bush Ambush now reliably blocks all normal damage while invulnerable, including projectiles/specials. */
+hurtHero=function(n,source){if(S&&S.h&&(S.h.inv||0)>0)return;_v38Hurt(n,source)};
+
+/* Guarding, dash evasion, and stronger readable impacts. */
+damageEnemy=function(e,n,k,sx,sy){
+ if(!e||e.dead)return;v38InitEnemy(e);var raw=n,before=e.hp;
+ if(e.v38.guardT>0)n*=.55;
+ if(e.v38.evade>0)n*=.35;
+ _v38Damage(e,n,k,sx,sy);
+ var dealt=Math.max(0,before-Math.max(0,e.hp));
+ if(dealt>=70){v38Fx(e.x,e.y,dealt>=150?46:32,dealt>=150?"heavy":"hit");S.shake=Math.max(S.shake,dealt>=150?.30:.16)}
+};
+
+update=function(dt){
+ if(!S)return _v38Update(dt);if(S.paused)return _v38Update(dt);
+ v38Pre(dt);_v38Update(dt);if(!S)return;v38Post(dt);
+};
+
+function v38ResetRoom(){
+ if(!S)return;v38Ensure();S.v38Shots=[];S.v38Clouds=[];S.v38Impacts=[];S.v38RoomIntro=1.05;if(S.h){S.h.poison=0;S.h.poisonTick=.7}
+ for(var i=0;i<S.en.length;i++)v38InitEnemy(S.en[i]);
+}
+spawnCombat=function(kind){_v38Spawn(kind);v38ResetRoom()};
+enterFixedBoss=function(){_v38Boss();v38ResetRoom()};
+
+/* Telegraphs are information, not extra HUD clutter. */
+function v38Line(x,y,a,len,width,fill,stroke){ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.fillStyle=fill;ctx.fillRect(0,-width/2,len,width);ctx.strokeStyle=stroke;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(len,0);ctx.stroke();ctx.restore()}
+function v38DrawTelegraphs(){
+ if(!S)return;for(var i=0;i<S.en.length;i++){var e=S.en[i],c=e.v38&&e.v38.cast;if(c){var p=1-c.t/c.max,d=c.data||{},a=d.a||0,alpha=.18+.32*p;ctx.save();
+   if(c.kind==="aimedShot"){v38Line(e.x,e.y,a,340,10,"rgba(255,70,55,"+alpha+")","rgba(255,210,150,.82)")}
+   else if(c.kind==="spearLunge"){v38Line(e.x,e.y,a,170,22,"rgba(255,174,70,"+alpha+")","rgba(255,220,130,.75)")}
+   else if(c.kind==="shieldCharge"){v38Line(e.x,e.y,a,160,34,"rgba(246,110,60,"+alpha+")","rgba(255,205,130,.8)")}
+   else if(c.kind==="bruteRush"){v38Line(e.x,e.y,a,235,42,"rgba(225,65,45,"+alpha+")","rgba(255,170,110,.82)")}
+   else if(c.kind==="bruteSlam"){ctx.fillStyle="rgba(225,65,45,"+alpha*.75+")";ctx.strokeStyle="rgba(255,205,130,.9)";ctx.lineWidth=6;ctx.beginPath();ctx.arc(e.x,e.y,112,0,Math.PI*2);ctx.fill();ctx.stroke()}
+   else if(c.kind==="toxicCloud"){ctx.fillStyle="rgba(117,71,142,"+alpha+")";ctx.strokeStyle="rgba(181,223,115,.9)";ctx.lineWidth=5;ctx.beginPath();ctx.arc(d.x,d.y,72,0,Math.PI*2);ctx.fill();ctx.stroke()}
+   else if(c.kind==="guardAlly"){var t=v38Find(d.target);if(t){ctx.strokeStyle="rgba(126,205,230,.85)";ctx.lineWidth=6;ctx.setLineDash([9,7]);ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(t.x,t.y);ctx.stroke();ctx.setLineDash([])}}
+   else if(c.kind==="archerDash"||c.kind==="spearRetreat"){ctx.strokeStyle="rgba(225,245,235,.9)";ctx.lineWidth=6;ctx.beginPath();ctx.arc(e.x,e.y,30+10*p,.3,2.6);ctx.stroke()}
+   else if(c.kind==="burrow"){ctx.strokeStyle="rgba(155,103,175,.9)";ctx.lineWidth=8;ctx.beginPath();ctx.arc(e.x,e.y,30*(1-p*.3),0,Math.PI*2);ctx.stroke()}
+   ctx.restore();
+  }
+  if((e.type==="boss"||e.type==="miniboss")&&e.chargeWind>0)v38Line(e.x,e.y,e.chargeDir,e.type==="boss"?280:220,e.type==="boss"?44:34,"rgba(220,55,45,.2)","rgba(255,190,120,.8)");
+ }
+ for(i=0;i<S.v38Clouds.length;i++){var cl=S.v38Clouds[i],fade=Math.min(1,cl.t/.6);ctx.fillStyle="rgba(104,60,128,"+(.22*fade)+")";ctx.strokeStyle="rgba(154,202,102,"+(.55*fade)+")";ctx.lineWidth=4;ctx.beginPath();ctx.arc(cl.x,cl.y,cl.r,0,Math.PI*2);ctx.fill();ctx.stroke()}
+}
+drawHazards=function(){_v38DrawHazards();v38DrawTelegraphs()};
+
+drawEnemy=function(e){_v38DrawEnemy(e);if(e.v38&&e.v38.guardT>0&&!e.dead){ctx.save();ctx.strokeStyle="rgba(132,216,238,.9)";ctx.lineWidth=5;ctx.beginPath();ctx.arc(e.x,e.y,32*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.restore()}};
+function v38DrawShots(){if(!S)return;for(var i=0;i<S.v38Shots.length;i++){var p=S.v38Shots[i];ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.strokeStyle="#f1d99b";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-19,0);ctx.lineTo(12,0);ctx.stroke();ctx.fillStyle="#f26d55";ctx.beginPath();ctx.moveTo(18,0);ctx.lineTo(7,-6);ctx.lineTo(7,6);ctx.closePath();ctx.fill();ctx.restore()}}
+function v38DrawImpacts(){if(!S)return;for(var i=0;i<S.v38Impacts.length;i++){var f=S.v38Impacts[i],a=Math.max(0,f.t/f.max),rr=f.r*(1+(1-a)*.35);ctx.save();ctx.globalAlpha=a;ctx.strokeStyle=f.kind==="poison"?"#a9d86e":(f.kind==="guard"?"#9bdceb":(f.kind==="enemyHit"?"#ff765e":"#ffe29a"));ctx.lineWidth=f.kind==="heavy"?9:5;ctx.beginPath();ctx.arc(f.x,f.y,rr,0,Math.PI*2);ctx.stroke();if(f.kind==="heavy"){ctx.fillStyle="#fff0b1";ctx.font="bold 18px system-ui";ctx.textAlign="center";ctx.fillText("SMASH!",f.x,f.y-42)}ctx.restore()}}
+function v38DrawIntro(){if(!S||S.v38RoomIntro<=0)return;var a=Math.min(1,S.v38RoomIntro/.35, (1.05-S.v38RoomIntro)/.20);ctx.save();ctx.globalAlpha=Math.max(0,a)*.88;ctx.fillStyle="#10241fd9";ctx.fillRect(250,218,260,74);ctx.strokeStyle="#d8ad61";ctx.lineWidth=3;ctx.strokeRect(250,218,260,74);ctx.fillStyle="#ffe09a";ctx.font="900 22px Georgia,serif";ctx.textAlign="center";ctx.fillText("ROOM "+S.room,380,247);ctx.fillStyle="#d7c99e";ctx.font="bold 12px system-ui";ctx.fillText("ENEMIES INBOUND",380,271);ctx.restore()}
+draw=function(){_v38Draw();if(!S)return;v38DrawShots();v38DrawImpacts();v38DrawIntro()};
+
+/* BUILD screen now exposes the actual current combat values instead of only abstract stat points. */
+renderBuildSummary=function(){
+ _v38RenderBuild();if(!S)return;var b=byId("v3BuildBody");if(!b)return;var s=S.stats||{body:0,might:0,power:0,armor:0,haste:0,focus:0},basic=S.h.dmg*S.mods.basic*(1+s.might*.05),focusRate=1+s.focus*.03,baseDR=1-(100/(100+S.h.armor))*(1-Math.min(.50,s.armor*.02))*(S.passives.indexOf("hide")>=0?.88:1),html='<h3>Current Combat Values</h3>';
+ html+='<div class="buildRow v38BuildNote"><b>Max HP:</b> '+Math.round(S.h.max)+' · <b>Basic hit:</b> ~'+Math.round(basic)+' · <b>Total damage reduction:</b> ~'+Math.round(baseDR*100)+'%</div>';
+ html+='<div class="buildRow"><b>Attack-speed bonus:</b> +'+Math.round(s.haste*3)+'% · <b>Cooldown recovery:</b> +'+Math.round(s.focus*3)+'%</div>';
+ html+='<div class="buildRow"><b>Selected cooldowns:</b> '+S.abilities.concat([S.ult]).map(function(id){return skillInfo[id].name+' '+(skillInfo[id].cd/focusRate).toFixed(1)+'s'}).join(' · ')+'</div>';
+ html+='<h3>Combat Rules</h3><div class="buildRow"><b>Enemy abilities:</b> dangerous moves use visible lines, circles, dashes, or support links. Interrupt wind-ups with fear, stun, or strong displacement.</div><div class="buildRow"><b>Room reset:</b> temporary shield, poison/debuffs, and leftover cooldown state do not carry into the next fight.</div>';
+ b.innerHTML+=html;
+};
+
 })();
 </script>
 
