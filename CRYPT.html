@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Systems & Rewards v3.7</title>
+<title>Cryptids & Kings — Systems & Rewards v3.7.1</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -252,7 +252,7 @@ body[data-screen="game"]{padding:6px}
 <option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 
-<div id="engine">ENGINE READY · SYSTEMS & REWARDS V3.7 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · SYSTEMS & REWARDS V3.7.1 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -1755,7 +1755,7 @@ skillInfo.shroud.name="Bush Ambush";skillInfo.shroud.desc="Hide 1s invulnerable,
 <script>
 /* ===== SYSTEMS & REWARDS V3.7 ===== */
 (function(){
-var _v37Start=startGame,_v37Update=update,_v37UpdateUI=updateUI,_v37Cast=cast,_v37Hurt=hurtHero,_v37Damage=damageEnemy,_v37Knock=knockEnemy,_v37Spawn=spawnCombat,_v37Boss=enterFixedBoss,_v37Apply=applyUpgrade,_v37RenderBuild=renderBuildSummary;
+var _v37Start=startGame,_v37Update=update,_v37UpdateUI=updateUI,_v37Cast=cast,_v37Hurt=hurtHero,_v37Damage=damageEnemy,_v37Knock=knockEnemy,_v37Spawn=spawnCombat,_v37Boss=enterFixedBoss,_v37Apply=applyUpgrade;
 
 window.v37PowerMult=function(){return (!window.S||!S.stats)?1:(1+S.stats.power*.05)};
 window.v37GrantShield=function(amount,duration,source){if(!window.S||!S.h)return;S.h.shield=(S.h.shield||0)+amount;S.h.shieldT=Math.max(S.h.shieldT||0,duration||6);S.h.shieldSource=source||"Shield";};
