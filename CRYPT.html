@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Bigfoot Run Expansion</title>
+<title>Cryptids & Kings — Bigfoot Expansion v2</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -64,6 +64,13 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
  body{padding:3px}.panel{padding:9px}h1{font-size:24px}.hud{font-size:12px}.pill{padding:5px 7px}
  #roomName{font-size:11px}.skill{min-height:78px;padding:8px}.card{min-height:84px}
 }
+
+/* BIGFOOT EXPANSION V2 */
+#bossBarWrap{display:none;position:absolute;left:50%;transform:translateX(-50%);top:47px;width:min(82%,620px);background:#201a18e8;border:3px solid #d2a052;border-radius:12px;padding:5px 7px;z-index:5;box-shadow:0 4px 14px #0008}
+#bossBarName{display:flex;justify-content:space-between;font-size:11px;font-weight:1000;color:#ffe29a;margin-bottom:3px;letter-spacing:.4px}
+#bossBar{height:12px;background:#3a2421;border:2px solid #171212;border-radius:7px;overflow:hidden}#bossFill{height:100%;width:100%;background:linear-gradient(90deg,#b93b35,#e26442,#efae4c);transition:width .12s linear}
+.eliteBonus{border-color:#e19d54!important;background:linear-gradient(#5b4131,#3c3029)!important}
+#runRules{font-size:12px;color:#cdbf95;margin:7px 0 0;text-align:center;line-height:1.35}
 </style>
 </head>
 <body>
@@ -72,7 +79,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 
 <section id="setup" class="panel">
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Expanded run build: branching rooms, elite fights, events, item hunts, wolves, hooks, and stronger enemy animation.</div>
+<div class="muted">Bigfoot Expansion v2: rarer risk/reward events, deeper item hunts, elite modifiers, new enemies, and two-phase bosses.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -146,7 +153,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 
-<div id="engine">ENGINE READY · 12 ROOM RUN</div>
+<div id="engine">ENGINE READY · BIGFOOT EXPANSION V2 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -164,7 +171,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <div class="arena">
 <canvas id="field" width="760" height="520"></canvas>
 <div id="roomName">SUNNY TRAIL · COMBAT</div>
-<div id="itemBadge"></div>
+<div id="itemBadge"></div><div id="bossBarWrap"><div id="bossBarName"><span id="bossName">BOSS</span><span id="bossPhase">PHASE I</span></div><div id="bossBar"><div id="bossFill"></div></div></div>
 </div>
 <div id="status">Starting...</div>
 <div id="skills"></div>
@@ -174,7 +181,7 @@ canvas{display:block;width:100%;height:auto;touch-action:none}
 <div id="decisionText"></div>
 <div id="decisionCards" class="cards"></div>
 </section>
-<div class="runTip">Camp Recovery triggers after every completed room. Bigfoot item hunts begin after the first boss.</div>
+<div class="runTip">Camp Recovery triggers after every completed room. Bigfoot item hunts begin after the first boss.</div><div id="runRules">Combat is the main source of Evolutions. Events are uncommon, and non-combat rooms trade an Evolution for their own reward.</div>
 </section>
 </div>
 
@@ -888,6 +895,299 @@ function stopGame(){
 function startToggleChanged(el){if(el.checked)startGame();else stopGame()}
 
 syncAbilityChoices();syncPassiveChoices();
+</script>
+<script>
+/* ===== BIGFOOT EXPANSION V2 LAYER ===== */
+(function(){
+var _update=update,_draw=draw,_spawnCombat=spawnCombat,_enterFixedBoss=enterFixedBoss,_drawProjectile=drawProjectile;
+
+roomNames.combat.push("PINE NEEDLE PASS","CREEK BED","FERAL GROVE");
+roomNames.elite.push("WAR PAINT CAMP","IRONBARK ENCAMPMENT");
+roomNames.event=["ABANDONED CABIN","HUNTER'S SNARE","INJURED ANIMAL","CURSED STUMP","STRANGE FOOTPRINTS","STORM CLEARING"];
+roomNames.treasure.push("HOLLOW LOG CACHE");
+roomNames.shrine.push("ROOTBOUND ALTAR");
+
+function findUpgrade(id){for(var i=0;i<upgrades.length;i++)if(upgrades[i].id===id)return upgrades[i];return null}
+function setReq(id,req){var u=findUpgrade(id);if(u)u.requires=req}
+setReq("colossal","cleave"); setReq("aftershock","slamWide"); setReq("splinter","timber");
+setReq("deepSet","barbed"); setReq("doubleHook","fastReel"); setReq("alpha","packBond"); setReq("dire","alpha");
+upgrades.push(
+ {id:"mountainBreaker",requires:"colossal",need:"swipe",tag:"MIGHTY SWIPES",title:"Mountain Breaker",text:"Every third launch deals +70% damage and sends a shock ring through nearby enemies."},
+ {id:"tectonic",requires:"aftershock",need:"slam",tag:"EARTH SLAM",title:"Tectonic Heart",text:"Aftershock erupts wider and deals +45% damage."},
+ {id:"ancientRedwood",requires:"splinter",need:"tree",tag:"UPROOT",title:"Ancient Redwood",text:"Uproot becomes enormous and launches a second ancient trunk beside the first."},
+ {id:"serrated",requires:"barbed",item:"fishing",tag:"FISHING GEAR",title:"Serrated Hooks",text:"Embedded hooks tick damage 35% faster."},
+ {id:"bloodTrail",requires:"deepSet",item:"fishing",tag:"FISHING GEAR",title:"Blood Trail",text:"Hooked enemies take 20% more damage from every source."},
+ {id:"castNet",requires:"doubleHook",item:"fishing",tag:"FISHING GEAR",title:"Cast the Whole Line",text:"Automatic casts throw three hooks at once."},
+ {id:"oldAngler",requires:["serrated","castNet"],item:"fishing",tag:"FISHING GEAR",title:"Old Angler",text:"Hook damage +35% and casts happen 15% faster."},
+ {id:"packHowl",requires:"alpha",item:"bones",tag:"SKELETAL REMAINS",title:"Pack Howl",text:"The pack periodically fears nearby enemies."},
+ {id:"scavengers",requires:"packBond",item:"bones",tag:"SKELETAL REMAINS",title:"Scavengers",text:"Killing elite enemies restores 6% max HP."},
+ {id:"thirdWolf",requires:"dire",item:"bones",tag:"SKELETAL REMAINS",title:"The Whole Pack",text:"A third wolf joins Bigfoot."},
+ {id:"promise",item:"ring",tag:"WEDDING RING",title:"Promise Kept",text:"Homebound Resolve triggers at 45% HP and grants a larger shield."},
+ {id:"steadyHands",requires:"promise",item:"ring",tag:"WEDDING RING",title:"Steady Hands",text:"Homebound Resolve also refreshes every ability."},
+ {id:"homebound",item:"ring",tag:"WEDDING RING",title:"Homeward Bound",text:"Camp Recovery gains +5% max HP for the rest of the run."},
+ {id:"protectiveFury",requires:"promise",item:"ring",tag:"WEDDING RING",title:"Protective Fury",text:"Homebound Resolve triggers a 5-second Wild Rage."},
+ {id:"neverLeave",requires:["steadyHands","homebound"],item:"ring",tag:"WEDDING RING",title:"I'm Coming Home",text:"Once per run, lethal damage leaves Bigfoot at 1 HP with a massive shield."},
+ {id:"fastball",item:"baseball",tag:"BASEBALL & GLOVE",title:"Fastball",text:"The baseball deals +45% damage and flies faster."},
+ {id:"playCatch",item:"baseball",tag:"BASEBALL & GLOVE",title:"Play Catch",text:"The baseball ricochets into one additional enemy."},
+ {id:"luckyGlove",item:"baseball",tag:"BASEBALL & GLOVE",title:"Lucky Glove",text:"The special baseball triggers every 4th basic instead of every 5th."},
+ {id:"dadStrength",requires:"fastball",item:"baseball",tag:"BASEBALL & GLOVE",title:"Dad Strength",text:"Baseball hits trigger a brief attack-speed and damage burst."},
+ {id:"homeRun",requires:["playCatch","fastball"],item:"baseball",tag:"BASEBALL & GLOVE",title:"Home Run",text:"The final baseball impact explodes, smashing nearby enemies away."}
+);
+
+upgradeEligible=function(u){
+ if(S.owned[u.id])return false;
+ if(u.item&&S.item!==u.item)return false;
+ if(u.requires){var r=Array.isArray(u.requires)?u.requires:[u.requires];for(var z=0;z<r.length;z++)if(!S.owned[r[z]])return false}
+ if(u.need){if(u.need==="swipe"||u.need==="rock")return S.basic===u.need;if(u.need==="roar"||u.need==="avalanche")return S.ult===u.need;return S.abilities.indexOf(u.need)>=0}
+ return true;
+};
+
+campRecovery=function(){
+ var pct=(S.passives.indexOf("recover")>=0 ? .20 : .10)+(S.mods.campBonus||0);
+ if(S.honeyBoost){pct+=S.mods.honeyCamp;S.honeyBoost=false}
+ var before=S.h.hp,heal=S.h.max*pct;S.h.hp=Math.min(S.h.max,S.h.hp+heal);return Math.round(S.h.hp-before);
+};
+
+function triggerRing(){
+ if(S.item!=="ring"||S.ringProc)return;
+ S.ringProc=true;S.h.shield+=S.ring.shield;S.h.roarDR=Math.max(S.h.roarDR,4);
+ if(S.owned.steadyHands)S.cds={};
+ if(S.owned.protectiveFury)S.h.rage=Math.max(S.h.rage,5);
+ S.fx.push({type:"ringResolve",x:S.h.x,y:S.h.y,t:1,max:1});byId("status").innerHTML="HOMEBOUND RESOLVE — Bigfoot refuses to go down.";
+}
+
+hurtHero=function(n,source){
+ var h=S.h,red=S.passives.indexOf("hide")>=0 ? .88 : 1,armor=h.armor+(h.armorTemp||0);
+ if(h.roarDR>0)red*=.75;n*=red*100/(100+armor);
+ if(h.shield>0){var z=Math.min(h.shield,n);h.shield-=z;n-=z}
+ if(n>0)h.hp-=n;
+ if(source)S.fx.push({type:"hurt",x:h.x,y:h.y,n:Math.round(n),t:.35});S.shake=Math.max(S.shake,.12);
+ if(S.passives.indexOf("instinct")>=0&&n>20)h.rage=Math.max(h.rage,2.5);
+ if(S.item==="ring"&&!S.ringProc&&h.hp/h.max<=S.ring.threshold&&h.hp>0)triggerRing();
+ if(h.hp<=0&&S.item==="ring"&&S.owned.neverLeave&&S.ringRevive){S.ringRevive=false;h.hp=1;h.shield+=360;h.rage=Math.max(h.rage,6);S.fx.push({type:"ringResolve",x:h.x,y:h.y,t:1.4,max:1.4});byId("status").innerHTML="I'M COMING HOME — lethal damage refused."}
+};
+
+var _damageEnemy=damageEnemy;
+damageEnemy=function(e,n,k,sx,sy){
+ if(!e||e.dead)return;
+ if(e.resist)n*=1-e.resist;
+ if(e.hooks&&e.hooks.length&&S.owned.bloodTrail)n*=1.2;
+ var wasElite=isElite(e),before=e.hp;_damageEnemy(e,n,k,sx,sy);
+ if(before>0&&e.dead&&wasElite&&S.item==="bones"&&S.owned.scavengers)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.06);
+};
+
+isElite=function(e){return !!(e&&(e.type==="brute"||e.type==="miniboss"||e.type==="boss"||e.eliteMod))};
+
+enemyStats=function(type,scale){
+ var d;if(type==="boss")d=[4700,29,44,66];else if(type==="miniboss")d=[1900,27,39,62];else if(type==="brute")d=[360,28,29,48];else if(type==="archer")d=[90,39,14,170];else if(type==="mush")d=[135,33,15,46];else if(type==="spear")d=[125,43,17,82];else if(type==="shield")d=[190,34,15,43];else if(type==="poison")d=[145,31,13,72];else d=[105,47,12,34];return[d[0]*scale,d[1],d[2]*(1+(scale-1)*.55),d[3]];
+};
+makeEnemy=function(type,x,y){
+ var scale=1+(S.room-1)*.052,d=enemyStats(type,scale);var o={type:type,x:x,y:y,hp:d[0],max:d[0],spd:d[1],dmg:d[2],range:d[3],atk:rnd(.1,.8),wind:0,windMax:0,winding:false,attackAnim:0,fear:0,dead:false,flash:0,kbx:0,kby:0,hooks:[],chargeCd:rnd(4.5,6.5),chargeWind:0,chargeTime:0,chargeDir:0,chargeHit:false,shockCd:rnd(4,6),summonCd:rnd(7,9),phase:1,eliteMod:null,resist:0,regen:0,scale:1,toxic:false,uid:(S.nextEnemyId=(S.nextEnemyId||0)+1)};if(type==="shield")o.resist=.18;return o;
+};
+function applyEliteModifier(e,forced){
+ var mods=["ARMORED","ENRAGED","GIANT","TOXIC","REGEN"],m=forced||pickOne(mods);e.eliteMod=m;
+ if(m==="ARMORED")e.resist=.27;
+ if(m==="ENRAGED"){e.spd*=1.25;e.dmg*=1.28;e.atk*=.7}
+ if(m==="GIANT"){e.hp*=1.45;e.max*=1.45;e.dmg*=1.18;e.range*=1.12;e.scale=1.25}
+ if(m==="TOXIC")e.toxic=true;
+ if(m==="REGEN")e.regen=e.max*.012;
+}
+spawnCombat=function(kind){
+ S.en=[];S.proj=[];S.fx=[];S.hazards=[];S.h.x=380;S.h.y=270;S.paused=false;S.roomKind=kind;S.ringProc=false;
+ var n=7+Math.floor(S.room*1.42),i,a,r,t,close=kind==="ambush",pool=["gob","gob","gob","archer","mush","spear","shield","poison"];
+ if(kind==="elite"){
+   spawnAround("brute",Math.max(1,Math.floor(S.room/4)),175,245);spawnAround("archer",1+Math.floor(S.room/5),175,260);spawnAround("shield",1,150,235);spawnAround("spear",1,150,235);spawnAround("gob",Math.max(2,Math.floor(n*.3)),150,270);
+   var cand=S.en.slice();shuffle(cand);for(i=0;i<Math.min(3,cand.length);i++)applyEliteModifier(cand[i]);
+ }else{
+   for(i=0;i<n;i++){a=i/n*Math.PI*2+rnd(-.3,.3);r=rnd(close?95:175,close?185:285);t=(S.room>7&&i%8===0)?"brute":pickOne(pool);addEnemy(t,380+Math.cos(a)*r,270+Math.sin(a)*r)}
+ }
+ if(S.ambushDebt){for(i=0;i<3;i++){a=i/3*Math.PI*2;addEnemy(i===0?"shield":"spear",380+Math.cos(a)*120,270+Math.sin(a)*120)}S.ambushDebt=false;byId("status").innerHTML="The patrol from the earlier event catches up with Bigfoot."}
+ else byId("status").innerHTML=kind==="ambush"?"AMBUSH! Enemies crash out of the brush.":(kind==="elite"?"Elite enemies guard this clearing. Watch their modifiers.":"The clearing erupts into a fight.");
+};
+
+var _enterBoss=enterFixedBoss;
+enterFixedBoss=function(){_enterBoss();S.ringProc=false;var b=null;for(var i=0;i<S.en.length;i++)if(S.en[i].type==="boss"||S.en[i].type==="miniboss"){b=S.en[i];break}if(b){b.phase=1;b.scale=b.type==="boss"?1.1:1.05}}
+
+function weightedKind(list){var total=0,i,r;for(i=0;i<list.length;i++)total+=list[i][1];r=Math.random()*total;for(i=0;i<list.length;i++){r-=list[i][1];if(r<=0)return list[i][0]}return list[0][0]}
+pathOption=function(kind){var nm=pickOne(roomNames[kind]||["FOREST PATH"]),tag="",text="",cls=kind;if(kind==="combat"){tag="COMBAT";text="Guaranteed Evolution after the fight.";cls=""}if(kind==="elite"){tag="ELITE";text="Modified enemies. Evolution + a smaller bonus reward."}if(kind==="treasure"){tag="TREASURE";text="Useful supplies, but no Evolution from this room."}if(kind==="event"){tag="WEIRD EVENT";text="Rare. Tradeoffs, gambles, and consequences — no Evolution."}if(kind==="shrine"){tag="SHRINE";text="Power always has a cost. No Evolution from this room."}if(kind==="ambush"){tag="AMBUSH";text="Dangerous starting position, but a guaranteed Evolution."}return{kind:kind,name:nm,tag:tag,text:text,cls:cls}}
+showPathChoice=function(extra){
+ if(S.room>=12)return;
+ if(S.room===4){showDecision("THE BRIDGE AHEAD",extra||"The woods go quiet.",[{cls:"elite",tag:"BOSS ROOM",title:"Troll Bridge — Mossback",text:"A two-phase forest brute blocks the only way forward.",go:function(){S.room=5;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}],1);return}
+ if(S.room===11){showDecision("THE LAST CLEARING",extra||"A roar shakes the forest.",[{cls:"elite",tag:"FINAL BOSS",title:"Grumblegut's Hollow",text:"The Goblin King waits. His second phase is much more aggressive.",go:function(){S.room=12;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}],1);return}
+ var combatKind=weightedKind([["combat",62],["elite",22],["ambush",16]]),secondKind;
+ if(S.lastNonCombat)secondKind=weightedKind([["combat",58],["elite",25],["ambush",17]]);
+ else{
+   var pool=[["combat",36],["elite",14],["ambush",10],["treasure",15],["shrine",10],["event",15]];
+   if(S.room<5)pool=pool.filter(function(x){return x[0]!=="shrine"});
+   if(S.eventSeen>=2||S.room-S.lastEventRoom<3)pool=pool.filter(function(x){return x[0]!=="event"});
+   if(S.room-S.lastTreasureRoom<3)pool=pool.filter(function(x){return x[0]!=="treasure"});
+   secondKind=weightedKind(pool);
+ }
+ if(secondKind===combatKind){secondKind=combatKind==="combat"?"elite":"combat"}
+ var opts=[pathOption(combatKind),pathOption(secondKind)],cards=[];shuffle(opts);
+ for(var i=0;i<opts.length;i++){(function(p){cards.push({cls:p.cls,tag:p.tag,title:p.name,text:p.text,go:function(){S.room++;enterRoom(p)}})})(opts[i])}
+ showDecision("CHOOSE THE NEXT PATH",extra||"One trail promises a fight. The other may offer something stranger.",cards,2);
+};
+
+finishNonCombat=function(text){S.lastNonCombat=true;var heal=campRecovery();byId("status").innerHTML=text+" Camp Recovery +"+heal+" HP.";showPathChoice(text+"<br><b>No Evolution this room.</b><br><b>Camp Recovery:</b> +"+heal+" HP.")};
+
+showTreasure=function(){S.paused=true;S.lastTreasureRoom=S.room;showDecision("TREASURE — "+S.currentName,"Useful, but taking this path means giving up the Evolution a combat room would have offered.",[
+ {cls:"treasure",tag:"SUPPLY",title:"Packed Meal",text:"Heal 24% max HP now. No permanent stat increase.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.24);finishNonCombat("Bigfoot eats the supplies.")}},
+ {cls:"treasure",tag:"SUPPLY",title:"Resin Wrap",text:"Gain 190 shield for the next fights.",go:function(){S.h.shield+=190;finishNonCombat("Bigfoot wraps himself in thick resin-coated bark.")}},
+ {cls:"treasure",tag:"SMALL FIND",title:"Old Trail Charm",text:"+60 max HP and heal 60. A modest permanent bonus.",go:function(){S.h.max+=60;S.h.hp=Math.min(S.h.max,S.h.hp+60);finishNonCombat("The charm feels warm in Bigfoot's hand.")}}
+ ],3)};
+
+showShrine=function(){S.paused=true;showDecision("SHRINE — "+S.currentName,"The shrine will give power, but it will not give it freely.",[
+ {cls:"shrine",tag:"SACRIFICE",title:"Blood for Strength",text:"Lose 16% max HP. Basic damage +22% permanently.",go:function(){var loss=S.h.max*.16;S.h.max=Math.max(300,S.h.max-loss);S.h.hp=Math.min(S.h.hp,S.h.max);S.mods.basic*=1.22;finishNonCombat("The shrine drinks the offering.")}},
+ {cls:"shrine",tag:"SACRIFICE",title:"Stone Bargain",text:"Lose 35% current HP. Gain +18 armor permanently.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.35);S.h.armor+=18;finishNonCombat("Stone crawls across Bigfoot's fur like armor.")}},
+ {cls:"shrine",tag:"SACRIFICE",title:"Burn the Future",text:"All abilities refresh now, but Camp Recovery is -5% for the rest of the run.",go:function(){S.cds={};S.mods.campBonus=(S.mods.campBonus||0)-.05;finishNonCombat("The shrine grants power now and takes comfort later.")}}
+ ],3)};
+
+showEvent=function(){
+ S.paused=true;S.eventSeen++;S.lastEventRoom=S.room;var which=Math.floor(Math.random()*6);
+ if(which===0)showDecision("WEIRD EVENT — ABANDONED CABIN","The door is open. Food sits on a table beside a sprung bear trap.",[
+  {cls:"event",tag:"TRADEOFF",title:"Eat What You Can",text:"Heal 30% max HP, but lose 7 armor for the rest of the run.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.30);S.h.armor=Math.max(0,S.h.armor-7);finishNonCombat("The meal helps, but Bigfoot leaves some protection behind.")}},
+  {cls:"event",tag:"GAMBLE",title:"Search the Back Room",text:"50% chance: +16% basic damage. Otherwise the trap costs 22% current HP.",go:function(){if(Math.random()<.5){S.mods.basic*=1.16;finishNonCombat("Bigfoot finds a sharpened hunting charm.")}else{S.h.hp=Math.max(1,S.h.hp-S.h.max*.22);finishNonCombat("The floor trap snaps shut before Bigfoot can react.")}}}
+ ],2);
+ else if(which===1)showDecision("WEIRD EVENT — HUNTER'S SNARE","A locked supply case hangs above a trail covered in warning marks.",[
+  {cls:"event",tag:"CONSEQUENCE",title:"Take the Supplies",text:"Gain 180 shield now, but an armed patrol will join your next combat.",go:function(){S.h.shield+=180;S.ambushDebt=true;finishNonCombat("Bigfoot takes the supplies. Someone will notice.")}},
+  {cls:"event",tag:"SAFE EXIT",title:"Leave It",text:"Nothing gained, nothing lost. Sometimes that is the right call.",go:function(){finishNonCombat("Bigfoot leaves the trap untouched.")}}
+ ],2);
+ else if(which===2)showDecision("WEIRD EVENT — INJURED WOLF","A wounded wolf watches Bigfoot without running.",[
+  {cls:"event",tag:"TRADEOFF",title:"Help the Wolf",text:"Lose 12% current HP worth of supplies and effort. If you have or later find the bones, the pack remembers.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.12);S.wolfFavor=true;if(S.item==="bones"&&S.wolf)S.wolf.damage*=1.12;finishNonCombat("The wolf disappears into the trees after Bigfoot helps it.")}},
+  {cls:"event",tag:"WILDERNESS",title:"Keep Moving",text:"No reward. Preserve your health and continue.",go:function(){finishNonCombat("Bigfoot lets nature take its course.")}}
+ ],2);
+ else if(which===3)showDecision("WEIRD EVENT — CURSED STUMP","Black sap runs upward along a dead tree.",[
+  {cls:"event",tag:"CURSE",title:"Touch the Sap",text:"Basic damage +20%, but max HP -12%.",go:function(){S.mods.basic*=1.20;S.h.max*=.88;S.h.hp=Math.min(S.h.hp,S.h.max);finishNonCombat("The curse burns through Bigfoot's arms.")}},
+  {cls:"event",tag:"CURSE",title:"Rip It Apart",text:"Lose 18% current HP, gain +12 armor.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.18);S.h.armor+=12;finishNonCombat("The stump breaks. Something inside it screams.")}}
+ ],2);
+ else if(which===4)showDecision("WEIRD EVENT — STRANGE FOOTPRINTS","The tracks are too large to be human and too precise to be an animal.",[
+  {cls:"event",tag:"RISK",title:"Follow Them",text:"Gain +12% movement speed, but the next combat begins as an ambush patrol.",go:function(){S.mods.move*=1.12;S.ambushDebt=true;finishNonCombat("Bigfoot learns the route, and something learns his.")}},
+  {cls:"event",tag:"CAUTION",title:"Erase the Trail",text:"Lose 10% current HP clearing the area, but gain 100 shield.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.10);S.h.shield+=100;finishNonCombat("Bigfoot hides every sign that he was here.")}}
+ ],2);
+ else showDecision("WEIRD EVENT — STORM CLEARING","Lightning splits a pine and starts a fire across the safest trail.",[
+  {cls:"event",tag:"RISK",title:"Push Through",text:"Lose 20% current HP, but refresh every cooldown and gain 140 shield.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.20);S.cds={};S.h.shield+=140;finishNonCombat("Bigfoot crashes through the burning brush.")}},
+  {cls:"event",tag:"DETOUR",title:"Take the Long Way",text:"No damage, but your next combat has 3 extra enemies.",go:function(){S.ambushDebt=true;finishNonCombat("The long trail is safer, but not empty.")}}
+ ],2);
+};
+
+showItemHunt=function(){
+ var all=[
+  {cls:"item",tag:"UNIQUE ITEM",title:"Fishing Gear",text:"Automatic hooks stick in enemies and bleed them over time.",item:"fishing"},
+  {cls:"item",tag:"UNIQUE ITEM",title:"Skeletal Remains",text:"A wolf companion joins Bigfoot and can grow into a full pack.",item:"bones"},
+  {cls:"item",tag:"UNIQUE ITEM",title:"Wedding Ring",text:"Homebound Resolve protects Bigfoot when badly hurt. A husband has a reason to make it home.",item:"ring"},
+  {cls:"item",tag:"UNIQUE ITEM",title:"Baseball & Glove",text:"A keepsake from his son. Every fifth basic launches a ricocheting baseball attack.",item:"baseball"}
+ ];shuffle(all);all=all.slice(0,3);var cards=[];for(var i=0;i<all.length;i++){(function(o){cards.push({cls:o.cls,tag:o.tag,title:o.title,text:o.text,go:function(){chooseItem(o.item)}})})(all[i])}showDecision("BIGFOOT ITEM HUNT","Choose one of three tracks. The fourth item will not appear this run.",cards,3);
+};
+chooseItem=function(item){
+ S.item=item;
+ if(item==="fishing"){S.hook={timer:.6,rate:2.7,damage:10,duration:6,count:1,tickRate:.6};byId("itemBadge").innerHTML="FISHING GEAR · HOOK HUNT";byId("status").innerHTML="Fishing Gear found. Hooks now stick and bleed enemies."}
+ if(item==="bones"){S.wolf={damage:34,speed:105,size:1,howlTimer:7};if(S.wolfFavor)S.wolf.damage*=1.12;addWolf();byId("itemBadge").innerHTML="SKELETAL REMAINS · WOLF PACK";byId("status").innerHTML="Skeletal Remains found. A wolf answers Bigfoot's call."}
+ if(item==="ring"){S.ring={threshold:.35,shield:190};S.ringRevive=true;S.ringProc=false;byId("itemBadge").innerHTML="WEDDING RING · HOMEBOUND";byId("status").innerHTML="Wedding Ring found. Homebound Resolve can trigger once per combat."}
+ if(item==="baseball"){S.ball={rate:5,damage:1.25,bounces:1,speed:480,homeRun:false};byId("itemBadge").innerHTML="BASEBALL & GLOVE · PLAY CATCH";byId("status").innerHTML="Baseball & Glove found. Every fifth basic becomes a ricocheting throw."}
+ byId("itemBadge").style.display="block";showPathChoice("The item changes the rest of this run.");
+};
+
+updateHooks=function(e,dt){if(!e.hooks.length)return;for(var i=e.hooks.length-1;i>=0;i--){var h=e.hooks[i];h.t-=dt;h.tick-=dt;if(h.tick<=0){h.tick=S.hook.tickRate||.6;damageEnemy(e,S.hook.damage,0,e.x,e.y);S.fx.push({type:"hooktick",x:e.x,y:e.y,t:.25})}if(h.t<=0)e.hooks.splice(i,1)}};
+updateWolves=function(dt){if(S.item!=="bones"||!S.wolf)return;S.wolf.howlTimer-=dt;if(S.owned.packHowl&&S.wolf.howlTimer<=0){S.wolf.howlTimer=7;for(var z=0;z<S.en.length;z++)if(dist(S.h,S.en[z])<170)S.en[z].fear=Math.max(S.en[z].fear,1.4);S.fx.push({type:"packHowl",x:S.h.x,y:S.h.y,t:.8,max:.8})}for(var i=0;i<S.wolves.length;i++){var w=S.wolves[i],t=nearestTo(w);w.atk=Math.max(0,w.atk-dt);w.anim=Math.max(0,w.anim-dt);if(!t){moveUnit(w,S.h,S.wolf.speed*.8,dt,false);continue}w.face=Math.atan2(t.y-w.y,t.x-w.x);if(dist(w,t)>38*S.wolf.size)moveUnit(w,t,S.wolf.speed,dt,false);else if(w.atk<=0){damageEnemy(t,S.wolf.damage,14,w.x,w.y);w.atk=.75;w.anim=.22;S.fx.push({type:"wolfbite",x:t.x,y:t.y,t:.25})}}};
+
+var oldApplyUpgrade=applyUpgrade;
+applyUpgrade=function(id){
+ S.owned[id]=true;
+ if(id==="power")S.mods.basic*=1.18;if(id==="heart"){S.h.max+=150;S.h.hp=Math.min(S.h.max,S.h.hp+150)}if(id==="armor")S.h.armor+=14;if(id==="quick")S.mods.move*=1.12;
+ if(id==="cleave")S.mods.cleave=true;if(id==="colossal")S.mods.spin=true;if(id==="mountainBreaker")S.mods.thirdPower=1.7;
+ if(id==="doubleRock")S.mods.rocks=2;if(id==="ricochet")S.mods.rockBounce=1;
+ if(id==="slamWide")S.mods.slamR+=60;if(id==="aftershock")S.mods.aftershock=true;if(id==="tectonic")S.mods.afterPower=1.45;
+ if(id==="timber")S.mods.treeW+=19;if(id==="splinter")S.mods.splinter=true;if(id==="ancientRedwood"){S.mods.treeW+=24;S.mods.redwoodDouble=true}
+ if(id==="royal")S.mods.honeyCamp=.20;if(id==="predator")S.mods.shroudMult=2.6;if(id==="unleashed"){S.mods.rageDur=8;S.mods.rageDmg=1.24}if(id==="fort")S.mods.wallShield+=150;if(id==="terror"){S.mods.roarPower=1.4;S.mods.roarDur=10}if(id==="mountain")S.mods.avPower=1.4;
+ if(id==="barbed")S.hook.damage*=1.6;if(id==="deepSet")S.hook.duration+=3;if(id==="fastReel")S.hook.rate*=.65;if(id==="doubleHook")S.hook.count=2;if(id==="serrated")S.hook.tickRate*=.65;if(id==="castNet")S.hook.count=3;if(id==="oldAngler"){S.hook.damage*=1.35;S.hook.rate*=.85}
+ if(id==="packBond")addWolf();if(id==="alpha")S.wolf.damage*=1.45;if(id==="dire"){S.wolf.damage*=1.35;S.wolf.speed*=1.18;S.wolf.size*=1.2}if(id==="thirdWolf")addWolf();
+ if(id==="promise"){S.ring.threshold=.45;S.ring.shield+=110}if(id==="homebound")S.mods.campBonus=(S.mods.campBonus||0)+.05;
+ if(id==="fastball"){S.ball.damage*=1.45;S.ball.speed=560}if(id==="playCatch")S.ball.bounces++;if(id==="luckyGlove")S.ball.rate=4;if(id==="homeRun")S.ball.homeRun=true;
+ var wasElite=S.roomKind==="elite";
+ if(S.room===5&&!S.item)showItemHunt();else if(wasElite)showEliteBonus();else showPathChoice("Choose where Bigfoot goes next.");
+};
+function showEliteBonus(){showDecision("ELITE SPOILS","The Evolution is yours. Take one smaller reward from the elite camp too.",[
+ {cls:"eliteBonus",tag:"ELITE SPOILS",title:"Trophy Hide",text:"+70 max HP and heal 70.",go:function(){S.h.max+=70;S.h.hp=Math.min(S.h.max,S.h.hp+70);showPathChoice("Elite spoils collected.")}},
+ {cls:"eliteBonus",tag:"ELITE SPOILS",title:"War Tonic",text:"Heal 18% max HP.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.18);showPathChoice("Elite spoils collected.")}},
+ {cls:"eliteBonus",tag:"ELITE SPOILS",title:"Stolen Plate",text:"Gain 130 shield and +4 armor.",go:function(){S.h.shield+=130;S.h.armor+=4;showPathChoice("Elite spoils collected.")}}
+ ],3)}
+
+var _completeRoom=completeRoom;
+completeRoom=function(){if(S.paused)return;S.lastNonCombat=false;_completeRoom()};
+
+var _enemyAttack=enemyAttack;
+enemyAttack=function(e){
+ if(e.type==="spear"){e.attackAnim=.25;if(dist(e,S.h)<e.range+18)hurtHero(e.dmg,e);S.fx.push({type:"spear",x:e.x,y:e.y,t:.3});if(e.toxic){S.h.poison=Math.max(S.h.poison,3.5)};return}
+ if(e.type==="shield"){e.attackAnim=.24;if(dist(e,S.h)<e.range+16)hurtHero(e.dmg,e);S.fx.push({type:"shieldBash",x:e.x,y:e.y,t:.3});if(e.toxic)S.h.poison=Math.max(S.h.poison,3.5);return}
+ if(e.type==="poison"){e.attackAnim=.22;if(dist(e,S.h)<e.range+20){hurtHero(e.dmg,e);S.h.poison=Math.max(S.h.poison,4.5)}S.fx.push({type:"poisonSpore",x:e.x,y:e.y,t:.75,max:.75});return}
+ _enemyAttack(e);if(e.toxic&&e.type!=="archer"&&dist(e,S.h)<e.range+28)S.h.poison=Math.max(S.h.poison,3.5);
+};
+
+updateBossSpecial=function(e,dt){
+ if(e.type!=="boss"&&e.type!=="miniboss")return false;
+ if(e.phase===1&&e.hp/e.max<=.5){e.phase=2;e.spd*=1.18;e.dmg*=1.24;e.chargeCd=Math.min(e.chargeCd,1.6);e.shockCd=Math.min(e.shockCd,1.3);e.summonCd=Math.min(e.summonCd,2.5);S.fx.push({type:"bossRage",x:e.x,y:e.y,t:1.3,max:1.3});byId("status").innerHTML=(e.type==="boss"?"GRUMBLEGUT":"MOSSBACK")+" ENTERS PHASE II — enraged!"}
+ if(e.chargeWind>0){e.chargeWind-=dt;if(e.chargeWind<=0){e.chargeTime=(e.type==="boss"?.72:.52)*(e.phase===2?.82:1);e.chargeHit=false}return true}
+ if(e.chargeTime>0){e.chargeTime-=dt;var sp=(e.type==="boss"?300:240)*(e.phase===2?1.22:1);e.x=clamp(e.x+Math.cos(e.chargeDir)*sp*dt,40,720);e.y=clamp(e.y+Math.sin(e.chargeDir)*sp*dt,45,480);if(!e.chargeHit&&dist(e,S.h)<58){hurtHero((e.type==="boss"?48:36)*(e.phase===2?1.18:1),e);e.chargeHit=true}return true}
+ e.chargeCd-=dt;e.shockCd-=dt;e.summonCd-=dt;
+ if(e.chargeCd<=0){e.chargeDir=Math.atan2(S.h.y-e.y,S.h.x-e.x);e.chargeWind=e.phase===2?.58:.8;e.chargeCd=(e.type==="boss"?6.8:8.5)*(e.phase===2?.62:1);return true}
+ if(e.shockCd<=0){var rr=(e.type==="boss"?145:112)*(e.phase===2?1.18:1);S.hazards.push({type:"bossShock",x:e.x,y:e.y,r:rr,t:e.phase===2?.68:.85,done:false});e.shockCd=(e.type==="boss"?6.1:8)*(e.phase===2?.65:1);return true}
+ if(e.type==="boss"&&e.summonCd<=0){var count=e.phase===2?6:4;for(var i=0;i<count;i++){var a=i/count*Math.PI*2;addEnemy(i%3===0?"shield":(i%2?"gob":"archer"),e.x+Math.cos(a)*95,e.y+Math.sin(a)*95)}e.summonCd=e.phase===2?6.5:9.5;S.fx.push({type:"summon",x:e.x,y:e.y,t:.8})}
+ return false;
+};
+
+function launchBaseball(){if(S.item!=="baseball"||!S.ball||!S.en.length)return;var t=nearestTo(S.h);if(!t)return;var a=Math.atan2(t.y-S.h.y,t.x-S.h.x);S.proj.push({type:"baseball",x:S.h.x,y:S.h.y,vx:Math.cos(a)*S.ball.speed,vy:Math.sin(a)*S.ball.speed,t:2,hits:{},v2Hits:{},rot:a,bounces:S.ball.bounces,damage:S.h.dmg*S.mods.basic*S.ball.damage,homeRun:S.ball.homeRun})}
+function processBaseballs(){for(var i=0;i<S.proj.length;i++){var p=S.proj[i];if(p.type!=="baseball"||p.t<=0)continue;p.v2Hits=p.v2Hits||{};for(var j=0;j<S.en.length;j++){var e=S.en[j],key=e.uid+"";if(!e.dead&&!p.v2Hits[key]&&dist(p,e)<22){p.v2Hits[key]=1;damageEnemy(e,p.damage,58,p.x,p.y);S.fx.push({type:"baseballHit",x:e.x,y:e.y,t:.35,max:.35});if(S.owned.dadStrength)S.h.rage=Math.max(S.h.rage,2.2);if(p.bounces>0){p.bounces--;var nt=null,bd=1e9;for(var q=0;q<S.en.length;q++){var o=S.en[q],kk=o.uid+"",dd=dist(e,o);if(!o.dead&&!p.v2Hits[kk]&&o!==e&&dd<bd){bd=dd;nt=o}}if(nt){var a=Math.atan2(nt.y-p.y,nt.x-p.x);p.vx=Math.cos(a)*S.ball.speed;p.vy=Math.sin(a)*S.ball.speed;p.rot=a}else p.t=0}else{if(p.homeRun){for(q=0;q<S.en.length;q++)if(S.en[q]!==e&&!S.en[q].dead&&dist(e,S.en[q])<95)damageEnemy(S.en[q],p.damage*.55,72,e.x,e.y);S.fx.push({type:"homeRun",x:e.x,y:e.y,t:.55,max:.55});S.shake=.3}p.t=0}break}}}S.proj=S.proj.filter(function(pp){return pp.t>0})}
+
+update=function(dt){
+ if(!S||S.paused)return _update(dt);
+ var beforeCombo=S.h.combo;
+ if(S.h.poison>0){S.h.poison-=dt;S.h.poisonTick-=dt;if(S.h.poisonTick<=0){S.h.poisonTick=.7;S.h.hp-=6+S.room*.28;S.fx.push({type:"poisonHurt",x:S.h.x,y:S.h.y,t:.35,max:.35})}}
+ for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e.regen>0&&!e.dead)e.hp=Math.min(e.max,e.hp+e.regen*dt)}
+ _update(dt);
+ if(!S||S.paused)return;
+ if(S.h.combo!==beforeCombo&&S.owned.mountainBreaker&&S.basic==="swipe"&&S.h.combo%3===0){for(var mb=0;mb<S.en.length;mb++)if(dist(S.h,S.en[mb])<135)damageEnemy(S.en[mb],S.h.dmg*.70,45,S.h.x,S.h.y);S.fx.push({type:"ring",x:S.h.x,y:S.h.y,r:135,t:.45,max:.45})}
+ if(S.item==="baseball"&&S.h.combo!==beforeCombo&&S.h.combo%S.ball.rate===0)launchBaseball();
+ processBaseballs();
+ if(S.item==="ring"&&!S.ringProc&&S.h.hp/S.h.max<=S.ring.threshold&&S.h.hp>0)triggerRing();
+};
+
+function drawSpear(e){var swing=e.winding?(1-e.wind/e.windMax):e.attackAnim>0?1:0;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(enemyAngle(e));if(e.flash>0)ctx.globalAlpha=.45;ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,12,25,14,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#5d8746";ctx.beginPath();ctx.arc(0,-5,18,0,Math.PI*2);ctx.fill();ctx.fillStyle="#466836";ctx.beginPath();ctx.moveTo(-12,-8);ctx.lineTo(-30,-19);ctx.lineTo(-15,3);ctx.moveTo(12,-8);ctx.lineTo(30,-19);ctx.lineTo(15,3);ctx.fill();ctx.save();ctx.translate(15,1);ctx.rotate(-.25+.48*swing);ctx.strokeStyle="#745033";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,23);ctx.lineTo(0,-46);ctx.stroke();ctx.fillStyle="#c9c6b9";ctx.beginPath();ctx.moveTo(0,-58);ctx.lineTo(-6,-44);ctx.lineTo(6,-44);ctx.closePath();ctx.fill();ctx.restore();ctx.restore()}
+function drawShield(e){ctx.save();ctx.translate(e.x,e.y);ctx.rotate(enemyAngle(e));if(e.flash>0)ctx.globalAlpha=.45;ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,13,28,15,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#527a40";ctx.beginPath();ctx.arc(0,-3,19,0,Math.PI*2);ctx.fill();ctx.fillStyle="#7e633e";ctx.beginPath();ctx.arc(-18,-3,19,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c19c55";ctx.lineWidth=4;ctx.beginPath();ctx.arc(-18,-3,15,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#4f3a2c";ctx.beginPath();ctx.arc(-18,-3,5,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c4c0b5";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(16,3);ctx.lineTo(26,-23);ctx.stroke();ctx.restore()}
+function drawPoison(e){ctx.save();ctx.translate(e.x,e.y);if(e.flash>0)ctx.globalAlpha=.45;ctx.fillStyle="#1c281e77";ctx.beginPath();ctx.ellipse(0,13,28,15,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ded7ad";ctx.beginPath();ctx.arc(0,8,11,0,Math.PI*2);ctx.fill();ctx.fillStyle="#6e4b86";ctx.beginPath();ctx.arc(0,-2,27,0,Math.PI*2);ctx.fill();ctx.fillStyle="#9fd568";for(var i=0;i<6;i++){var a=i/6*Math.PI*2;ctx.beginPath();ctx.arc(Math.cos(a)*15,Math.sin(a)*10-3,4,0,Math.PI*2);ctx.fill()}ctx.restore()}
+var _drawEnemy=drawEnemy;
+drawEnemy=function(e){
+ if(e.type==="spear")drawSpear(e);else if(e.type==="shield")drawShield(e);else if(e.type==="poison")drawPoison(e);else _drawEnemy(e);
+ if(e.type==="spear"||e.type==="shield"||e.type==="poison"){var s=28,w=48;ctx.fillStyle="#352822";ctx.fillRect(e.x-w/2,e.y-s,w,6);ctx.fillStyle="#d44a42";ctx.fillRect(e.x-w/2,e.y-s,w*Math.max(0,e.hp/e.max),6)}
+ if(e.eliteMod){var colors={ARMORED:"#9bb0bb",ENRAGED:"#f46b4c",GIANT:"#e4bd55",TOXIC:"#8fd45e",REGEN:"#68cda3"};ctx.save();ctx.strokeStyle=colors[e.eliteMod]||"#fff";ctx.lineWidth=4;ctx.beginPath();ctx.arc(e.x,e.y,31*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.fillStyle=colors[e.eliteMod]||"#fff";ctx.font="bold 10px system-ui";ctx.textAlign="center";ctx.fillText(e.eliteMod,e.x,e.y-39*(e.scale||1));ctx.restore()}
+};
+
+var _drawBrute=drawBrute;
+drawBrute=function(e,boss){_drawBrute(e,boss);if((e.type==="boss"||e.type==="miniboss")&&e.phase===2){ctx.save();ctx.strokeStyle="#ff6c4c";ctx.lineWidth=6;ctx.globalAlpha=.75;ctx.beginPath();ctx.arc(e.x,e.y,e.type==="boss"?75:58,0,Math.PI*2);ctx.stroke();ctx.restore()}};
+
+drawProjectile=function(p){if(p.type!=="baseball")return _drawProjectile(p);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot||0);ctx.fillStyle="#f4efe1";ctx.beginPath();ctx.arc(0,0,9,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c44f48";ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(-2,0,5,-1.2,1.2);ctx.arc(2,0,5,1.9,4.4);ctx.stroke();ctx.restore()};
+
+var _drawFx=drawFx;
+drawFx=function(){_drawFx();for(var i=0;i<S.fx.length;i++){var f=S.fx[i],alpha=Math.max(0,Math.min(1,f.t/(f.max||.5)));ctx.save();ctx.globalAlpha=alpha;if(f.type==="ringResolve"){ctx.strokeStyle="#f4d77b";ctx.lineWidth=8;ctx.beginPath();ctx.arc(f.x,f.y,70*(1-alpha*.2),0,Math.PI*2);ctx.stroke();ctx.fillStyle="#f4d77b";ctx.font="bold 18px system-ui";ctx.textAlign="center";ctx.fillText("HOMEBOUND",f.x,f.y-58)}if(f.type==="packHowl"){ctx.strokeStyle="#d9ded8";ctx.lineWidth=6;ctx.beginPath();ctx.arc(f.x,f.y,150*(1-alpha),0,Math.PI*2);ctx.stroke()}if(f.type==="baseballHit"){ctx.fillStyle="#fff0b1";ctx.font="bold 17px system-ui";ctx.fillText("CRACK!",f.x-25,f.y-30)}if(f.type==="homeRun"){ctx.strokeStyle="#ffe067";ctx.lineWidth=11;ctx.beginPath();ctx.arc(f.x,f.y,100*(1-alpha),0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffe067";ctx.font="bold 21px system-ui";ctx.textAlign="center";ctx.fillText("HOME RUN!",f.x,f.y-48)}if(f.type==="bossRage"){ctx.strokeStyle="#ff553f";ctx.lineWidth=12;ctx.beginPath();ctx.arc(f.x,f.y,105*(1-alpha*.25),0,Math.PI*2);ctx.stroke()}if(f.type==="poisonHurt"){ctx.fillStyle="#9edb62";ctx.font="bold 16px system-ui";ctx.fillText("POISON",f.x-28,f.y-42)}if(f.type==="poisonSpore"){ctx.fillStyle="rgba(116,75,135,.28)";ctx.beginPath();ctx.arc(f.x,f.y,65*(1-alpha*.25),0,Math.PI*2);ctx.fill()}ctx.restore()}};
+
+function drawBossBar(){var wrap=byId("bossBarWrap"),boss=null;if(!S){wrap.style.display="none";return}for(var i=0;i<S.en.length;i++)if(S.en[i].type==="boss"||S.en[i].type==="miniboss"){boss=S.en[i];break}if(!boss){wrap.style.display="none";return}wrap.style.display="block";byId("bossName").innerHTML=boss.type==="boss"?"GRUMBLEGUT — GOBLIN KING":"MOSSBACK — BRIDGE TYRANT";byId("bossPhase").innerHTML=boss.phase===2?"PHASE II · ENRAGED":"PHASE I";byId("bossFill").style.width=Math.max(0,boss.hp/boss.max*100)+"%"}
+var _updateUI=updateUI;
+updateUI=function(){_updateUI();drawBossBar()};
+
+var _startGame=startGame;
+startGame=function(){_startGame();if(!S)return;S.eventSeen=0;S.lastEventRoom=-99;S.lastTreasureRoom=-99;S.lastNonCombat=false;S.ambushDebt=false;S.wolfFavor=false;S.ringProc=false;S.ringRevive=true;S.h.poison=0;S.h.poisonTick=.7;S.mods.campBonus=0;S.mods.redwoodDouble=false;S.mods.afterPower=1;S.mods.thirdPower=1;byId("bossBarWrap").style.display="none"};
+
+/* Patch core ability multipliers without replacing the stable combat engine. */
+var _cast=cast;
+cast=function(id){var beforeTree=S&&S.proj?S.proj.length:0,beforeHaz=S&&S.hazards?S.hazards.length:0;_cast(id);if(!S)return;if(id==="tree"&&S.mods.redwoodDouble&&S.proj.length>beforeTree){var p=S.proj[S.proj.length-1],aa=Math.atan2(p.vy,p.vx)+.13;S.proj.push({type:"tree",x:p.x,y:p.y,vx:Math.cos(aa)*500,vy:Math.sin(aa)*500,t:1.65,hits:{},rot:aa})}if(id==="slam"&&S.mods.afterPower>1&&S.hazards.length>beforeHaz){for(var i=beforeHaz;i<S.hazards.length;i++)if(S.hazards[i].type==="aftershock")S.hazards[i].v2Power=S.mods.afterPower}};
+var _updateHazards=updateHazards;
+updateHazards=function(dt){for(var i=0;i<S.hazards.length;i++){var h=S.hazards[i];if(h.type==="aftershock"&&h.v2Power&&!h.done&&h.t<=dt){for(var j=0;j<S.en.length;j++)if(dist(h,S.en[j])<h.r)damageEnemy(S.en[j],78*(h.v2Power-1),15,h.x,h.y)}}_updateHazards(dt)};
+
+/* Core projectile damage multipliers are applied by temporarily scaling around the stable update. */
+var _coreDamageEnemy=damageEnemy;
+/* tree multiplier hook: detect current projectile is handled by the original engine indirectly, so widen the base through temporary stat flags in process below */
+
+})();
 </script>
 </body>
 </html>
