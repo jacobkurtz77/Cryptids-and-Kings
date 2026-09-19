@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Combat Polish v3.6</title>
+<title>Cryptids & Kings — Systems & Rewards v3.7</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -156,7 +156,7 @@ body[data-screen="game"]{padding:6px}
     <article class="charCard bigfoot">
       <div class="charPortrait"><div class="bfBody"><div class="bfFace"></div></div></div>
       <h2>BIGFOOT</h2><div class="role">Bruiser · Survivalist</div>
-      <div class="charDesc">Raw strength, forest weapons, family support, and scavenged human gear. Build around huge knockback, companions, hooks, camera tricks, or a roaring chainsaw.</div>
+      <div class="charDesc">Raw strength, forest weapons, family support, and scavenged human gear.<br><b>Base HP 800 · Basic Damage 52 · High durability · Moderate speed</b><br>Build around huge knockback, companions, hooks, camera tricks, or a roaring chainsaw.</div>
       <button class="selectBtn" type="button" onclick="chooseBigfoot()">SELECT BIGFOOT</button>
     </article>
     <article class="charCard locked"><div class="silhouette"></div><strong>LOCKED</strong><br><small>More legends are coming.</small></article>
@@ -169,11 +169,8 @@ body[data-screen="game"]{padding:6px}
 </section>
 
 <div id="creditsModal" role="dialog" aria-modal="true" aria-label="Credits">
-  <div class="creditsCard">
-    <h2>CRYPTIDS &amp; KINGS</h2>
-    <p><strong>Created &amp; designed by Jacob Kurtz</strong></p>
-    <p>Prototype development built collaboratively with ChatGPT.</p>
-    <p style="font-size:12px;opacity:.75">Bigfoot Expansion · Presentation Build v3.5</p>
+  <div class="creditsCard creditsNameOnly">
+    <div class="giantCreditName">JACOB<br>KURTZ</div>
     <button class="creditsClose" type="button" onclick="closeCredits()">BACK TO THE FOREST</button>
   </div>
 </div>
@@ -181,7 +178,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Bigfoot Expansion v3.5: six unique item builds, deeper Evolutions, family companions, and a new presentation flow.</div>
+<div class="muted">Systems & Rewards v3.7: named run stats, temporary shields, room-start cooldowns, elite trophies, clearer scaling, and longer fights.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -223,10 +220,10 @@ body[data-screen="game"]{padding:6px}
 <summary>Ability effects</summary>
 <div><b>Earth Slam</b> — 360° damage and heavy knockback.</div>
 <div><b>Uproot</b> — throw a tree exactly down the live green aim line.</div>
-<div><b>Honey Stash</b> — gain shield + armor and empower the next Camp Recovery.</div>
+<div><b>Honey Stash</b> — gain an 8-second shield + armor and empower the next Camp Recovery.</div>
 <div><b>Bush Ambush</b> — dive into a bush for about 1 second of invulnerability, then burst out for AoE damage and knockback.</div>
 <div><b>Wild Rage</b> — greatly faster basic attacks for 6 seconds.</div>
-<div><b>Boulder Wall</b> — large shield plus defensive knockback burst.</div>
+<div><b>Boulder Wall</b> — gain a powerful 5-second shield plus a defensive knockback burst.</div>
 </details>
 
 <div class="section">ULTIMATE</div>
@@ -255,7 +252,7 @@ body[data-screen="game"]{padding:6px}
 <option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 
-<div id="engine">ENGINE READY · BIGFOOT EXPANSION V3 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · SYSTEMS & REWARDS V3.7 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -310,10 +307,10 @@ var passiveChoices=[
 var skillInfo={
  slam:{name:"Earth Slam",desc:"360° damage + knockback",cd:5},
  tree:{name:"Uproot",desc:"Piercing tree throw",cd:7},
- honey:{name:"Honey Stash",desc:"Shield + stronger next recovery",cd:12},
+ honey:{name:"Honey Stash",desc:"8s shield + stronger next recovery",cd:12},
  shroud:{name:"Bush Ambush",desc:"Hide 1s invulnerable, then burst out",cd:11},
  rage:{name:"Wild Rage",desc:"6s attack-speed burst",cd:13},
- wall:{name:"Boulder Wall",desc:"Shield + knockback blast",cd:12},
+ wall:{name:"Boulder Wall",desc:"5s shield + knockback blast",cd:12},
  roar:{name:"Primal Roar",desc:"Damage + fear + 8s combat buff",cd:24},
  avalanche:{name:"Avalanche",desc:"Telegraphed falling-boulder barrage",cd:26}
 };
@@ -676,10 +673,10 @@ function cast(id){
    if(S.mods.aftershock)S.hazards.push({type:"aftershock",x:h.x,y:h.y,r:S.mods.slamR+18,t:.48,done:false});
  }
  if(id==="tree"&&t){a=Math.atan2(t.y-h.y,t.x-h.x);S.proj.push({type:"tree",x:h.x,y:h.y,vx:Math.cos(a)*500,vy:Math.sin(a)*500,t:1.65,hits:{},rot:a})}
- if(id==="honey"){h.shield+=150;h.armorTemp+=24;h.armorTempT=6;S.honeyBoost=true;S.fx.push({type:"honey",x:h.x,y:h.y,t:1})}
+ if(id==="honey"){v37GrantShield(150,8,"Honey Stash");h.armorTemp+=24;h.armorTempT=6;S.honeyBoost=true;S.fx.push({type:"honey",x:h.x,y:h.y,t:1})}
  if(id==="shroud"){h.inv=2.6;h.bonusNext=true;S.fx.push({type:"mist",x:h.x,y:h.y,t:2.6})}
  if(id==="rage"){h.rage=S.mods.rageDur;S.fx.push({type:"rage",x:h.x,y:h.y,t:S.mods.rageDur})}
- if(id==="wall"){h.shield+=S.mods.wallShield;for(i=0;i<S.en.length;i++)if(dist(h,S.en[i])<120)damageEnemy(S.en[i],55,100,h.x,h.y);S.fx.push({type:"wall",x:h.x,y:h.y,t:.7});S.shake=.18}
+ if(id==="wall"){v37GrantShield(S.mods.wallShield,5,"Boulder Wall");for(i=0;i<S.en.length;i++)if(dist(h,S.en[i])<120)damageEnemy(S.en[i],55,100,h.x,h.y);S.fx.push({type:"wall",x:h.x,y:h.y,t:.7});S.shake=.18}
  if(id==="roar"){for(i=0;i<S.en.length;i++){S.en[i].fear=2.2;damageEnemy(S.en[i],82*S.mods.roarPower,28,h.x,h.y)}h.rage=S.mods.roarDur;h.roarDR=S.mods.roarDur;S.fx.push({type:"roar",x:h.x,y:h.y,t:.9});S.shake=.4}
  if(id==="avalanche"){for(i=0;i<S.en.length;i++)damageEnemy(S.en[i],265*S.mods.avPower,40,h.x,h.y);S.fx.push({type:"avalanche",t:1});S.shake=.65}
 }
@@ -755,7 +752,7 @@ function updateHazards(dt){
      h.done=true;
      if(h.type==="bossShock"&&dist(h,S.h)<h.r)hurtHero(46,null);
      if(h.type==="aftershock"){
-       for(var j=0;j<S.en.length;j++)if(dist(h,S.en[j])<h.r)damageEnemy(S.en[j],78,45,h.x,h.y);
+       for(var j=0;j<S.en.length;j++)if(dist(h,S.en[j])<h.r)damageEnemy(S.en[j],78*v37PowerMult(),45,h.x,h.y);
        S.shake=.22;
      }
      h.t=-.25;
@@ -818,8 +815,8 @@ function update(dt){
      if(!p.hits[key]&&dist(p,e)<(p.type==="tree"?S.mods.treeW+20:(p.type==="hook"?22:20))){
        p.hits[key]=1;
        if(p.type==="tree"){
-         damageEnemy(e,170,72,p.x,p.y);
-         if(S.mods.splinter)for(var q=0;q<S.en.length;q++)if(S.en[q]!==e&&!S.en[q].dead&&dist(e,S.en[q])<82)damageEnemy(S.en[q],46,10,e.x,e.y);
+         damageEnemy(e,170*v37PowerMult(),72,p.x,p.y);
+         if(S.mods.splinter)for(var q=0;q<S.en.length;q++)if(S.en[q]!==e&&!S.en[q].dead&&dist(e,S.en[q])<82)damageEnemy(S.en[q],46*v37PowerMult(),10,e.x,e.y);
        }else if(p.type==="rock"){
          damageEnemy(e,h.dmg*.82*p.mult,12,p.x,p.y);
          if(p.bounce>0){p.bounce--;var nt=nearestOther(e,p.hits);if(nt){a=Math.atan2(nt.y-p.y,nt.x-p.x);p.vx=Math.cos(a)*430;p.vy=Math.sin(a)*430;p.rot=a}else p.t=0}else p.t=0;
@@ -985,7 +982,7 @@ function startGame(){
  if(!ctx){byId("status").innerHTML="START ERROR: canvas unavailable";return}
  S={basic:load.basic,abilities:load.abilities,ult:load.ult,passives:load.passives,room:1,roomKind:"combat",currentName:"SUNNY TRAIL",level:1,xp:0,need:8,paused:false,
  en:[],proj:[],fx:[],hazards:[],wolves:[],owned:{},item:null,cds:{},honeyBoost:false,shake:0,
- h:{x:380,y:270,hp:820,max:820,dmg:52,armor:15,armorTemp:0,armorTempT:0,shield:0,atk:0,aim:0,combo:0,swing:0,rage:0,inv:0,roarDR:0,bonusNext:false},
+ h:{x:380,y:270,hp:800,max:800,dmg:52,armor:15,armorTemp:0,armorTempT:0,shield:0,atk:0,aim:0,combo:0,swing:0,rage:0,inv:0,roarDR:0,bonusNext:false},
  mods:{basic:1,move:1,slamR:122,treeW:23,cleave:false,spin:false,rocks:1,rockBounce:0,aftershock:false,splinter:false,honeyCamp:.10,shroudMult:1.9,rageDur:6,rageDmg:1.12,wallShield:220,roarPower:1,roarDur:8,avPower:1},
  hook:null,wolf:null};
  buildSkills();updateRoomLabel();spawnCombat("combat");updateUI();draw();hideDecision();byId("itemBadge").style.display="none";
@@ -1066,7 +1063,7 @@ hurtHero=function(n,source){
  if(source)S.fx.push({type:"hurt",x:h.x,y:h.y,n:Math.round(n),t:.35});S.shake=Math.max(S.shake,.12);
  if(S.passives.indexOf("instinct")>=0&&n>20)h.rage=Math.max(h.rage,2.5);
  if(S.item==="ring"&&!S.ringProc&&h.hp/h.max<=S.ring.threshold&&h.hp>0)triggerRing();
- if(h.hp<=0&&S.item==="ring"&&S.owned.neverLeave&&S.ringRevive){S.ringRevive=false;h.hp=1;h.shield+=360;h.rage=Math.max(h.rage,6);S.fx.push({type:"ringResolve",x:h.x,y:h.y,t:1.4,max:1.4});byId("status").innerHTML="I'M COMING HOME — lethal damage refused."}
+ if(h.hp<=0&&S.item==="ring"&&S.owned.neverLeave&&S.ringRevive){S.ringRevive=false;h.hp=1;v37GrantShield(360,6,"Coming Home");h.rage=Math.max(h.rage,6);S.fx.push({type:"ringResolve",x:h.x,y:h.y,t:1.4,max:1.4});byId("status").innerHTML="I'M COMING HOME — lethal damage refused."}
 };
 
 var _damageEnemy=damageEnemy;
@@ -1283,7 +1280,7 @@ startGame=function(){_startGame();if(!S)return;S.eventSeen=0;S.lastEventRoom=-99
 var _cast=cast;
 cast=function(id){var beforeTree=S&&S.proj?S.proj.length:0,beforeHaz=S&&S.hazards?S.hazards.length:0;_cast(id);if(!S)return;if(id==="tree"&&S.mods.redwoodDouble&&S.proj.length>beforeTree){var p=S.proj[S.proj.length-1],aa=Math.atan2(p.vy,p.vx)+.13;S.proj.push({type:"tree",x:p.x,y:p.y,vx:Math.cos(aa)*500,vy:Math.sin(aa)*500,t:1.65,hits:{},rot:aa})}if(id==="slam"&&S.mods.afterPower>1&&S.hazards.length>beforeHaz){for(var i=beforeHaz;i<S.hazards.length;i++)if(S.hazards[i].type==="aftershock")S.hazards[i].v2Power=S.mods.afterPower}};
 var _updateHazards=updateHazards;
-updateHazards=function(dt){for(var i=0;i<S.hazards.length;i++){var h=S.hazards[i];if(h.type==="aftershock"&&h.v2Power&&!h.done&&h.t<=dt){for(var j=0;j<S.en.length;j++)if(dist(h,S.en[j])<h.r)damageEnemy(S.en[j],78*(h.v2Power-1),15,h.x,h.y)}}_updateHazards(dt)};
+updateHazards=function(dt){for(var i=0;i<S.hazards.length;i++){var h=S.hazards[i];if(h.type==="aftershock"&&h.v2Power&&!h.done&&h.t<=dt){for(var j=0;j<S.en.length;j++)if(dist(h,S.en[j])<h.r)damageEnemy(S.en[j],78*(h.v2Power-1)*v37PowerMult(),15,h.x,h.y)}}_updateHazards(dt)};
 
 /* Core projectile damage multipliers are applied by temporarily scaling around the stable update. */
 var _coreDamageEnemy=damageEnemy;
@@ -1535,7 +1532,7 @@ function launchAvalanche(){
  if(S.owned.avFinale){var tt=nearestTo(S.h);S.v3Boulders.push({x:tt?tt.x:380,y:tt?tt.y:240,t:2.25,r:88,damage:240,done:false,big:true})}
  byId("status").innerHTML="AVALANCHE — warning circles mark where the boulders will land.";v3Fx("avStart",S.h.x,S.h.y,.7);
 }
-function updateAvalanche(dt){if(!S.v3Boulders)return;for(var i=S.v3Boulders.length-1;i>=0;i--){var b=S.v3Boulders[i];b.t-=dt;if(!b.done&&b.t<=0){b.done=true;for(var j=0;j<S.en.length;j++)if(dist(b,S.en[j])<b.r)damageEnemy(S.en[j],b.damage,b.big?115:55,b.x,b.y);S.shake=Math.max(S.shake,b.big? .55:.28);v3Fx("boulderImpact",b.x,b.y,.55,{r:b.r});if(S.owned.avRubble)S.v3Rubble.push({x:b.x,y:b.y,r:b.r*.72,t:3});b.t=-.5}if(b.t<-.45)S.v3Boulders.splice(i,1)}for(i=S.v3Rubble.length-1;i>=0;i--){S.v3Rubble[i].t-=dt;if(S.v3Rubble[i].t<=0)S.v3Rubble.splice(i,1)}}
+function updateAvalanche(dt){if(!S.v3Boulders)return;for(var i=S.v3Boulders.length-1;i>=0;i--){var b=S.v3Boulders[i];b.t-=dt;if(!b.done&&b.t<=0){b.done=true;for(var j=0;j<S.en.length;j++)if(dist(b,S.en[j])<b.r)damageEnemy(S.en[j],b.damage*v37PowerMult(),b.big?115:55,b.x,b.y);S.shake=Math.max(S.shake,b.big? .55:.28);v3Fx("boulderImpact",b.x,b.y,.55,{r:b.r});if(S.owned.avRubble)S.v3Rubble.push({x:b.x,y:b.y,r:b.r*.72,t:3});b.t=-.5}if(b.t<-.45)S.v3Boulders.splice(i,1)}for(i=S.v3Rubble.length-1;i>=0;i--){S.v3Rubble[i].t-=dt;if(S.v3Rubble[i].t<=0)S.v3Rubble.splice(i,1)}}
 
 /* damage hooks for camera, chainsaw and ability secondary effects */
 damageEnemy=function(e,n,k,sx,sy){
@@ -1557,7 +1554,7 @@ hurtHero=function(n,source){
  var taken=Math.max(0,oldHp-S.h.hp);
  if(S.owned.stickyCoat&&oldShield>0&&source){source.slowDebuff=Math.max(source.slowDebuff||0,1.8);source.slowPct=Math.max(source.slowPct||0,.35)}
  if(S.owned.lastDrop&&oldShield>0&&S.h.shield<=0&&S.lastDropCd<=0){S.h.rage=Math.max(S.h.rage,3);S.lastDropCd=6;v3Fx("lastDrop",S.h.x,S.h.y,.65)}
- if(S.wallRetaliateT>0&&S.owned.stoneRetaliation&&oldShield>0&&S.h.shield<=0){for(var i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<125)damageEnemy(S.en[i],90,95,S.h.x,S.h.y);S.wallRetaliateT=0;v3Fx("wallBreak",S.h.x,S.h.y,.6)}
+ if(S.wallRetaliateT>0&&S.owned.stoneRetaliation&&oldShield>0&&S.h.shield<=0){for(var i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<125)damageEnemy(S.en[i],90*v37PowerMult(),95,S.h.x,S.h.y);S.wallRetaliateT=0;v3Fx("wallBreak",S.h.x,S.h.y,.6)}
  if(S.item==="ring"&&S.mrs&&taken>=25&&S.owned.mrsHusband)S.mrs.rage=4;
  if(S.item==="camera"&&S.camera&&taken>=25&&S.owned.camNoPictures&&S.camera.counterCd<=0&&source){S.camera.counterCd=5;cameraFlashAt(source.x,source.y,90,.65,.08,2.5,true);byId("status").innerHTML="NO PICTURES! — counter-flash."}
 };
@@ -1593,7 +1590,7 @@ function mrsCheerAssist(){
  v3Fx("cheer",S.h.x,S.h.y,.7);byId("status").innerHTML="Mrs. Bigfoot: GET HIM, HONEY!";
 }
 function mrsGuardAssist(){
- if(!S.mrs)return;S.h.roarDR=Math.max(S.h.roarDR,2.2);S.h.shield+=60;
+ if(!S.mrs)return;S.h.roarDR=Math.max(S.h.roarDR,2.2);v37GrantShield(60,4,"Watch Out!");
  v3Fx("watchOut",S.h.x,S.h.y,.7);byId("status").innerHTML="Mrs. Bigfoot: WATCH OUT!";
 }
 function updateMrs(dt){
@@ -1633,10 +1630,10 @@ update=function(dt){
  if(bushBefore>0)S.h.atk=Math.max(S.h.atk,bushBefore+.15);
  _v2Update(dt);
  S.mods.basic=savedBasic;restoreEnemyControl();if(!S||S.paused)return;
- if(bushBefore>0){S.h.x=bx;S.h.y=by;S.h.bushT=Math.max(0,bushBefore-dt);if(S.owned.brambleBush){S.h.bushTick-=dt;if(S.h.bushTick<=0){S.h.bushTick=.35;for(var bi=0;bi<S.en.length;bi++)if(dist(S.h,S.en[bi])<78)damageEnemy(S.en[bi],24,5,S.h.x,S.h.y)}}if(S.h.bushT<=0){var radius=S.owned.wildEntrance?118:90,dmg=S.owned.wildEntrance?152:105,k=S.owned.wildEntrance?105:58;for(bi=0;bi<S.en.length;bi++)if(dist(S.h,S.en[bi])<radius)damageEnemy(S.en[bi],dmg,k,S.h.x,S.h.y);if(S.owned.ambushPredatorV3){S.h.bonusNext=true;S.mods.shroudMult=2.25}if(S.owned.underbrush)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.04);v3Fx("bushBurst",S.h.x,S.h.y,.65,{r:radius})}}
+ if(bushBefore>0){S.h.x=bx;S.h.y=by;S.h.bushT=Math.max(0,bushBefore-dt);if(S.owned.brambleBush){S.h.bushTick-=dt;if(S.h.bushTick<=0){S.h.bushTick=.35;for(var bi=0;bi<S.en.length;bi++)if(dist(S.h,S.en[bi])<78)damageEnemy(S.en[bi],24*v37PowerMult(),5,S.h.x,S.h.y)}}if(S.h.bushT<=0){var radius=S.owned.wildEntrance?118:90,dmg=S.owned.wildEntrance?152:105,k=S.owned.wildEntrance?105:58;for(bi=0;bi<S.en.length;bi++)if(dist(S.h,S.en[bi])<radius)damageEnemy(S.en[bi],dmg*v37PowerMult(),k,S.h.x,S.h.y);if(S.owned.ambushPredatorV3){S.h.bonusNext=true;S.mods.shroudMult=2.25}if(S.owned.underbrush)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.04);v3Fx("bushBurst",S.h.x,S.h.y,.65,{r:radius})}}
  var comboChanged=S.h.combo!==comboBefore;
  if(comboChanged&&S.owned.followThrough&&S.basic==="swipe"&&S.h.combo%3===0)S.h.atk=Math.min(S.h.atk,.36);
- if(comboChanged&&S.owned.ironMomentum&&S.basic==="swipe"&&S.h.combo%3===0)S.h.shield+=24;
+ if(comboChanged&&S.owned.ironMomentum&&S.basic==="swipe"&&S.h.combo%3===0)v37GrantShield(24,3.5,"Iron Momentum");
  if(comboChanged&&S.basic==="rock"&&S.owned.heavyArc){for(var pi=S.proj.length-1;pi>=0;pi--){var pp=S.proj[pi];if(pp.type==="rock"&&!pp.v3Heavy){pp.v3Heavy=true;pp.vx*=.85;pp.vy*=.85;pp.mult=(pp.mult||1)*1.35;break}}}
  if(comboChanged&&S.basic==="rock"&&S.owned.scatterShot&&S.h.combo%3===0){var aa=S.h.aim;for(var si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.16)*410,vy:Math.sin(aa+si*.16)*410,t:1.45,hits:{},rot:aa+si*.16,bounce:0,mult:S.mods.basic*.55})}
  if(comboChanged&&S.owned.ragingSwings&&S.basic==="swipe"&&S.h.rage>0){for(var ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<80)knockEnemy(S.en[ri],20,S.h.x,S.h.y)}
@@ -1744,6 +1741,124 @@ skillInfo.shroud.name="Bush Ambush";skillInfo.shroud.desc="Hide 1s invulnerable,
  }
  installCleanCombatHUD();
  var oldStart=startGame;startGame=function(){installCleanCombatHUD();oldStart.apply(this,arguments)};
+})();
+</script>
+
+
+<style>
+/* ===== SYSTEMS & REWARDS V3.7 ===== */
+.creditsNameOnly{padding:30px 20px 22px!important}.giantCreditName{font-family:Georgia,serif;font-weight:1000;font-size:clamp(58px,16vw,112px);line-height:.82;letter-spacing:3px;color:#ffe08a;text-shadow:0 5px 0 #55391f,0 11px 26px #000b;margin:24px 0 34px}
+#v37StatGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:7px 0}.v37Stat{background:#15352e;border:2px solid #62513a;border-radius:11px;padding:8px}.v37Stat b{color:#ffe08a}.v37Stat small{display:block;color:#cabd96;margin-top:2px}
+.v37Trophy{border-left:4px solid #d89e50!important}.shieldTime{color:#aee5ff;font-size:11px;margin-left:3px}
+@media(min-width:700px){#v37StatGrid{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script>
+/* ===== SYSTEMS & REWARDS V3.7 ===== */
+(function(){
+var _v37Start=startGame,_v37Update=update,_v37UpdateUI=updateUI,_v37Cast=cast,_v37Hurt=hurtHero,_v37Damage=damageEnemy,_v37Knock=knockEnemy,_v37Spawn=spawnCombat,_v37Boss=enterFixedBoss,_v37Apply=applyUpgrade,_v37RenderBuild=renderBuildSummary;
+
+window.v37PowerMult=function(){return (!window.S||!S.stats)?1:(1+S.stats.power*.05)};
+window.v37GrantShield=function(amount,duration,source){if(!window.S||!S.h)return;S.h.shield=(S.h.shield||0)+amount;S.h.shieldT=Math.max(S.h.shieldT||0,duration||6);S.h.shieldSource=source||"Shield";};
+function ensureStats(){if(!S)return;if(!S.stats)S.stats={body:0,might:0,power:0,armor:0,haste:0,focus:0};if(!S.trophies)S.trophies=[];if(S.h.shieldT==null)S.h.shieldT=0;if(S.v37FirstAbility==null)S.v37FirstAbility=false;}
+function statEffect(k,n){if(k==="body")return "+"+(n*50)+" Max HP";if(k==="might")return "+"+(n*5)+"% Basic Damage";if(k==="power")return "+"+(n*5)+"% Ability Damage";if(k==="armor")return "+"+(n*2)+"% Damage Reduction";if(k==="haste")return "+"+(n*3)+"% Basic Attack Speed";return "+"+(n*3)+"% Cooldown Recovery";}
+function statName(k){return{k:""}[k]||({body:"BODY",might:"MIGHT",power:"POWER",armor:"ARMOR",haste:"HASTE",focus:"FOCUS"})[k]||k.toUpperCase()}
+window.v37AddStat=function(k,n,healBody){ensureStats();S.stats[k]+=n;if(k==="body"){S.h.max+=50*n;if(healBody!==false)S.h.hp=Math.min(S.h.max,S.h.hp+50*n)}updateUI();};
+
+/* Named stat cards. Generic boosts stay uncommon. */
+function mutateUpgrade(id,title,text){for(var i=0;i<upgrades.length;i++)if(upgrades[i].id===id){upgrades[i].title=title;upgrades[i].text=text;upgrades[i].tag="RUN STAT";return}}
+mutateUpgrade("heart","Hardened Body","+3 Body (+150 Max HP). Max-health gains also heal the amount gained.");
+mutateUpgrade("power","Heavy Hands","+3 Might (+15% Basic Attack Damage).");
+mutateUpgrade("armor","Stone Skin","+3 Armor (+6% Damage Reduction).");
+mutateUpgrade("quick","Quick Hands","+3 Haste (+9% Basic Attack Speed).");
+upgrades.push(
+ {id:"v37PowerStat",tag:"RUN STAT",title:"Primal Power",text:"+3 Power (+15% Ability Damage)."},
+ {id:"v37FocusStat",tag:"RUN STAT",title:"Clear Focus",text:"+3 Focus (+9% Cooldown Recovery)."},
+ {id:"v37BattleReady",tag:"COMBAT PREP",title:"Battle Ready",text:"Every non-Ultimate ability begins each combat room with 1.5s less Starting Cooldown."},
+ {id:"v37RageReady",need:"rage",tag:"WILD RAGE",title:"Short Fuse",text:"Wild Rage begins every combat room READY instead of starting partially charged."},
+ {id:"v37UltCharge",tag:"ULTIMATE",title:"Gathering Storm",text:"Your Ultimate begins each room 75% charged instead of 50% charged."}
+);
+var STAT_IDS={heart:1,power:1,armor:1,quick:1,v37PowerStat:1,v37FocusStat:1};
+
+/* Upgrade chooser keeps flat stats uncommon. */
+getUpgradeChoices=function(){var itemPool=[],uniquePool=[],statPool=[],out=[],i,u;for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;if(STAT_IDS[u.id])statPool.push(u);else if(u.item&&u.item===S.item)itemPool.push(u);else uniquePool.push(u)}shuffle(itemPool);shuffle(uniquePool);shuffle(statPool);if(S.item&&itemPool.length&&Math.random()<.82)out.push(itemPool.shift());while(out.length<3&&uniquePool.length)out.push(uniquePool.shift());if(statPool.length&&Math.random()<.20){if(out.length>=3)out[2]=statPool.shift();else out.push(statPool.shift())}while(out.length<3&&itemPool.length)out.push(itemPool.shift());while(out.length<3&&statPool.length)out.push(statPool.shift());return out};
+function v37CardClass(u){if(STAT_IDS[u.id])return"statboost";if(u.item)return"itemEvolution";if(u.requires)return"advanced";return""}
+function v37CardTag(u){if(STAT_IDS[u.id])return"STAT BOOST";if(u.item)return"ITEM EVOLUTION";if(u.need==="swipe"||u.need==="rock")return"BASIC EVOLUTION";return u.tag||"EVOLUTION"}
+showUpgrade=function(heal){var choices=getUpgradeChoices(),cards=[];for(var i=0;i<choices.length;i++)(function(up){cards.push({cls:v37CardClass(up),tag:v37CardTag(up),title:up.title,text:up.text,go:function(){applyUpgrade(up.id)}})})(choices[i]);showDecision("ROOM CLEARED","Camp Recovery restored <b>"+heal+" HP</b>. Choose one Evolution.",cards,3)};
+function afterStatUpgrade(){if(S.room===5&&!S.item)showItemHunt();else if(S.roomKind==="elite")showEliteBonus();else showPathChoice("Evolution acquired. Choose where Bigfoot goes next.")}
+applyUpgrade=function(id){ensureStats();if(STAT_IDS[id]||id.indexOf("v37")===0){S.owned[id]=true;if(id==="heart")v37AddStat("body",3);else if(id==="power")v37AddStat("might",3);else if(id==="armor")v37AddStat("armor",3);else if(id==="quick")v37AddStat("haste",3);else if(id==="v37PowerStat")v37AddStat("power",3);else if(id==="v37FocusStat")v37AddStat("focus",3);afterStatUpgrade();return}_v37Apply(id)};
+
+/* Actual stat scaling. Bigfoot base numbers are character balance, these are run bonuses on top. */
+hurtHero=function(n,source){ensureStats();var bonusDR=Math.min(.50,S.stats.armor*.02);_v37Hurt(n*(1-bonusDR),source)};
+knockEnemy=function(e,k,sx,sy){if(S&&S.trophies&&S.trophies.indexOf("bruteKnuckle")>=0)k*=1.15;_v37Knock(e,k,sx,sy)};
+damageEnemy=function(e,n,k,sx,sy){var wasAlive=e&&!e.dead&&e.hp>0,wasElite=wasAlive&&isElite(e),debuffed=wasAlive&&((e.hooks&&e.hooks.length)||(e.exposedT||0)>0||(e.slowDebuff||0)>0);if(S&&S.v37DamageClass==="ability")n*=v37PowerMult();_v37Damage(e,n,k,sx,sy);if(wasAlive&&e.dead&&S&&S.trophies){if(wasElite&&S.trophies.indexOf("trophyHide")>=0)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.03);if(debuffed&&S.trophies.indexOf("mushroomCrown")>=0)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.02)}};
+
+/* Cooldowns have a fresh Starting Cooldown every room. Holding skills between rooms is never required. */
+function startingCooldown(id){var base={slam:0,tree:0,honey:2,shroud:1,rage:3,wall:2,roar:12,avalanche:13}[id]||0;if(id===S.ult&&S.owned.v37UltCharge)base=skillInfo[id].cd*.25;if(id==="rage"&&S.owned.v37RageReady)base=0;if(id!==S.ult&&S.owned.v37BattleReady)base=Math.max(0,base-1.5);return base}
+function resetRoomCombatState(){if(!S)return;ensureStats();S.h.shield=0;S.h.shieldT=0;S.h.shieldSource="";S.h.rage=0;S.h.inv=0;S.h.roarDR=0;S.h.armorTemp=0;S.h.armorTempT=0;S.h.bonusNext=false;S.h.bushT=0;S.v37FirstAbility=false;S.cds={};for(var i=0;i<S.abilities.length;i++)S.cds[S.abilities[i]]=startingCooldown(S.abilities[i]);S.cds[S.ult]=startingCooldown(S.ult);if(S.item==="fishing"&&S.hook)S.hook.timer=.6;if(S.item==="chainsaw"&&S.chainsaw){S.chainsaw.active=0;S.chainsaw.timer=S.chainsaw.cycle}if(S.item==="camera"&&S.camera)S.camera.timer=2.8;if(S.item==="baseball"&&S.son)S.son.timer=2.5;}
+spawnCombat=function(kind){_v37Spawn(kind);resetRoomCombatState();S.v37Reinforced=false;S.v37WaveKind=kind};
+enterFixedBoss=function(){_v37Boss();resetRoomCombatState();S.v37Reinforced=true;S.v37WaveKind="boss"};
+
+/* Shield durations: no banking shield forever and no shields survive room transitions. */
+cast=function(id){if(!S)return;ensureStats();var before=(S.cds[id]||0);S.v37DamageClass="ability";_v37Cast(id);S.v37DamageClass="";if(before<=0&&(S.cds[id]||0)>0&&S.trophies.indexOf("warHorn")>=0&&!S.v37FirstAbility){S.v37FirstAbility=true;S.cds[id]=Math.max(0,S.cds[id]-2)}};
+
+/* Slightly longer rooms use a second enemy push instead of only inflating HP. */
+function aliveCount(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead)n++;return n}
+function spawnReinforcement(){if(!S||S.v37Reinforced||S.roomKind==="boss")return;S.v37Reinforced=true;var count=S.roomKind==="elite"?2:3;for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.2,.2),r=rnd(220,290),type;if(S.roomKind==="elite")type=i===0?"brute":(S.room>6?"spear":"gob");else type=(S.room>7&&i===0)?"shield":(i===1?"archer":"gob");addEnemy(type,380+Math.cos(a)*r,270+Math.sin(a)*r)}byId("status").innerHTML="More enemies crash into the clearing!"}
+update=function(dt){if(!S)return _v37Update(dt);ensureStats();if(!S.paused&&!S.v37Reinforced&&aliveCount()<=3&&aliveCount()>0)spawnReinforcement();var might=1+S.stats.might*.05,oldBasic=S.mods.basic,combo=S.h.combo;S.mods.basic*=might;_v37Update(dt);S.mods.basic=oldBasic;if(!S||S.paused)return;if(S.h.combo!==combo&&S.stats.haste>0)S.h.atk/=1+S.stats.haste*.03;if(S.stats.focus>0){var extra=dt*(S.stats.focus*.03);for(var k in S.cds)if(S.cds.hasOwnProperty(k))S.cds[k]=Math.max(0,S.cds[k]-extra)}if(S.h.shield>0){if((S.h.shieldT||0)<=0)S.h.shieldT=6;S.h.shieldT-=dt;if(S.h.shieldT<=0){S.h.shield=0;S.h.shieldT=0;S.h.shieldSource=""}}else S.h.shieldT=0;};
+
+/* Elite rewards are permanent trophies, not disposable healing/shields. */
+var TROPHIES=[
+ {id:"trophyHide",title:"Trophy Hide",text:"+2 Body, +1 Armor. Elite kills restore 3% max HP.",take:function(){v37AddStat("body",2);v37AddStat("armor",1)}},
+ {id:"warHorn",title:"Cracked War Horn",text:"+1 Power, +1 Focus. Your first ability used each room refunds 2s of its cooldown.",take:function(){v37AddStat("power",1);v37AddStat("focus",1)}},
+ {id:"ironPlate",title:"Ironbark Plate",text:"+3 Armor. The first hit worth 10%+ max HP each room grants a 60 shield for 4s.",take:function(){v37AddStat("armor",3)}},
+ {id:"mushroomCrown",title:"Mushroom Crown",text:"+1 Body, +1 Power. Killing a debuffed enemy restores 2% max HP.",take:function(){v37AddStat("body",1);v37AddStat("power",1)}},
+ {id:"bruteKnuckle",title:"Brute Knuckle",text:"+2 Body, +1 Might. All knockback is 15% stronger.",take:function(){v37AddStat("body",2);v37AddStat("might",1)}},
+ {id:"hunterCompass",title:"Hunter's Compass",text:"+1 Haste, +1 Focus. Movement speed +8%.",take:function(){v37AddStat("haste",1);v37AddStat("focus",1);S.mods.move*=1.08}},
+ {id:"championCharm",title:"Champion's Charm",text:"+1 Might, +1 Power, +1 Focus. Pure flexible offense.",take:function(){v37AddStat("might",1);v37AddStat("power",1);v37AddStat("focus",1)}},
+ {id:"fangCord",title:"Goblin Fang Cord",text:"+2 Might, +1 Haste. A simple aggressive trophy for basic-attack builds.",take:function(){v37AddStat("might",2);v37AddStat("haste",1)}},
+ {id:"ritualStone",title:"Ritual Stone",text:"+2 Power, +1 Armor. Ability-heavy builds hit harder without becoming fragile.",take:function(){v37AddStat("power",2);v37AddStat("armor",1)}}
+];
+function takeTrophy(t){ensureStats();S.trophies.push(t.id);t.take();showPathChoice("Elite trophy collected: <b>"+t.title+"</b>.")}
+showEliteBonus=function(){ensureStats();var pool=TROPHIES.filter(function(t){return S.trophies.indexOf(t.id)<0});shuffle(pool);pool=pool.slice(0,3);var cards=[];for(var i=0;i<pool.length;i++)(function(t){cards.push({cls:"eliteBonus v37Trophy",tag:"ELITE TROPHY",title:t.title,text:t.text,go:function(){takeTrophy(t)}})})(pool[i]);if(!cards.length){cards=[{cls:"eliteBonus",tag:"ELITE TROPHY",title:"Champion's Cache",text:"+1 Body, +1 Might, +1 Power.",go:function(){v37AddStat("body",1);v37AddStat("might",1);v37AddStat("power",1);showPathChoice("Elite cache collected.")}}]}showDecision("ELITE TROPHIES","Take one permanent trophy from the elite you defeated.",cards,3)};
+
+/* Non-combat rewards now speak the same stat language and never bank permanent shields. */
+showTreasure=function(){S.paused=true;S.lastTreasureRoom=S.room;showDecision("TREASURE — "+S.currentName,"Useful supplies, but this path trades away a combat Evolution.",[
+ {cls:"treasure",tag:"SUPPLY",title:"Packed Meal",text:"Heal 28% max HP now.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.28);finishNonCombat("Bigfoot eats the supplies.")}},
+ {cls:"treasure",tag:"SMALL FIND",title:"Trail Medicine",text:"+1 Body (+50 Max HP) and heal 12% max HP.",go:function(){v37AddStat("body",1);S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.12);finishNonCombat("The old trail kit still has something useful inside.")}},
+ {cls:"treasure",tag:"SMALL FIND",title:"Hunter's Notes",text:"+1 Focus (+3% Cooldown Recovery).",go:function(){v37AddStat("focus",1);finishNonCombat("Bigfoot cannot read all of it, but the diagrams make sense.")}}
+],3)};
+showShrine=function(){S.paused=true;showDecision("SHRINE — "+S.currentName,"The shrine offers permanent power for a permanent or immediate cost.",[
+ {cls:"shrine",tag:"SACRIFICE",title:"Blood for Might",text:"Lose 12% max HP. Gain +3 Might (+15% Basic Damage).",go:function(){var loss=S.h.max*.12;S.h.max=Math.max(300,S.h.max-loss);S.h.hp=Math.min(S.h.hp,S.h.max);v37AddStat("might",3,false);finishNonCombat("The shrine drinks the offering.")}},
+ {cls:"shrine",tag:"SACRIFICE",title:"Stone Bargain",text:"Lose 30% current HP. Gain +3 Armor (+6% Damage Reduction).",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.30);v37AddStat("armor",3);finishNonCombat("Stone-hard fur spreads across Bigfoot's shoulders.")}},
+ {cls:"shrine",tag:"SACRIFICE",title:"Burn the Future",text:"Gain +3 Power, but Camp Recovery is -5% for the rest of the run.",go:function(){v37AddStat("power",3);S.mods.campBonus=(S.mods.campBonus||0)-.05;finishNonCombat("The shrine grants violence now and comfort later.")}}
+],3)};
+showEvent=function(){S.paused=true;S.eventSeen++;S.lastEventRoom=S.room;var which=Math.floor(Math.random()*5);if(which===0)showDecision("WEIRD EVENT — ABANDONED CABIN","The cabin smells like smoke, food, and old hunters.",[
+ {cls:"event",tag:"TRADEOFF",title:"Eat What You Can",text:"Heal 30% max HP, but lose 1 Armor if you have any.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.30);ensureStats();S.stats.armor=Math.max(0,S.stats.armor-1);finishNonCombat("The meal helps. The escape costs some protection.")}},
+ {cls:"event",tag:"GAMBLE",title:"Search the Back Room",text:"50% chance: +2 Might. Otherwise lose 20% current HP.",go:function(){if(Math.random()<.5){v37AddStat("might",2);finishNonCombat("Bigfoot finds something worth carrying.")}else{S.h.hp=Math.max(1,S.h.hp-S.h.max*.20);finishNonCombat("The floor trap snaps shut.")}}}
+ ],2);else if(which===1)showDecision("WEIRD EVENT — HUNTER'S SNARE","A locked supply case hangs above a marked trail.",[
+ {cls:"event",tag:"CONSEQUENCE",title:"Take the Supplies",text:"Gain +1 Body and +1 Might, but an armed patrol joins the next combat.",go:function(){v37AddStat("body",1);v37AddStat("might",1);S.ambushDebt=true;finishNonCombat("Bigfoot takes the supplies. Someone will notice.")}},
+ {cls:"event",tag:"SAFE EXIT",title:"Leave It",text:"Nothing gained, nothing lost.",go:function(){finishNonCombat("Bigfoot leaves the trap untouched.")}}
+ ],2);else if(which===2)showDecision("WEIRD EVENT — CURSED STUMP","Black sap runs upward along a dead tree.",[
+ {cls:"event",tag:"CURSE",title:"Touch the Sap",text:"+2 Power, but lose 10% max HP.",go:function(){v37AddStat("power",2);S.h.max*=.90;S.h.hp=Math.min(S.h.hp,S.h.max);finishNonCombat("The curse burns through Bigfoot's arms.")}},
+ {cls:"event",tag:"CURSE",title:"Rip It Apart",text:"Lose 16% current HP, gain +2 Armor.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.16);v37AddStat("armor",2);finishNonCombat("The stump breaks. Something inside it screams.")}}
+ ],2);else if(which===3)showDecision("WEIRD EVENT — STRANGE FOOTPRINTS","The tracks are too large to be human and too precise to be an animal.",[
+ {cls:"event",tag:"RISK",title:"Follow Them",text:"Gain +1 Haste and +1 Focus, but the next combat gains extra enemies.",go:function(){v37AddStat("haste",1);v37AddStat("focus",1);S.ambushDebt=true;finishNonCombat("Bigfoot learns the route, and something learns his.")}},
+ {cls:"event",tag:"CAUTION",title:"Erase the Trail",text:"Lose 8% current HP. Gain +1 Armor.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.08);v37AddStat("armor",1);finishNonCombat("Bigfoot hides every sign that he was here.")}}
+ ],2);else showDecision("WEIRD EVENT — STORM CLEARING","Lightning splits a pine across the safest trail.",[
+ {cls:"event",tag:"RISK",title:"Push Through",text:"Lose 18% current HP. Gain +2 Focus.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.18);v37AddStat("focus",2);finishNonCombat("Bigfoot crashes through the burning brush.")}},
+ {cls:"event",tag:"DETOUR",title:"Take the Long Way",text:"No damage, but the next combat gains extra enemies.",go:function(){S.ambushDebt=true;finishNonCombat("The long trail is safer, but not empty.")}}
+ ],2)};
+
+/* Ironbark Plate trophy reactive shield. */
+hurtHero=(function(prev){return function(n,source){if(!S)return prev(n,source);ensureStats();var before=S.h.hp;prev(n,source);var lost=Math.max(0,before-S.h.hp);if(S.trophies.indexOf("ironPlate")>=0&&!S.v37IronPlateUsed&&lost>=S.h.max*.10){S.v37IronPlateUsed=true;v37GrantShield(60,4,"Ironbark Plate")}}})(hurtHero);
+var _v37ResetSpawn=spawnCombat;spawnCombat=function(kind){_v37ResetSpawn(kind);if(S)S.v37IronPlateUsed=false};var _v37ResetBoss=enterFixedBoss;enterFixedBoss=function(){_v37ResetBoss();if(S)S.v37IronPlateUsed=false};
+
+/* Build screen explains every stat in game terms. */
+renderBuildSummary=function(){if(!S)return;ensureStats();var b=byId("v3BuildBody"),s=S.stats,html="";html+='<h3>Run Stats</h3><div id="v37StatGrid">';var order=["body","might","power","armor","haste","focus"];for(var i=0;i<order.length;i++){var k=order[i];html+='<div class="v37Stat"><b>'+statName(k)+' '+s[k]+'</b><small>'+statEffect(k,s[k])+'</small></div>'}html+='</div>';html+='<div class="buildRow"><b>Base Character:</b> 800 HP · 52 basic damage · built-in Bigfoot durability</div>';html+='<div class="buildRow"><b>Damage rules:</b> Might scales basics (including Baseball/Chainsaw basics). Power scales abilities. Item and companion damage use their own Evolutions.</div>';html+='<div class="buildRow"><b>Starting Cooldowns:</b> Earth Slam 0s · Uproot 0s · Honey 2s · Bush 1s · Rage 3s · Wall 2s · Ultimate 50% charged.</div>';html+='<div class="buildRow"><b>Basic:</b> '+(S.basic==="swipe"?"Mighty Swipes":"Throwing Rocks")+'</div>';html+='<div class="buildRow"><b>Abilities:</b> '+S.abilities.map(function(x){return skillInfo[x].name}).join(" · ")+'</div>';html+='<div class="buildRow"><b>Ultimate:</b> '+skillInfo[S.ult].name+'</div>';html+='<div class="buildRow"><b>Unique Item:</b> '+(S.item?({fishing:"Fishing Gear",bones:"Skeletal Remains",ring:"Wedding Ring",baseball:"Baseball & Glove",camera:"Trail Camera",chainsaw:"Logger’s Chainsaw"})[S.item]:"Not found yet")+'</div>';html+='<h3>Elite Trophies</h3>';if(!S.trophies.length)html+='<div class="buildRow">None yet.</div>';else for(i=0;i<S.trophies.length;i++){var tt=TROPHIES.filter(function(x){return x.id===S.trophies[i]})[0];html+='<div class="buildRow v37Trophy"><b>'+(tt?tt.title:S.trophies[i])+'</b></div>'}html+='<h3>Evolutions</h3>';var ids=[];for(var q in S.owned)if(S.owned[q])ids.push(q);if(!ids.length)html+='<div class="buildRow">No Evolutions yet.</div>';else for(i=0;i<ids.length;i++){var u=null;for(var z=0;z<upgrades.length;z++)if(upgrades[z].id===ids[i]){u=upgrades[z];break}html+='<div class="buildRow"><b>'+(u?u.title:ids[i])+'</b></div>'}b.innerHTML=html};
+
+updateUI=function(){_v37UpdateUI();if(!S)return;var hp=byId("hpText");if(S.h.shield>0&&hp)hp.innerHTML=Math.max(0,Math.ceil(S.h.hp))+" / "+Math.ceil(S.h.max)+" +"+Math.ceil(S.h.shield)+" shield <span class='shieldTime'>"+Math.max(0,S.h.shieldT||0).toFixed(1)+"s</span>"};
+
+startGame=function(){_v37Start();if(!S)return;ensureStats();S.h.hp=Math.min(800,S.h.hp);S.h.max=800;S.h.shield=0;S.h.shieldT=0;resetRoomCombatState();updateUI()};
 })();
 </script>
 
