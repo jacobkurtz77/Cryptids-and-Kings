@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Combat Intelligence v3.8</title>
+<title>Cryptids & Kings — Encounter Identity v3.9</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -178,7 +178,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Combat Intelligence v3.8: smarter enemies, cooldown abilities, readable telegraphs, cleaner spacing, stronger impact feedback, and core-system polish.</div>
+<div class="muted">Encounter Identity v3.9: authored combat formations, enemy synergies, elite ability mutations, modernized bosses, harder-room rewards, and clearer build feedback.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -252,7 +252,7 @@ body[data-screen="game"]{padding:6px}
 <option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
 
-<div id="engine">ENGINE READY · COMBAT INTELLIGENCE V3.8 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · ENCOUNTER IDENTITY V3.9 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -2069,6 +2069,139 @@ renderBuildSummary=function(){
  html+='<h3>Combat Rules</h3><div class="buildRow"><b>Enemy abilities:</b> dangerous moves use visible lines, circles, dashes, or support links. Interrupt wind-ups with fear, stun, or strong displacement.</div><div class="buildRow"><b>Room reset:</b> temporary shield, poison/debuffs, and leftover cooldown state do not carry into the next fight.</div>';
  b.innerHTML+=html;
 };
+
+})();
+</script>
+
+<style>
+/* ===== ENCOUNTER IDENTITY V3.9 ===== */
+.v39Mutation{color:#ffb46c;font-weight:1000}.v39EncounterNote{border-left:4px solid #d7a34f!important;background:#1b352f!important}
+</style>
+<script>
+/* ===== ENCOUNTER IDENTITY V3.9 ===== */
+(function(){
+var _v39Spawn=spawnCombat,
+    _v39Boss=enterFixedBoss,
+    _v39Update=update,
+    _v39Draw=draw,
+    _v39DrawEnemy=drawEnemy,
+    _v39Damage=damageEnemy,
+    _v39ShowUpgrade=showUpgrade,
+    _v39PathOption=pathOption,
+    _v39RenderBuild=renderBuildSummary;
+
+var V39_ENCOUNTERS={
+ firing:{name:"FIRING LINE",desc:"Shield bearers screen a line of archers. Break the formation or eat aimed shots.",reinforce:["archer","shield","spear"]},
+ pincer:{name:"PINCER ATTACK",desc:"Spear fighters attack from opposite sides while ranged enemies punish hesitation.",reinforce:["spear","spear","archer"]},
+ toxic:{name:"TOXIC GARDEN",desc:"Poison zones divide the clearing while guards protect the creatures creating them.",reinforce:["poison","mush","shield"]},
+ escort:{name:"BRUTE ESCORT",desc:"A brute advances behind a living screen while archers fire over the fight.",reinforce:["gob","shield","brute"]},
+ pack:{name:"HUNTER PACK",desc:"Fast melee enemies surround Bigfoot from several angles and collapse together.",reinforce:["gob","spear","gob"]},
+ siege:{name:"SIEGE",desc:"A ranged-heavy formation forces Bigfoot to cross dangerous ground to reach the shooters.",reinforce:["archer","poison","shield"]},
+ brawl:{name:"BRAWL",desc:"Almost everything in the room wants to fight at arm's length. Expect slams and lunges.",reinforce:["gob","spear","brute"]}
+};
+function v39Ensure(){if(!S)return;if(!S.v39BossZones)S.v39BossZones=[];if(!S.v39Bursts)S.v39Bursts=[];if(!S.v39Encounter)S.v39Encounter=null;if(S.v39Reinforced==null)S.v39Reinforced=false;if(S.v39AmbushBonusPending==null)S.v39AmbushBonusPending=false}
+function v39Add(type,x,y){addEnemy(type,clamp(x,42,718),clamp(y,48,478));return S.en[S.en.length-1]}
+function v39Outer(type,a,r){return v39Add(type,380+Math.cos(a)*r,270+Math.sin(a)*r)}
+function v39Fill(pool,target){while(S.en.length<target){var a=rnd(0,Math.PI*2),r=rnd(165,285);v39Outer(pickOne(pool),a,r)}}
+function v39ChooseEncounter(kind){
+ var ids;if(kind==="ambush")ids=["pincer","pack","toxic"];else if(kind==="elite")ids=["escort","firing","toxic","brawl","siege"];else ids=["firing","pincer","toxic","escort","pack","siege","brawl"];
+ if(S.v39LastEncounter&&ids.length>1)ids=ids.filter(function(x){return x!==S.v39LastEncounter});return pickOne(ids)
+}
+function v39SpawnTemplate(id,kind){
+ var target=Math.min(15,7+Math.floor(S.room*.78)+(kind==="elite"?1:0)),i,a;
+ if(id==="firing"){
+   v39Add("archer",250,75);v39Add("archer",380,67);v39Add("archer",510,75);v39Add("shield",305,150);v39Add("shield",455,150);v39Add("spear",135,255);v39Add("gob",625,255);v39Fill(["archer","shield","gob","spear"],target);
+ }else if(id==="pincer"){
+   v39Add("spear",68,175);v39Add("spear",68,355);v39Add("spear",692,175);v39Add("spear",692,355);v39Add("archer",165,78);v39Add("archer",595,78);v39Add("shield",380,455);v39Fill(["spear","gob","archer"],target);
+ }else if(id==="toxic"){
+   v39Add("poison",130,110);v39Add("poison",630,110);v39Add("mush",135,425);v39Add("mush",625,425);v39Add("shield",260,120);v39Add("shield",500,120);v39Add("spear",380,465);v39Fill(["poison","mush","shield","gob"],target);
+ }else if(id==="escort"){
+   v39Add("brute",380,82);v39Add("shield",305,155);v39Add("shield",455,155);v39Add("archer",220,72);v39Add("archer",540,72);v39Add("gob",120,300);v39Add("spear",640,300);v39Fill(["gob","shield","spear","archer"],target);
+ }else if(id==="pack"){
+   var types=["spear","gob","gob","spear","gob","gob","shield","spear"];for(i=0;i<types.length&&S.en.length<target;i++){a=i/types.length*Math.PI*2+.18;v39Outer(types[i],a,kind==="ambush"?125:165)}v39Fill(["gob","spear","gob"],target);
+ }else if(id==="siege"){
+   v39Add("archer",105,80);v39Add("archer",270,65);v39Add("archer",490,65);v39Add("archer",655,80);v39Add("poison",110,430);v39Add("poison",650,430);v39Add("shield",300,160);v39Add("shield",460,160);v39Fill(["archer","poison","shield"],target);
+ }else{
+   v39Add("brute",380,90);for(i=0;i<4&&S.en.length<target;i++)v39Outer(i%2?"spear":"gob",i/4*Math.PI*2+.5,150);v39Add("shield",380,455);v39Fill(["gob","spear","brute"],target);
+ }
+ if(kind==="ambush"){
+   for(i=0;i<S.en.length;i++){var e=S.en[i],dx=e.x-380,dy=e.y-270;if(e.type!=="archer"&&e.type!=="poison"&&e.type!=="mush"){e.x=380+dx*.82;e.y=270+dy*.82}if(e.v38&&e.v38.cd)for(var k in e.v38.cd)e.v38.cd[k]+=2.2}
+ }
+}
+function v39ApplyEliteStats(e){
+ var mods=["ARMORED","ENRAGED","GIANT","TOXIC","REGEN"],m=pickOne(mods);e.eliteMod=m;
+ if(m==="ARMORED")e.resist=Math.max(e.resist||0,.27);
+ else if(m==="ENRAGED"){e.spd*=1.25;e.dmg*=1.28;e.atk*=.7}
+ else if(m==="GIANT"){e.hp*=1.45;e.max*=1.45;e.dmg*=1.18;e.range*=1.12;e.scale=1.25}
+ else if(m==="TOXIC")e.toxic=true;
+ else if(m==="REGEN")e.regen=e.max*.012;
+ var mut=null;if(e.type==="archer")mut="DOUBLE DASH";else if(e.type==="spear")mut="RELENTLESS LUNGE";else if(e.type==="shield")mut="TWIN GUARD";else if(e.type==="poison"||e.type==="mush")mut="DEATH BLOOM";else if(e.type==="brute")mut="AFTERSHOCK";
+ if(mut)e.v39Mutation=mut;
+}
+function v39EliteMutateRoom(){
+ var eligible=S.en.filter(function(e){return e.type==="archer"||e.type==="spear"||e.type==="shield"||e.type==="poison"||e.type==="mush"||e.type==="brute"});shuffle(eligible);for(var i=0;i<Math.min(3,eligible.length);i++)v39ApplyEliteStats(eligible[i]);
+}
+function v39AddDebtPatrol(){var ts=["shield","spear","spear"];for(var i=0;i<ts.length;i++)v39Outer(ts[i],i/3*Math.PI*2+.3,155)}
+function v39SetEncounter(kind,hadDebt){
+ var id=v39ChooseEncounter(kind),meta=V39_ENCOUNTERS[id];S.en=[];S.v39Encounter={id:id,name:meta.name,desc:meta.desc,reinforce:meta.reinforce.slice()};S.v39LastEncounter=id;v39SpawnTemplate(id,kind);if(kind==="elite")v39EliteMutateRoom();if(hadDebt)v39AddDebtPatrol();S.v37Reinforced=true;S.v39Reinforced=false;S.v39AmbushBonusPending=kind==="ambush";byId("status").innerHTML="<b>"+meta.name+"</b> — "+meta.desc;
+}
+spawnCombat=function(kind){var hadDebt=!!(S&&S.ambushDebt);_v39Spawn(kind);if(!S)return;v39Ensure();S.v39BossZones=[];S.v39Bursts=[];if(kind==="combat"||kind==="elite"||kind==="ambush")v39SetEncounter(kind,hadDebt)};
+
+function v39ThemedReinforcement(){
+ if(!S||!S.v39Encounter||S.v39Reinforced||S.roomKind==="boss")return;S.v39Reinforced=true;var p=S.v39Encounter.reinforce,count=S.roomKind==="elite"?2:3;for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.22,.22);v39Outer(pickOne(p),a,rnd(235,290))}byId("status").innerHTML="<b>"+S.v39Encounter.name+"</b> — reinforcements join the same formation.";
+}
+function v39Alive(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead)n++;return n}
+
+function v39NearestRanged(exclude,exclude2){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){var o=S.en[i];if(o.dead||o===exclude||o===exclude2)continue;if(o.type!=="archer"&&o.type!=="poison"&&o.type!=="mush")continue;var d=dist(exclude,o);if(d<bd){bd=d;best=o}}return best}
+function v39QueueMutationEvents(dt){var ev=[];for(var i=0;i<S.en.length;i++){var e=S.en[i],c=e.v38&&e.v38.cast;if(!e.dead&&e.v39Mutation&&c&&c.t<=dt+.002&&(e.stunT||0)<=0&&(e.fear||0)<=0)ev.push({e:e,kind:c.kind,data:c.data||{}})}return ev}
+function v39AfterMutationEvents(ev){for(var i=0;i<ev.length;i++){var e=ev[i].e;if(!e||e.dead)continue;if(e.v39Mutation==="DOUBLE DASH"&&ev[i].kind==="archerDash"){if(!e.v39DoubleDashUsed){e.v39DoubleDashUsed=true;e.v38.cd.dash=Math.min(e.v38.cd.dash,1.35)}else e.v39DoubleDashUsed=false}
+ else if(e.v39Mutation==="TWIN GUARD"&&ev[i].kind==="guardAlly"){var first=null;if(ev[i].data&&ev[i].data.target)for(var q=0;q<S.en.length;q++)if(S.en[q].uid===ev[i].data.target)first=S.en[q];var t=v39NearestRanged(e,first);if(t&&t.v38){t.v38.guardT=Math.max(t.v38.guardT||0,4.2);t.v38.guardFrom=e.uid}}
+ else if(e.v39Mutation==="AFTERSHOCK"&&ev[i].kind==="bruteSlam"){S.v39Bursts.push({x:e.x,y:e.y,r:155,t:.72,max:.72,damage:22+S.room*.7,kind:"aftershock",hit:false})}}
+}
+function v39TickMutations(){for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e.dead||!e.v39Mutation||!e.v38)continue;if(e.v39Mutation==="RELENTLESS LUNGE"&&e.v38.cd&&e.v38.cd.lunge!=null)e.v38.cd.lunge=Math.min(e.v38.cd.lunge,3.6)}}
+
+damageEnemy=function(e,n,k,sx,sy){var alive=e&&!e.dead&&e.hp>0,deathBloom=alive&&e.v39Mutation==="DEATH BLOOM";_v39Damage(e,n,k,sx,sy);if(deathBloom&&e.dead){if(!S.v38Clouds)S.v38Clouds=[];S.v38Clouds.push({x:e.x,y:e.y,r:78,t:4.4,max:4.4,tick:.12});S.v39Bursts.push({x:e.x,y:e.y,r:80,t:.34,max:.34,kind:"bloom",hit:true});byId("status").innerHTML="DEATH BLOOM — the fallen elite leaves a toxic zone."}};
+
+function v39BossInit(b){if(!b)return;if(!b.v39Boss)b.v39Boss={cd:b.type==="boss"?4.6:5.2,cast:null,lastPhase:b.phase||1}}
+function v39BossSpots(b,kind,count){var out=[],hx=S.h.x,hy=S.h.y,i,a;if(kind==="roots"){out.push({x:hx,y:hy});for(i=1;i<count;i++){a=(i-1)/Math.max(1,count-1)*Math.PI*2+.35;out.push({x:clamp(hx+Math.cos(a)*78,55,705),y:clamp(hy+Math.sin(a)*78,60,465)})}}
+ else{for(i=0;i<count;i++){a=i/count*Math.PI*2+.2;var rr=i===0?0:72;out.push({x:clamp(hx+Math.cos(a)*rr,55,705),y:clamp(hy+Math.sin(a)*rr,60,465)})}}return out}
+function v39StartBossSpecial(b){
+ var phase=b.phase||1,kind=b.type==="boss"?"royal":"roots",wind=kind==="royal"?.88:.96,count=kind==="royal"?(phase===2?5:3):(phase===2?5:3),spots=v39BossSpots(b,kind,count),damage=kind==="royal"?(24+S.room*.55):(22+S.room*.5),r=kind==="royal"?48:50;b.v39Boss.cast={kind:kind,t:wind,max:wind};S.v39BossSpecials=(S.v39BossSpecials||0)+1;for(var i=0;i<spots.length;i++)S.v39BossZones.push({x:spots[i].x,y:spots[i].y,r:r,t:wind,max:wind,damage:damage,kind:kind,hit:false});b.v39Boss.cd=kind==="royal"?(phase===2?5.5:8):(phase===2?6.2:8.6);byId("status").innerHTML=kind==="royal"?"ROYAL BARRAGE — move before the marked ground erupts!":"ROOT BURST — Mossback is sealing off the clearing!";
+}
+function v39BossPre(dt){
+ var b=null;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&(S.en[i].type==="boss"||S.en[i].type==="miniboss")){b=S.en[i];break}if(!b)return null;v39BossInit(b);var q=b.v39Boss;q.cd=Math.max(0,q.cd-dt);if(q.cast){q.cast.t-=dt;b.chargeCd=Math.max(b.chargeCd,q.cast.t+.35);b.shockCd=Math.max(b.shockCd,q.cast.t+.35);var saved={b:b,spd:b.spd,range:b.range};b.spd=0;b.range=999;b.atk=Math.max(b.atk||0,q.cast.t+.15);if(q.cast.t<=0)q.cast=null;return saved}
+ if(q.cd<=0&&(b.stunT||0)<=0){b.winding=false;b.wind=0;b.chargeWind=0;b.chargeTime=0;v39StartBossSpecial(b);q=b.v39Boss;var first={b:b,spd:b.spd,range:b.range};b.spd=0;b.range=999;b.atk=Math.max(b.atk||0,q.cast.t+.15);b.chargeCd=Math.max(b.chargeCd,q.cast.t+.35);b.shockCd=Math.max(b.shockCd,q.cast.t+.35);return first}return null
+}
+function v39BossRestore(saved){if(saved&&saved.b&&!saved.b.dead){saved.b.spd=saved.spd;saved.b.range=saved.range}}
+function v39UpdateZones(dt){
+ for(var i=S.v39BossZones.length-1;i>=0;i--){var z=S.v39BossZones[i];z.t-=dt;if(z.t<=0&&!z.hit){z.hit=true;var d=dist(z,S.h);if(d<z.r&&S.h.inv<=0){hurtHero(z.damage,null);if(z.kind==="roots")S.v39SlowT=Math.max(S.v39SlowT||0,1.6);S.shake=Math.max(S.shake,.22)}z.t=-.18}if(z.t<-.16)S.v39BossZones.splice(i,1)}
+ for(i=S.v39Bursts.length-1;i>=0;i--){var h=S.v39Bursts[i];h.t-=dt;if(h.kind==="aftershock"&&!h.hit&&h.t<=0){h.hit=true;if(dist(h,S.h)<h.r&&S.h.inv<=0){hurtHero(h.damage,null);S.shake=Math.max(S.shake,.24)}h.t=-.18}if(h.t<-.16)S.v39Bursts.splice(i,1)}
+}
+enterFixedBoss=function(){_v39Boss();if(!S)return;v39Ensure();S.v39Encounter={id:"boss",name:S.room===12?"THE KING'S HOLLOW":"TROLL BRIDGE",desc:"Boss abilities now combine with the same telegraph rules as normal enemies.",reinforce:[]};S.v39BossZones=[];S.v39Bursts=[];S.v39BossSpecials=0;for(var i=0;i<S.en.length;i++)if(S.en[i].type==="boss"||S.en[i].type==="miniboss")v39BossInit(S.en[i])};
+
+showUpgrade=function(heal){var bonus=null;if(S&&S.roomKind==="ambush"&&S.v39AmbushBonusPending){S.v39AmbushBonusPending=false;var pool=["might","haste","focus"],k=pickOne(pool);if(window.v37AddStat)window.v37AddStat(k,1);bonus=k.toUpperCase()+" +1"}_v39ShowUpgrade(heal);if(bonus&&byId("decisionText"))byId("decisionText").innerHTML="<b>AMBUSH SPOILS:</b> "+bonus+" for surviving the close-range attack.<br>"+byId("decisionText").innerHTML};
+pathOption=function(kind){var p=_v39PathOption(kind);if(kind==="elite")p.text="Designed elite encounter. Win an Evolution + choose a permanent Trophy. Elite enemies also mutate their signature abilities.";if(kind==="ambush")p.text="Enemies begin dangerously close. Win an Evolution +1 random combat stat (Might, Haste, or Focus).";return p};
+
+function v39CastLabel(kind){return({aimedShot:"AIM",archerDash:"EVADE",spearLunge:"LUNGE",spearRetreat:"RETREAT",shieldCharge:"CHARGE",guardAlly:"GUARD",toxicCloud:"CLOUD",burrow:"BURROW",bruteSlam:"SLAM",bruteRush:"RUSH"})[kind]||"ABILITY"}
+function v39DrawReadability(){
+ if(!S)return;var i,e,c,p,label;for(i=0;i<S.en.length;i++){e=S.en[i];if(e.dead)continue;c=e.v38&&e.v38.cast;if(c){p=clamp(1-c.t/c.max,0,1);ctx.save();ctx.strokeStyle="rgba(255,222,148,.95)";ctx.lineWidth=4;ctx.beginPath();ctx.arc(e.x,e.y,38*(e.scale||1),-Math.PI/2,-Math.PI/2+Math.PI*2*p);ctx.stroke();label=v39CastLabel(c.kind);ctx.fillStyle="#fff0bd";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText(label,e.x,e.y-39*(e.scale||1));ctx.restore()}
+   if(e.exposedT>0){ctx.save();ctx.strokeStyle="rgba(255,232,112,.9)";ctx.lineWidth=3;ctx.setLineDash([5,4]);ctx.beginPath();ctx.arc(e.x,e.y,35*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#ffe56f";ctx.font="900 8px system-ui";ctx.textAlign="center";ctx.fillText("EXPOSED",e.x,e.y+43*(e.scale||1));ctx.restore()}
+   if(e.hooks&&e.hooks.length&&S.item==="fishing"&&S.fishingSlow>0){ctx.save();ctx.strokeStyle="rgba(120,205,235,.85)";ctx.lineWidth=3;ctx.beginPath();ctx.arc(e.x,e.y,29*(e.scale||1),.2,2.6);ctx.stroke();ctx.restore()}
+ }
+ if(S.item==="ring"&&S.mrs&&S.mrs.damageBuffT>0){ctx.save();ctx.strokeStyle="rgba(255,213,105,.8)";ctx.lineWidth=6;ctx.globalAlpha=.55+.25*Math.sin(Date.now()/90);ctx.beginPath();ctx.arc(S.h.x,S.h.y,39,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffe18a";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("HONEY!",S.h.x,S.h.y-45);ctx.restore()}
+}
+function v39DrawBossZones(){for(var i=0;i<S.v39BossZones.length;i++){var z=S.v39BossZones[i],p=z.t>0?clamp(1-z.t/z.max,0,1):1;ctx.save();ctx.fillStyle=z.kind==="royal"?"rgba(217,63,47,"+(.10+.20*p)+")":"rgba(108,141,60,"+(.11+.20*p)+")";ctx.strokeStyle=z.kind==="royal"?"rgba(255,196,110,.95)":"rgba(190,225,110,.95)";ctx.lineWidth=5;ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.strokeStyle="rgba(255,244,201,.75)";ctx.lineWidth=3;ctx.beginPath();ctx.arc(z.x,z.y,Math.max(4,z.r*(1-p)),0,Math.PI*2);ctx.stroke();ctx.restore()}
+ for(i=0;i<S.v39Bursts.length;i++){var h=S.v39Bursts[i],q=h.max?clamp(1-h.t/h.max,0,1):1;ctx.save();ctx.strokeStyle=h.kind==="bloom"?"rgba(166,220,103,.9)":"rgba(255,139,76,.9)";ctx.lineWidth=6;ctx.beginPath();ctx.arc(h.x,h.y,h.r*q,0,Math.PI*2);ctx.stroke();ctx.restore()}}
+function v39DrawEncounterIntro(){if(!S||!S.v39Encounter||!S.v38RoomIntro||S.v38RoomIntro<=0)return;var a=Math.min(1,S.v38RoomIntro/.28,(1.05-S.v38RoomIntro)/.18);ctx.save();ctx.globalAlpha=Math.max(0,a)*.94;ctx.fillStyle="#10241fe8";ctx.fillRect(275,297,210,33);ctx.strokeStyle="#d8ad61";ctx.lineWidth=2;ctx.strokeRect(275,297,210,33);ctx.fillStyle="#ffd976";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText(S.v39Encounter.name,380,318);ctx.restore()}
+function v39DrawMutations(){for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e.dead||!e.v39Mutation)continue;ctx.save();ctx.fillStyle="#ffb36a";ctx.font="900 8px system-ui";ctx.textAlign="center";ctx.fillText(e.v39Mutation,e.x,e.y-50*(e.scale||1));ctx.restore()}}
+drawEnemy=function(e){_v39DrawEnemy(e);if(e&&!e.dead&&e.v39Mutation){ctx.save();ctx.strokeStyle="rgba(255,127,68,.9)";ctx.lineWidth=3;ctx.beginPath();ctx.arc(e.x,e.y,39*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.restore()}};
+draw=function(){_v39Draw();if(!S)return;v39DrawBossZones();v39DrawReadability();v39DrawMutations();v39DrawEncounterIntro()};
+
+update=function(dt){
+ if(!S)return _v39Update(dt);v39Ensure();if(S.paused)return _v39Update(dt);var mut=v39QueueMutationEvents(dt),bossSave=v39BossPre(dt),savedMove=S.mods.move;if((S.v39SlowT||0)>0){S.v39SlowT=Math.max(0,S.v39SlowT-dt);S.mods.move*=.72}_v39Update(dt);S.mods.move=savedMove;if(!S)return;v39BossRestore(bossSave);v39AfterMutationEvents(mut);v39TickMutations();v39UpdateZones(dt);if(!S.v39Reinforced&&S.roomKind!=="boss"&&v39Alive()<=3&&v39Alive()>0)v39ThemedReinforcement();var boss=null;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&(S.en[i].type==="boss"||S.en[i].type==="miniboss")){boss=S.en[i];break}if(boss&&byId("bossPhase"))byId("bossPhase").innerHTML=boss.phase===2?(boss.type==="boss"?"PHASE II · CROWN STORM":"PHASE II · ROOT FRENZY"):(boss.type==="boss"?"PHASE I · ROYAL GUARD":"PHASE I · BRIDGE HOLD");
+};
+
+renderBuildSummary=function(){_v39RenderBuild();if(!S)return;var b=byId("v3BuildBody");if(!b)return;var enc=S.v39Encounter?S.v39Encounter.name:"No active encounter";b.innerHTML+='<h3>Encounter Intelligence</h3><div class="buildRow v39EncounterNote"><b>Current encounter:</b> '+enc+'</div><div class="buildRow"><b>Elite mutations:</b> elite archers can Double Dash; spear fighters use Relentless Lunge; shield enemies Twin Guard; toxic creatures Death Bloom; brutes create Aftershocks.</div><div class="buildRow"><b>Hard-room rewards:</b> Elites award an Evolution + Trophy. Ambushes award an Evolution +1 random combat stat.</div>'};
 
 })();
 </script>
