@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Rage & Prime v4.4</title>
+<title>Cryptids & Kings — Rage & Prime v4.5</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -154,7 +154,13 @@ body[data-screen="game"]{padding:6px}
 #v43RageFill{height:100%;width:20%;background:linear-gradient(90deg,#8d302d,#d9533f,#f08a4d);transition:width .12s linear}
 .skill.primed{border-color:#f09a54!important;box-shadow:inset 0 0 0 2px #ffd88966,0 0 15px #ef774877!important;background:linear-gradient(#694838,#3f332d)!important}
 .skill.primed .cd{color:#ffd27c;font-weight:1000}.skill.starved{opacity:.60}.skill .rageCost{color:#f2a98e;font-weight:900}
+.skill.primePop{animation:v45PrimePop .34s ease-out}
+@keyframes v45PrimePop{0%{transform:scale(1)}38%{transform:scale(1.035);filter:brightness(1.25)}100%{transform:scale(1);filter:brightness(1)}}
 #setup .primeNote{color:#d9f0d9}
+
+#v43RageWrap.ragePulse{animation:v45RagePulse .28s ease-out}
+#v43RageWrap.ragePulse #v43RageTrack{box-shadow:0 0 12px #f08a4daa}
+@keyframes v45RagePulse{0%{transform:scale(1)}45%{transform:scale(1.012)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -240,7 +246,7 @@ body[data-screen="game"]{padding:6px}
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
 <option value="rage">Wild Frenzy — 13s • 6s attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • timed shield + knockback</option>
-<option value="charge">Primal Charge — 9s • targeted gap closer</option>
+<option value="charge">Primal Rush — 10s • +100% speed that decays over 5s</option>
 <option value="beatdown">Savage Beatdown — 10s • focused 3-hit combo</option>
 </select>
 <label class="caption">Ability 2</label>
@@ -251,7 +257,7 @@ body[data-screen="game"]{padding:6px}
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
 <option value="rage">Wild Frenzy — 13s • 6s attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • timed shield + knockback</option>
-<option value="charge">Primal Charge — 9s • targeted gap closer</option>
+<option value="charge">Primal Rush — 10s • +100% speed that decays over 5s</option>
 <option value="beatdown">Savage Beatdown — 10s • focused 3-hit combo</option>
 </select>
 <label class="caption">Ability 3</label>
@@ -262,7 +268,7 @@ body[data-screen="game"]{padding:6px}
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
 <option value="rage">Wild Frenzy — 13s • 6s attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • timed shield + knockback</option>
-<option value="charge">Primal Charge — 9s • targeted gap closer</option>
+<option value="charge">Primal Rush — 10s • +100% speed that decays over 5s</option>
 <option value="beatdown">Savage Beatdown — 10s • focused 3-hit combo</option>
 </select>
 <label class="caption">Ability 4</label>
@@ -273,7 +279,7 @@ body[data-screen="game"]{padding:6px}
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
 <option value="rage">Wild Frenzy — 13s • 6s attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • timed shield + knockback</option>
-<option value="charge" selected>Primal Charge — 9s • targeted gap closer</option>
+<option value="charge" selected>Primal Rush — 10s • +100% speed that decays over 5s</option>
 <option value="beatdown">Savage Beatdown — 10s • focused 3-hit combo</option>
 </select>
 <div class="infoGrid two">
@@ -285,13 +291,13 @@ body[data-screen="game"]{padding:6px}
 <div><b>Bush Ambush</b> — Bigfoot hides for about 1 second and is invulnerable while hidden, then bursts out for AoE damage and knockback.</div>
 <div><b>Wild Frenzy</b> — for 6 seconds Bigfoot basic-attacks much faster. The red circle should stay centered on Bigfoot while the buff is active.</div>
 <div><b>Boulder Wall</b> — gain a stronger timed shield for 5 seconds and blast nearby enemies away.</div>
-<div><b>Primal Charge</b> — 9s cooldown. When READY, its current target gets a bright marker and a line from Bigfoot so you know exactly who he will chase. It prioritizes ranged enemies, barrels through enemies in the path, and finishes beside the marked target with a heavy impact.</div>
+<div><b>Primal Rush</b> — 10s cooldown, 20 Rage. Bigfoot gains +100% Movement Speed immediately; the bonus rapidly decays to 0 over 5 seconds. He has 15% Damage Reduction and strong knockback resistance for the full 5 seconds. PRIMED when his current target is a ranged enemy at least 170px away; the first basic after closing into melee range gains +40% damage and briefly staggers that target.</div>
 <div><b>Savage Beatdown</b> — 10s cooldown. Bigfoot locks onto his current target and lands three heavy hits over about 1.2 seconds. The final hit interrupts enemy attacks and applies Cracked for 5 seconds, increasing damage taken by 10%.</div>
 </details>
 <details>
 <summary>Starting cooldown rules</summary>
 <div><b>Start of room</b> — chosen non-Ultimate abilities begin with their own starting cooldown values instead of carrying over from the last room.</div>
-<div><b>Bigfoot defaults</b> — Earth Slam, Uproot, and Savage Beatdown start READY. Honey Stash starts at 2s. Bush Ambush starts at 1s. Wild Frenzy starts at 3s. Boulder Wall starts at 2s. Primal Charge starts at 1s.</div>
+<div><b>Bigfoot defaults</b> — Earth Slam, Uproot, and Savage Beatdown start READY. Honey Stash starts at 2s. Bush Ambush starts at 1s. Wild Frenzy starts at 3s. Boulder Wall starts at 2s. Primal Rush starts at 1s.</div>
 <div><b>Ultimate</b> — the selected Ultimate starts each room half charged by default unless upgrades improve it.</div>
 </details>
 </div>
@@ -345,7 +351,7 @@ body[data-screen="game"]{padding:6px}
 <summary>Rage &amp; PRIMED abilities</summary>
 <div><b>Rage:</b> Bigfoot starts each combat with 20/100 Rage. Basic attacks and taking meaningful hits build Rage. All abilities spend Rage. Ultimates have the highest Rage costs.</div>
 <div><b>READY:</b> the cooldown is finished and you have enough Rage to cast.</div>
-<div><b>PRIMED:</b> the battlefield is giving that ability its ideal opportunity. You can always cast unprimed, but a Primed cast gets a unique bonus.</div>
+<div><b>PRIMED:</b> the battlefield is giving that ability its ideal opportunity. You can always cast unprimed, but a Primed cast gets a unique bonus. Primal Rush primes against a distant ranged target.</div>
 <div><b>Prime Evolutions:</b> Evolutions can make a Prime condition easier to reach or make the Primed payoff stronger.</div>
 </details>
 <div id="engine">ENGINE READY · RAGE & PRIME V4.4 · 12 ROOMS</div>
@@ -391,7 +397,7 @@ var abilityChoices=[
  ["shroud","Bush Ambush — 11s • hide 1s, invulnerable, burst out"],
  ["rage","Wild Frenzy — 13s • 6s attack-speed burst"],
  ["wall","Boulder Wall — 12s • timed shield + knockback"],
- ["charge","Primal Charge — 9s • targeted gap closer"],
+ ["charge","Primal Rush — 10s • +100% speed that decays over 5s"],
  ["beatdown","Savage Beatdown — 10s • focused 3-hit combo"]
 ];
 var passiveChoices=[
@@ -409,7 +415,7 @@ var skillInfo={
  shroud:{name:"Bush Ambush",desc:"Hide 1s invulnerable, then burst out",cd:11},
  rage:{name:"Wild Frenzy",desc:"6s faster basics",cd:13},
  wall:{name:"Boulder Wall",desc:"5s shield + knockback blast",cd:12},
- charge:{name:"Primal Charge",desc:"Marked-target gap closer",cd:9},
+ charge:{name:"Primal Rush",desc:"+100% speed, decays over 5s · 15% Damage Reduction",cd:10},
  beatdown:{name:"Savage Beatdown",desc:"3-hit priority-target combo",cd:10},
  roar:{name:"Primal Roar",desc:"Damage + fear + 8s combat buff",cd:24},
  avalanche:{name:"Avalanche",desc:"Telegraphed falling-boulder barrage",cd:26}
@@ -870,9 +876,9 @@ function update(dt){
  S.shake=Math.max(0,S.shake-dt);
  t=nearestTo(h);
  if(t){
-   ranged=S.basic==="rock";d=dist(h,t);ideal=ranged?160:(S.basic==="limb"?78:52);a=Math.atan2(t.y-h.y,t.x-h.x);h.aim=a;
+   ranged=S.basic==="rock";d=dist(h,t);ideal=(S.v45RushT>0?(ranged?78:(S.basic==="limb"?78:52)):(ranged?160:(S.basic==="limb"?78:52)));a=Math.atan2(t.y-h.y,t.x-h.x);h.aim=a;
    if(d>ideal+15)moveUnit(h,t,(ranged?65:80)*S.mods.move,dt,false);
-   else if(ranged&&d<110)moveUnit(h,t,70*S.mods.move,dt,true);
+   else if(ranged&&d<110&&!(S.v45RushT>0))moveUnit(h,t,70*S.mods.move,dt,true);
    else if(h.atk<=0){
      h.combo++;h.swing=.22;
      mult=S.mods.basic*(h.rage>0?S.mods.rageDmg:1)*(h.bonusNext?S.mods.shroudMult:1);h.bonusNext=false;
@@ -2078,7 +2084,7 @@ function v38RangedAlly(e){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){va
 function v38SetTemp(e,k,v){var q="_v38Orig_"+k;if(e[q]===undefined)e[q]=e[k];e[k]=v}
 function v38Lock(e){v38SetTemp(e,"spd",0);v38SetTemp(e,"range",999);e.atk=Math.max(e.atk||0,.24)}
 function v38RestoreTemps(){if(!S)return;for(var i=0;i<S.en.length;i++){var e=S.en[i],keys=["spd","range"];for(var j=0;j<keys.length;j++){var k=keys[j],q="_v38Orig_"+k;if(e[q]!==undefined){e[k]=e[q];delete e[q]}}}}
-function v38PushHero(e,amount){if(!S||!S.h||!e)return;var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1;S.h.x=clamp(S.h.x+dx/z*amount,35,725);S.h.y=clamp(S.h.y+dy/z*amount,40,485)}
+function v38PushHero(e,amount){if(!S||!S.h||!e)return;if(S.v45RushT>0)amount*=.35;var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1;S.h.x=clamp(S.h.x+dx/z*amount,35,725);S.h.y=clamp(S.h.y+dy/z*amount,40,485)}
 function v38Fx(x,y,r,kind){v38Ensure();S.v38Impacts.push({x:x,y:y,r:r||35,t:.32,max:.32,kind:kind||"hit"})}
 
 function v38InitEnemy(e){
@@ -2448,7 +2454,7 @@ function v41Interrupt(e){
 
 /* Wild Instinct reads the incoming attack before every defensive layer. */
 hurtHero=function(n,source){
- if(S){v41Ensure();if(S.h&&(S.h.inv||0)<=0&&S.passives.indexOf("instinct")>=0&&n>=60&&S.v41InstinctCd<=0){
+ if(S){v41Ensure();var rawForInstinct=(S.v45RawIncoming!=null?S.v45RawIncoming:n);if(S.h&&(S.h.inv||0)<=0&&S.passives.indexOf("instinct")>=0&&rawForInstinct>=60&&S.v41InstinctCd<=0){
    S.v41InstinctT=3;S.v41InstinctCd=8;S.v41Fx.push({kind:"instinct",t:1,max:1});
    if(byId("status"))byId("status").innerHTML="WILD INSTINCT — +30% Basic Attack Speed · +20% Movement Speed for 3s";
  }}
@@ -2470,12 +2476,7 @@ startingCooldown=function(id){
 cast=function(id){
  if(!S||S.paused)return;
  v41Ensure();
- if(id==="charge"){
-   if((S.cds.charge||0)>0)return;var ct=v41ChargeTarget();if(!ct)return;
-   _v41Cast(id);S.v41Charge={uid:ct.uid,t:.44,total:.44,hit:{},pathHits:0,targetWasRanged:v41IsRanged(ct),startX:S.h.x,startY:S.h.y};
-   S.v41Fx.push({kind:"chargeStart",t:.45,max:.45});
-   return;
- }
+ if(id==="charge"){return; /* retired: Primal Rush is handled by the Rage/Prime layer */}
  if(id==="beatdown"){
    if((S.cds.beatdown||0)>0)return;var bt=nearestTo(S.h);if(!bt)return;
    _v41Cast(id);S.v41Beat={uid:bt.uid,t:1.45,next:0,hits:0,landed:0};
@@ -2526,30 +2527,26 @@ update=function(dt){
  if(S.v41InstinctCd>0)S.v41InstinctCd=Math.max(0,S.v41InstinctCd-dt);
  if(S.v41InstinctT>0){S.v41InstinctT=Math.max(0,S.v41InstinctT-dt);if(S.h.combo!==combo)S.h.atk/=1.30}
  for(var i=0;i<S.en.length;i++)if(S.en[i].v41CrackedT>0)S.en[i].v41CrackedT=Math.max(0,S.en[i].v41CrackedT-dt);
- if(charging)v41UpdateCharge(dt);if(beating)v41UpdateBeat(dt);
+ if(charging)S.v41Charge=null;if(beating)v41UpdateBeat(dt);
  for(i=S.v41Fx.length-1;i>=0;i--){S.v41Fx[i].t-=dt;if(S.v41Fx[i].t<=0)S.v41Fx.splice(i,1)}
 };
 
-function v41DrawChargeIndicator(){
- if(!S||S.paused||S.abilities.indexOf("charge")<0||(S.cds.charge||0)>0||S.v41Charge)return;var t=v41ChargeTarget();if(!t)return;
- var pulse=.5+.5*Math.sin(Date.now()/105);ctx.save();ctx.strokeStyle="rgba(116,232,255,"+(.58+.28*pulse)+")";ctx.lineWidth=5;ctx.setLineDash([11,8]);ctx.beginPath();ctx.moveTo(S.h.x,S.h.y);ctx.lineTo(t.x,t.y);ctx.stroke();ctx.setLineDash([]);ctx.strokeStyle="#7ce8ff";ctx.lineWidth=4;ctx.beginPath();ctx.arc(t.x,t.y,34+5*pulse,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(t.x-13,t.y-43);ctx.lineTo(t.x,t.y-29);ctx.lineTo(t.x+13,t.y-43);ctx.stroke();ctx.fillStyle="#dffbff";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("CHARGE",t.x,t.y-50);ctx.restore();
-}
 function v41DrawCombatFx(){
  if(!S)return;var i,f,a;
  if(S.v41InstinctT>0){ctx.save();ctx.globalAlpha=.55+.18*Math.sin(Date.now()/90);ctx.strokeStyle="#ff765e";ctx.lineWidth=5;ctx.beginPath();ctx.arc(S.h.x,S.h.y,45,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffd7cd";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("INSTINCT",S.h.x,S.h.y-50);ctx.restore()}
  for(i=0;i<S.en.length;i++)if(S.en[i].v41CrackedT>0&&!S.en[i].dead){var e=S.en[i];ctx.save();ctx.strokeStyle="rgba(255,126,92,.92)";ctx.lineWidth=3;ctx.setLineDash([5,4]);ctx.beginPath();ctx.arc(e.x,e.y,40*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#ffb29a";ctx.font="900 8px system-ui";ctx.textAlign="center";ctx.fillText("CRACKED",e.x,e.y+48*(e.scale||1));ctx.restore()}
  for(i=0;i<S.v41Fx.length;i++){f=S.v41Fx[i];a=Math.max(0,f.t/(f.max||1));ctx.save();ctx.globalAlpha=a;if(f.kind==="chargeHit"){ctx.strokeStyle="#89efff";ctx.lineWidth=9;ctx.beginPath();ctx.arc(f.x,f.y,54*(1-a*.25),0,Math.PI*2);ctx.stroke()}else if(f.kind==="beatHit"){ctx.strokeStyle=f.hit===3?"#ff795c":"#f7dfaa";ctx.lineWidth=f.hit===3?9:6;ctx.beginPath();ctx.arc(f.x,f.y,32+(1-a)*18,0,Math.PI*2);ctx.stroke()}ctx.restore()}
 }
-draw=function(){_v41Draw();if(!S)return;v41DrawChargeIndicator();v41DrawCombatFx()};
+draw=function(){_v41Draw();if(!S)return;v41DrawCombatFx()};
 
 /* New Evolution branches. */
 upgrades.push(
  {id:"limbLong",needBasic:"limb",tag:"BASIC EVOLUTION",title:"Long Branch",text:"Tree Limb cleave reach increases from about 112px to 135px."},
  {id:"limbHeavy",needBasic:"limb",tag:"BASIC EVOLUTION",title:"Heavy Timber",text:"Tree Limb knockback is stronger on every enemy caught in the swing."},
  {id:"limbCrack",needBasic:"limb",tag:"BASIC EVOLUTION",title:"Splintered Impact",text:"Every fourth Tree Limb swing deals +60% damage to its primary target."},
- {id:"chargeStampede",need:"charge",tag:"PRIMAL CHARGE",title:"Stampede",text:"Primal Charge has a wider path and deals more damage to enemies Bigfoot runs through."},
- {id:"chargeRunDown",need:"charge",tag:"PRIMAL CHARGE",title:"Run Them Down",text:"Hitting a ranged target with Primal Charge refunds 2 seconds of its cooldown."},
- {id:"chargeFreight",requires:"chargeStampede",need:"charge",tag:"PRIMAL CHARGE",title:"Freight Train",text:"Primal Charge's final impact gains +20 damage for each enemy hit during the charge, up to +100."},
+ {id:"chargeStampede",need:"charge",tag:"PRIMAL RUSH",title:"Stampede",text:"Primal Rush loses its speed more slowly, and Bigfoot shoves each enemy he reaches aside once per Rush."},
+ {id:"chargeRunDown",need:"charge",tag:"PRIMAL RUSH",title:"Thick Skull",text:"Damage Reduction during Primal Rush increases from 15% to 22%."},
+ {id:"chargeFreight",requires:"chargeStampede",need:"charge",tag:"PRIMAL RUSH",title:"Crash Through",text:"A PRIMED Primal Rush first hit gains +70% damage instead of +40% and staggers longer."},
  {id:"beatHeavy",need:"beatdown",tag:"SAVAGE BEATDOWN",title:"Bone Rattler",text:"All three Savage Beatdown hits deal +25% damage."},
  {id:"beatTenderize",need:"beatdown",tag:"SAVAGE BEATDOWN",title:"Tenderize",text:"Cracked increases damage taken by 15% instead of 10%."},
  {id:"beatNoBreath",requires:"beatHeavy",need:"beatdown",tag:"SAVAGE BEATDOWN",title:"No Breathing Room",text:"Landing all three Savage Beatdown hits refunds 2 seconds of its cooldown."}
@@ -2652,7 +2649,7 @@ function v43Ensure(){
  if(!S.v43PrimeTrees)S.v43PrimeTrees=[];
  if(S.v43BushDodged==null)S.v43BushDodged=false;
 }
-function v43AddRage(n,label){if(!S)return;v43Ensure();var before=S.v43Rage;S.v43Rage=clamp(S.v43Rage+n,0,100);if(label&&S.v43Rage>before)S.v43Fx.push({kind:"rageGain",n:Math.round(S.v43Rage-before),x:S.h.x,y:S.h.y,t:.55,max:.55});}
+function v43AddRage(n,label){if(!S)return;v43Ensure();var before=S.v43Rage;S.v43Rage=clamp(S.v43Rage+n,0,100);if(label&&S.v43Rage>before){S.v43Fx.push({kind:"rageGain",n:Math.round(S.v43Rage-before),x:S.h.x,y:S.h.y,t:.55,max:.55});S.v45RagePulse=.28}}
 function v43IsBoss(e){return e&&(e.type==="boss"||e.type==="miniboss"||e.eliteMod)}
 function v43Ranged(e){return e&&(e.type==="archer"||e.type==="poison"||e.type==="mush")}
 function v43Alive(){return S.en.filter(function(e){return !e.dead})}
@@ -2678,9 +2675,8 @@ function v43LineHits(){
  return{count:count,bossFar:bossFar};
 }
 function v43ChargeTarget(){
- var list=v43Alive(),best=null,bd=-1,i,e,d;
- for(i=0;i<list.length;i++){e=list[i];if(!v43Ranged(e))continue;d=dist(S.h,e);if(d>bd){bd=d;best=e}}
- if(best)return best;for(i=0;i<list.length;i++){e=list[i];d=dist(S.h,e);if(d>bd){bd=d;best=e}}return best;
+ /* Primal Rush follows Bigfoot's normal AI target instead of forcing a dash target. */
+ var t=v43Nearest();return t||null;
 }
 function v43BeatTarget(){return v43Nearest()}
 function v43Prime(id){
@@ -2691,11 +2687,11 @@ function v43Prime(id){
  if(id==="shroud")return v43IncomingThreat(S.owned.bushPrimeSense?1.5:1.0,false);
  if(id==="rage")return (S.v43ReadyAge.rage||0)>= (S.owned.frenzyPrimeFast?1.5:3.0);
  if(id==="wall")return v43CountNear(130)>=2||v43IncomingThreat(1.05,true)||(S.owned.wallPrimeEasy&&v43CountNear(130)>=1&&v43IsBoss(v43Nearest()));
- if(id==="charge"){var c=v43ChargeTarget();if(!c)return false;var d=dist(S.h,c),normal=S.owned.chargePrimeNear?130:180,boss=S.owned.chargePrimeNear?170:220;return (v43Ranged(c)&&d>=normal)||(v43IsBoss(c)&&d>=boss)}
+ if(id==="charge"){var c=v43ChargeTarget();if(!c||!v43Ranged(c))return false;var d=dist(S.h,c),normal=S.owned.chargePrimeNear?120:170;return d>=normal}
  if(id==="beatdown"){var b=v43BeatTarget();if(!b)return false;return !!(b.winding||(b.chargeWind||0)>0||(b.stunT||0)>0||(b.exposedT||0)>0||(b.v41CrackedT||0)>0||(S.owned.beatPrimeOpen&&b.hp/b.max<=.35))}
  return false;
 }
-function v43PrimeShort(id){return({slam:"BIGGER CROWD CONTROL",tree:"SPLINTER BURST",honey:"FORTIFIED STASH",shroud:"PERFECT DODGE WINDOW",rage:"LONGER FRENZY",wall:"FORTIFIED WALL",charge:"FULL-SPEED IMPACT",beatdown:"FINISHER"})[id]||"PRIMED"}
+function v43PrimeShort(id){return({slam:"PRIMED — CROWD / CLOSE BOSS ATTACK",tree:"PRIMED — MULTI-HIT LINE",honey:"PRIMED — LOW HEALTH",shroud:"PRIMED — ATTACK INCOMING",rage:"PRIMED — HELD READY",wall:"PRIMED — HEAVY PRESSURE",charge:"PRIMED — DISTANT RANGED TARGET",beatdown:"PRIMED — TARGET EXPOSED"})[id]||"PRIMED"}
 function v43Cost(id){return V43_COST[id]||0}
 function v43AbilityValid(id){if(id==="tree"&&!v43Nearest())return false;if(id==="charge"&&!v43ChargeTarget())return false;if(id==="beatdown"&&!v43BeatTarget())return false;return true}
 
@@ -2722,8 +2718,11 @@ campRecovery=function(){
 hurtHero=function(n,source){
  if(!S)return _v43Hurt(n,source);v43Ensure();var raw=n||0,bush=S.h&&S.h.bushT>0;
  if(bush){S.v43BushDodged=true;S.v43BushAvoided=(S.v43BushAvoided||0)+raw}
- _v43Hurt(n,source);
- if(raw>=10&&!bush)v43AddRage(clamp(raw*.18,3,14),"hit");
+ /* Tiny Rage gain reads raw enemy damage before Armor, shields, or Rush mitigation. */
+ if(raw>=8&&!bush)v43AddRage(clamp(raw*.10,1,8),"hit");
+ /* Primal Rush mitigation is 15%, or 22% with Thick Skull, for the full Rush. */
+ if(S.v45RushT>0)n=raw*((S.owned&&S.owned.chargeRunDown)?0.78:0.85);
+ S.v45RawIncoming=raw;_v43Hurt(n,source);S.v45RawIncoming=null;
  if(S.item==="ring"&&S.mrs&&S.owned.mrsHusband&&raw>=60){S.mrs.furyReady=true;S.mrs.purseTimer=Math.min(S.mrs.purseTimer||9,.12)}
 };
 
@@ -2746,6 +2745,15 @@ cast=function(id){
    if(id==="rage"&&prime){oldDur=S.mods.rageDur;S.mods.rageDur+=S.owned.frenzyPrimeFast?3:2}
   }
  }
+ /* Primal Rush replaces the old forced-dash Charge. Bigfoot keeps normal AI movement. */
+ if(id==="charge"&&normal){
+   var rt=v43ChargeTarget();if(!rt){S.v43CastingPrime="";return}
+   S.cds.charge=skillInfo.charge.cd;S.v43Rage=Math.max(0,S.v43Rage-cost);S.v43ReadyAge.charge=0;
+   S.v45RushT=5;S.v45RushMax=5;S.v45RushPrime=prime;S.v45RushTargetUid=rt.uid;S.v45RushPrimeArmed=false;S.v45RushPrimeSpent=false;S.v45RushShoved={};
+   S.v43Fx.push({kind:"rushStart",x:S.h.x,y:S.h.y,t:.55,max:.55});
+   if(prime)S.v43Fx.push({kind:"primeCast",name:skillInfo[id].name,label:"PRIMAL RUSH!",x:S.h.x,y:S.h.y,t:.7,max:.7});
+   S.v43CastingPrime="";return;
+ }
  _v43Cast(id);
  if(!usesRage){S.v43CastingPrime="";return}
  var casted=(S.cds[id]||0)>beforeCd || (id==="charge"&&S.v41Charge) || (id==="beatdown"&&S.v41Beat);
@@ -2755,9 +2763,9 @@ cast=function(id){
  if(normal&&id==="shroud"){S.v43BushDodged=false;S.v43BushAvoided=0;S.v43BushPrimeCast=prime;if(prime){S.h.inv+=.5;S.h.bushT+=.5}}
  if(normal&&id==="slam"&&prime){for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(S.h,S.en[i])<S.mods.slamR)knockEnemy(S.en[i],24,S.h.x,S.h.y)}
  if(normal&&id==="wall"&&prime){for(i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(S.h,S.en[i])<150)knockEnemy(S.en[i],32,S.h.x,S.h.y)}
- if(normal&&id==="charge"&&S.v41Charge)S.v41Charge.v43Prime=prime;
+ /* Old Primal Charge dash state is intentionally unused by Primal Rush. */
  if(normal&&id==="beatdown"&&S.v41Beat)S.v41Beat.v43Prime=prime;
- if(prime)S.v43Fx.push({kind:"primeCast",name:skillInfo[id].name,x:S.h.x,y:S.h.y,t:.7,max:.7});
+ if(prime)S.v43Fx.push({kind:"primeCast",name:skillInfo[id].name,label:(id==="shroud"?"PERFECT AMBUSH!":(id==="tree"?"PERFECT LINE!":(id==="beatdown"?"OPENING PUNISHED!":"PRIMED CAST!"))),x:S.h.x,y:S.h.y,t:.7,max:.7});
  if(oldR)S.mods.slamR=oldR;if(oldDur)S.mods.rageDur=oldDur;S.v43CastingPrime="";
 };
 
@@ -2793,12 +2801,28 @@ function v43AbilityDamageSafe(e,n,k,x,y){var old=S.v37DamageClass;S.v37DamageCla
 
 update=function(dt){
  if(!S)return _v43Update(dt);v43Ensure();
- var combo=S.h.combo,bushBefore=S.h.bushT||0,chargeBefore=S.v41Charge?{uid:S.v41Charge.uid,prime:!!S.v41Charge.v43Prime}:null,beatBefore=S.v41Beat?{uid:S.v41Beat.uid,prime:!!S.v41Beat.v43Prime}:null;
+ var combo=S.h.combo,bushBefore=S.h.bushT||0,chargeBefore=null,beatBefore=S.v41Beat?{uid:S.v41Beat.uid,prime:!!S.v41Beat.v43Prime}:null;
+ var v45OldMove=S.mods.move,v45RushWas=(S.v45RushT||0)>0;
+ if(v45RushWas){var rr=clamp(S.v45RushT/5,0,1),expo=(S.owned&&S.owned.chargeStampede)?0.90:1.35;S.mods.move*=1+Math.pow(rr,expo)}
  var primeTrees=(S.v43PrimeTrees||[]).slice(),splinter=S.mods.splinter;
  if(splinter)S.mods.splinter=false; /* replace invisible legacy splash with visible shard projectiles */
  _v43Update(dt);
+ S.mods.move=v45OldMove;
  if(splinter)S.mods.splinter=true;if(!S)return;
+ if(!S.paused&&v45RushWas){
+   S.v45RushT=Math.max(0,S.v45RushT-dt);
+   var rushTarget=null;for(var rti=0;rti<S.en.length;rti++)if(!S.en[rti].dead&&S.en[rti].uid===S.v45RushTargetUid){rushTarget=S.en[rti];break}
+   if(S.v45RushPrime&&!S.v45RushPrimeArmed&&rushTarget&&dist(S.h,rushTarget)<=92)S.v45RushPrimeArmed=true;
+   if(S.owned&&S.owned.chargeStampede){for(var rsi=0;rsi<S.en.length;rsi++){var re=S.en[rsi];if(re.dead||(S.v45RushShoved&&S.v45RushShoved[re.uid])||dist(S.h,re)>58)continue;S.v45RushShoved[re.uid]=1;knockEnemy(re,20,S.h.x,S.h.y)}}
+   if(S.h.combo!==combo&&S.v45RushPrimeArmed&&!S.v45RushPrimeSpent&&rushTarget&&!rushTarget.dead){
+     var bonusPct=(S.owned&&S.owned.chargeFreight)?0.70:((S.owned&&S.owned.chargePrimeNear)?0.55:0.40);var baseHit=S.basic==="limb"?70:S.h.dmg;
+     damageEnemy(rushTarget,baseHit*S.mods.basic*bonusPct,18,S.h.x,S.h.y);rushTarget.stunT=Math.max(rushTarget.stunT||0,v43IsBoss(rushTarget)?0.25:((S.owned&&S.owned.chargeFreight)?0.75:0.55));rushTarget.winding=false;rushTarget.wind=0;rushTarget.chargeWind=0;rushTarget.chargeTime=0;
+     S.v45RushPrimeSpent=true;S.v43Fx.push({kind:"rushHit",x:rushTarget.x,y:rushTarget.y,t:.5,max:.5});byId("status").innerHTML="PRIMAL RUSH — first hit lands with +"+Math.round(bonusPct*100)+"% damage and a stagger.";
+   }
+   if(S.v45RushT<=0){S.v45RushPrime=false;S.v45RushPrimeArmed=false;S.v45RushShoved={}}
+ }
  if(!S.paused){
+  if(S.v45RagePulse>0)S.v45RagePulse=Math.max(0,S.v45RagePulse-dt);
   if(S.h.combo!==combo){var gain=S.basic==="limb"?8:6;if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0)gain=Math.max(3,Math.round(gain*.55));v43AddRage(gain,"basic");if(S.item==="ring"&&S.mrs&&S.mrs.attackBuffT>0)S.h.atk/=1.25}
   for(var a=0;a<S.abilities.length;a++){var id=S.abilities[a];if((S.cds[id]||0)<=0)S.v43ReadyAge[id]=(S.v43ReadyAge[id]||0)+dt;else S.v43ReadyAge[id]=0}
  }
@@ -2810,7 +2834,7 @@ update=function(dt){
  v43UpdateShardHits();v43UpdateMrsThrows(dt);
  for(i=0;i<S.en.length;i++)if(S.en[i].v43MrsMarkT>0)S.en[i].v43MrsMarkT=Math.max(0,S.en[i].v43MrsMarkT-dt);
  /* Prime payoff for charge / beatdown is applied when the underlying action completes. */
- if(chargeBefore&&chargeBefore.prime&&!S.v41Charge){for(i=0;i<S.en.length;i++)if(S.en[i].uid===chargeBefore.uid&&!S.en[i].dead){v43AbilityDamageSafe(S.en[i],S.owned.chargePrimeNear?60:42,18,S.h.x,S.h.y);S.en[i].stunT=Math.max(S.en[i].stunT||0,v43IsBoss(S.en[i])?.28:.55);break}}
+ /* Primal Rush Prime payoff is handled on the first basic after Bigfoot closes the gap. */
  if(beatBefore&&beatBefore.prime&&!S.v41Beat){for(i=0;i<S.en.length;i++)if(S.en[i].uid===beatBefore.uid&&!S.en[i].dead){v43AbilityDamageSafe(S.en[i],S.owned.beatPrimeOpen?76:59,18,S.h.x,S.h.y);S.en[i].v41CrackedT=Math.max(S.en[i].v41CrackedT||0,7);break}}
  if(bushBefore>0&&(S.h.bushT||0)<=0){if(S.v43BushDodged){var refund=S.owned.bushPrimeSense?2.5:1.5;S.cds.shroud=Math.max(0,(S.cds.shroud||0)-refund);byId("status").innerHTML="PERFECT AMBUSH — avoided an attack, refunding "+refund.toFixed(1)+"s of Bush Ambush."}if(S.v43BushPrimeCast){for(i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(S.h,S.en[i])<125)knockEnemy(S.en[i],24,S.h.x,S.h.y)}S.v43BushDodged=false;S.v43BushPrimeCast=false}
  for(i=S.v43Fx.length-1;i>=0;i--){S.v43Fx[i].t-=dt;if(S.v43Fx[i].t<=0)S.v43Fx.splice(i,1)}
@@ -2826,9 +2850,10 @@ drawMrs=function(){
 };
 function v43DrawOverlay(){
  if(!S)return;var i,e,f,a,pulse=.5+.5*Math.sin(Date.now()/105);
+ if((S.v45RushT||0)>0){var rp=clamp(S.v45RushT/5,0,1);ctx.save();ctx.globalAlpha=.25+.22*rp;ctx.strokeStyle="#8ff2b5";ctx.lineWidth=5+4*rp;ctx.beginPath();ctx.arc(S.h.x,S.h.y,44+10*rp,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#d7ffe5";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("RUSH "+S.v45RushT.toFixed(1)+"s",S.h.x,S.h.y-55);ctx.restore()} 
  for(i=0;i<S.en.length;i++){e=S.en[i];if(e.v43MrsMarkT>0&&!e.dead){ctx.save();ctx.strokeStyle="rgba(255,133,178,.9)";ctx.lineWidth=3;ctx.setLineDash([6,4]);ctx.beginPath();ctx.arc(e.x,e.y,44*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#ffb8d2";ctx.font="900 8px system-ui";ctx.textAlign="center";ctx.fillText("MARKED",e.x,e.y+52*(e.scale||1));ctx.restore()}}
  for(i=0;i<S.v43MrsThrows.length;i++){var pt=S.v43MrsThrows[i];ctx.save();ctx.translate(pt.x,pt.y);ctx.rotate(Date.now()/90);ctx.fillStyle=pt.fury?"#ff7581":"#cc7f91";ctx.fillRect(-11,-8,22,16);ctx.fillStyle="#f1ca86";ctx.fillRect(-4,-12,8,5);ctx.restore()}
- for(i=0;i<S.v43Fx.length;i++){f=S.v43Fx[i];a=Math.max(0,f.t/(f.max||1));ctx.save();ctx.globalAlpha=a;if(f.kind==="primeCast"){ctx.strokeStyle="#ffad62";ctx.lineWidth=8;ctx.beginPath();ctx.arc(f.x,f.y,52+(1-a)*28,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffe0a8";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText("PRIMED!",f.x,f.y-58)}else if(f.kind==="rageGain"){ctx.fillStyle="#ff997a";ctx.font="900 11px system-ui";ctx.textAlign="center";ctx.fillText("+"+f.n+" RAGE",f.x,f.y-54-(1-a)*18)}else if(f.kind==="noRage"){ctx.fillStyle="#ff7b70";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText("NEED RAGE",f.x,f.y-56)}else if(f.kind==="splinter"){ctx.strokeStyle="#d3944d";ctx.lineWidth=6;ctx.beginPath();ctx.arc(f.x,f.y,35+(1-a)*38,0,Math.PI*2);ctx.stroke()}else if(f.kind==="kitchen"){ctx.strokeStyle="#ffb0c7";ctx.lineWidth=7;ctx.beginPath();ctx.arc(f.x,f.y,88*(1-a*.15),0,Math.PI*2);ctx.stroke()}ctx.restore()}
+ for(i=0;i<S.v43Fx.length;i++){f=S.v43Fx[i];a=Math.max(0,f.t/(f.max||1));ctx.save();ctx.globalAlpha=a;if(f.kind==="primeCast"){ctx.strokeStyle="#ffad62";ctx.lineWidth=8;ctx.beginPath();ctx.arc(f.x,f.y,52+(1-a)*28,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffe0a8";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText(f.label||"PRIMED!",f.x,f.y-58)}else if(f.kind==="rageGain"){ctx.fillStyle="#ff997a";ctx.font="900 11px system-ui";ctx.textAlign="center";ctx.fillText("+"+f.n+" RAGE",f.x,f.y-54-(1-a)*18)}else if(f.kind==="noRage"){ctx.fillStyle="#ff7b70";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText("NEED RAGE",f.x,f.y-56)}else if(f.kind==="rushStart"){ctx.strokeStyle="#8ff2b5";ctx.lineWidth=7;ctx.beginPath();ctx.arc(f.x,f.y,44+(1-a)*38,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#d7ffe5";ctx.font="900 10px system-ui";ctx.textAlign="center";ctx.fillText("RUSH!",f.x,f.y-52)}else if(f.kind==="rushHit"){ctx.strokeStyle="#ffe08a";ctx.lineWidth=9;ctx.beginPath();ctx.arc(f.x,f.y,28+(1-a)*34,0,Math.PI*2);ctx.stroke()}else if(f.kind==="splinter"){ctx.strokeStyle="#d3944d";ctx.lineWidth=6;ctx.beginPath();ctx.arc(f.x,f.y,35+(1-a)*38,0,Math.PI*2);ctx.stroke()}else if(f.kind==="kitchen"){ctx.strokeStyle="#ffb0c7";ctx.lineWidth=7;ctx.beginPath();ctx.arc(f.x,f.y,88*(1-a*.15),0,Math.PI*2);ctx.stroke()}ctx.restore()}
 }
 draw=function(){_v43Draw();if(!S)return;v43DrawOverlay()};
 
@@ -2838,13 +2863,13 @@ buildSkills=function(){
  for(i=0;i<all.length;i++){id=all[i];cost=v43Cost(id);var isUlt=id===S.ult;b=document.createElement("button");b.type="button";b.className="skill ready"+(isUlt?" ultimate":"");b.setAttribute("data-skill",id);b.innerHTML="<b>"+skillInfo[id].name+"</b><small>"+skillInfo[id].desc+(isUlt?" · Ultimate":"")+(cost?" · <span class='rageCost'>"+cost+" Rage</span>":"")+"</small><span class='cd'>READY</span>";b.onclick=(function(skill){return function(){cast(skill)}})(id);bar.appendChild(b)}v43EnsureUI();
 };
 updateUI=function(){
- _v43UpdateUI();if(!S)return;v43Ensure();v43EnsureUI();var rt=byId("v43RageText"),rf=byId("v43RageFill");if(rt)rt.innerHTML=Math.round(S.v43Rage);if(rf)rf.style.width=clamp(S.v43Rage,0,100)+"%";
- var labels=document.querySelectorAll(".skill");for(var i=0;i<labels.length;i++){var id=labels[i].getAttribute("data-skill"),cd=S.cds[id]||0,isUlt=id===S.ult,prime=!isUlt&&v43Prime(id),cost=v43Cost(id),starved=cd<=0&&cost>0&&S.v43Rage<cost;labels[i].className="skill "+(cd>0?"cooling":(prime?"primed":"ready"))+(starved?" starved":"")+(isUlt?" ultimate":"");var c=labels[i].querySelector(".cd");if(c)c.innerHTML=cd>0?cd.toFixed(1)+"s":(starved?"NEED RAGE":(prime?"PRIMED":"READY"));var sm=labels[i].querySelector("small");if(sm)sm.innerHTML=skillInfo[id].desc+(isUlt?" · Ultimate":"")+(prime?" · <b>"+v43PrimeShort(id)+"</b>":"")+(cost?" · <span class='rageCost'>"+cost+" Rage</span>":"")}
+ _v43UpdateUI();if(!S)return;v43Ensure();v43EnsureUI();var rt=byId("v43RageText"),rf=byId("v43RageFill"),rw=byId("v43RageWrap");if(rt)rt.innerHTML=Math.round(S.v43Rage);if(rf)rf.style.width=clamp(S.v43Rage,0,100)+"%";if(rw)rw.className=(S.v45RagePulse||0)>0?"ragePulse":"";
+ var labels=document.querySelectorAll(".skill");S.v45PrimeLive=S.v45PrimeLive||{};S.v45PrimePopUntil=S.v45PrimePopUntil||{};for(var i=0;i<labels.length;i++){var id=labels[i].getAttribute("data-skill"),cd=S.cds[id]||0,isUlt=id===S.ult,prime=!isUlt&&v43Prime(id),cost=v43Cost(id),starved=cd<=0&&cost>0&&S.v43Rage<cost;if(prime&&!S.v45PrimeLive[id])S.v45PrimePopUntil[id]=Date.now()+340;S.v45PrimeLive[id]=prime;var popping=(S.v45PrimePopUntil[id]||0)>Date.now();labels[i].className="skill "+(cd>0?"cooling":(prime?"primed":"ready"))+(starved?" starved":"")+(isUlt?" ultimate":"")+(popping?" primePop":"");var c=labels[i].querySelector(".cd");if(c)c.innerHTML=cd>0?cd.toFixed(1)+"s":(starved?(cost+" RAGE NEEDED"):(prime?"PRIMED":"READY"));var sm=labels[i].querySelector("small");if(sm)sm.innerHTML=skillInfo[id].desc+(isUlt?" · Ultimate":"")+(prime?" · <b>"+v43PrimeShort(id)+"</b>":"")+(cost?" · <span class='rageCost'>"+cost+" Rage</span>":"")}
  if(S.item==="ring"&&S.mrs){var badge=byId("itemBadge");if(!S.mrs.joined)badge.innerHTML="WEDDING RING · MAKEUP "+Math.max(0,S.mrs.ready).toFixed(1)+"s";else badge.innerHTML="WEDDING RING · SIDELINE SUPPORT"}
 };
 
 function v43ResetCombat(){
- if(!S)return;v43Ensure();S.v43Rage=20;S.v43ReadyAge={};S.v43BushDodged=false;S.v43BushPrimeCast=false;S.v43MrsThrows=[];S.v43PrimeTrees=[];
+ if(!S)return;v43Ensure();S.v43Rage=20;S.v43ReadyAge={};S.v43BushDodged=false;S.v43BushPrimeCast=false;S.v43MrsThrows=[];S.v43PrimeTrees=[];S.v45RushT=0;S.v45RushPrime=false;S.v45RushPrimeArmed=false;S.v45RushPrimeSpent=false;S.v45RushTargetUid=0;S.v45RushShoved={};S.v45RagePulse=0;S.v45PrimeLive={};S.v45PrimePopUntil={};
  if(S.item==="ring"&&S.mrs){var m=S.mrs;m.x=720;m.y=455;m.ready=m.joinDelay;m.joined=m.joinDelay<=0;m.purseTimer=.8;m.lunchTimer=1.8;m.cheerTimer=1.2;m.guardTimer=2.5;m.damageBuffT=0;m.attackBuffT=0;m.furyReady=false;m.tossCount=0}
 }
 spawnCombat=function(kind){_v43Spawn(kind);v43ResetCombat()};
@@ -2859,7 +2884,7 @@ upgrades.push(
  {id:"bushPrimeSense",need:"shroud",tag:"PRIME EVOLUTION",title:"Sixth Sense",text:"Bush Ambush sees incoming attacks 1.5s early instead of 1s. Successfully avoiding an attack refunds 2.5s instead of 1.5s."},
  {id:"frenzyPrimeFast",need:"rage",tag:"PRIME EVOLUTION",title:"Hot Blooded",text:"Wild Frenzy becomes PRIMED after 1.5s READY instead of 3s. Its Primed duration bonus becomes +3s instead of +2s."},
  {id:"wallPrimeEasy",need:"wall",tag:"PRIME EVOLUTION",title:"Brace Yourself",text:"Boulder Wall can PRIME from one nearby Elite/Boss, and its Primed shield bonus rises from +25% to +40%."},
- {id:"chargePrimeNear",need:"charge",tag:"PRIME EVOLUTION",title:"Head Start",text:"Primal Charge needs about 50px less distance to become PRIMED, and its bonus Prime impact damage increases."},
+ {id:"chargePrimeNear",need:"charge",tag:"PRIME EVOLUTION",title:"Full Tilt",text:"Primal Rush becomes PRIMED at 120px instead of 170px. Its PRIMED first-hit bonus rises from +40% to +55%."},
  {id:"beatPrimeOpen",need:"beatdown",tag:"PRIME EVOLUTION",title:"Blood in the Water",text:"Savage Beatdown also becomes PRIMED against targets below 35% HP, and its Primed finisher gains more bonus damage."}
 );
 
