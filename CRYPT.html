@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Bigfoot Arsenal v4.1</title>
+<title>Cryptids & Kings — Four-Slot Arsenal v4.2</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -138,6 +138,13 @@ body[data-screen="game"]{padding:6px}
 #setup .infoGrid details{margin:0}
 @media(min-width:700px){#setup .infoGrid.two{grid-template-columns:repeat(2,1fr)}}
 
+
+/* ===== FOUR-SLOT COMBAT HUD V4.2 ===== */
+#skills{grid-template-columns:repeat(2,1fr)}
+#skills .skill.ultimate{grid-column:1/-1;min-height:76px;border-color:#b0874f;background:linear-gradient(#574a32,#3a3529)}
+#skills .skill.ultimate b{color:#fff0bd}
+@media(min-width:700px){#skills{grid-template-columns:repeat(2,1fr)}}
+
 </style>
 </head>
 <body>
@@ -196,7 +203,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Bigfoot Arsenal v4.1: three Basic Attacks, eight Ability choices, clearer targeting, rare travel interruptions, and direct combat-stat language.</div>
+<div class="muted">Four-Slot Arsenal v4.2: choose four of eight abilities, keep one Ultimate, and reward choices are protected against duplicate application.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -214,7 +221,7 @@ body[data-screen="game"]{padding:6px}
 </details>
 </div>
 
-<div class="section">ABILITIES — PICK 3</div>
+<div class="section">ABILITIES — PICK 4</div>
 <label class="caption">Ability 1</label>
 <select id="ability1" onchange="syncAbilityChoices()">
 <option value="slam" selected>Earth Slam — 5s • 360° AoE + knockback</option>
@@ -246,6 +253,17 @@ body[data-screen="game"]{padding:6px}
 <option value="rage">Wild Rage — 13s • 6s attack-speed burst</option>
 <option value="wall">Boulder Wall — 12s • timed shield + knockback</option>
 <option value="charge">Primal Charge — 9s • targeted gap closer</option>
+<option value="beatdown">Savage Beatdown — 10s • focused 3-hit combo</option>
+</select>
+<label class="caption">Ability 4</label>
+<select id="ability4" onchange="syncAbilityChoices()">
+<option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="tree">Uproot — 7s • piercing tree line</option>
+<option value="honey">Honey Stash — 12s • timed shield + recovery boost</option>
+<option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
+<option value="rage">Wild Rage — 13s • 6s attack-speed burst</option>
+<option value="wall">Boulder Wall — 12s • timed shield + knockback</option>
+<option value="charge" selected>Primal Charge — 9s • targeted gap closer</option>
 <option value="beatdown">Savage Beatdown — 10s • focused 3-hit combo</option>
 </select>
 <div class="infoGrid two">
@@ -312,7 +330,7 @@ body[data-screen="game"]{padding:6px}
 </details>
 </div>
 
-<div id="engine">ENGINE READY · BIGFOOT ARSENAL V4.1 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · FOUR-SLOT ARSENAL V4.2 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -436,7 +454,7 @@ function buildSkills(){
  var all=S.abilities.concat([S.ult]),bar=byId("skills"),i,id,b;
  bar.innerHTML="";
  for(i=0;i<all.length;i++){
-   id=all[i];b=document.createElement("button");b.type="button";b.className="skill ready";b.setAttribute("data-skill",id);
+   id=all[i];b=document.createElement("button");b.type="button";b.className="skill ready"+(id===S.ult?" ultimate":"");b.setAttribute("data-skill",id);
    b.innerHTML="<b>"+skillInfo[id].name+"</b><small>"+skillInfo[id].desc+"</small><span class='cd'>READY</span>";
    b.onclick=(function(skill){return function(){cast(skill)}})(id);bar.appendChild(b);
  }
@@ -621,7 +639,7 @@ function applyUpgrade(id){
  if(id==="colossal")S.mods.spin=true;
  if(id==="doubleRock")S.mods.rocks=2;
  if(id==="ricochet")S.mods.rockBounce=1;
- if(id==="slamWide")S.mods.slamR+=60;
+ if(id==="slamWide")S.mods.slamR=Math.max(S.mods.slamR,182);
  if(id==="aftershock")S.mods.aftershock=true;
  if(id==="timber")S.mods.treeW+=19;
  if(id==="splinter")S.mods.splinter=true;
@@ -1275,7 +1293,7 @@ applyUpgrade=function(id){
  if(id==="power")S.mods.basic*=1.18;if(id==="heart"){S.h.max+=150;S.h.hp=Math.min(S.h.max,S.h.hp+150)}if(id==="armor")S.h.armor+=14;if(id==="quick")S.mods.move*=1.12;
  if(id==="cleave")S.mods.cleave=true;if(id==="colossal")S.mods.spin=true;if(id==="mountainBreaker")S.mods.thirdPower=1.7;
  if(id==="doubleRock")S.mods.rocks=2;if(id==="ricochet")S.mods.rockBounce=1;
- if(id==="slamWide")S.mods.slamR+=60;if(id==="aftershock")S.mods.aftershock=true;if(id==="tectonic")S.mods.afterPower=1.45;
+ if(id==="slamWide")S.mods.slamR=Math.max(S.mods.slamR,182);if(id==="aftershock")S.mods.aftershock=true;if(id==="tectonic")S.mods.afterPower=1.45;
  if(id==="timber")S.mods.treeW+=19;if(id==="splinter")S.mods.splinter=true;if(id==="ancientRedwood"){S.mods.treeW+=24;S.mods.redwoodDouble=true}
  if(id==="royal")S.mods.honeyCamp=.20;if(id==="predator")S.mods.shroudMult=2.6;if(id==="unleashed"){S.mods.rageDur=8;S.mods.rageDmg=1.24}if(id==="fort")S.mods.wallShield+=150;if(id==="terror"){S.mods.roarPower=1.4;S.mods.roarDur=10}if(id==="mountain")S.mods.avPower=1.4;
  if(id==="barbed")S.hook.damage*=1.6;if(id==="deepSet")S.hook.duration+=3;if(id==="fastReel")S.hook.rate*=.65;if(id==="doubleHook")S.hook.count=2;if(id==="serrated")S.hook.tickRate*=.65;if(id==="castNet")S.hook.count=3;if(id==="oldAngler"){S.hook.damage*=1.35;S.hook.rate*=.85}
@@ -2521,6 +2539,63 @@ update=function(dt){
  if(!S)return _v41Update2(dt);var before=S.h.combo;_v41Update2(dt);if(!S||S.paused)return;
  if(S.basic==="limb"&&S.owned.limbCrack&&S.h.combo!==before&&S.h.combo%4===0){var t=nearestTo(S.h);if(t&&dist(S.h,t)<150){var old=S.v37DamageClass;S.v37DamageClass="";damageEnemy(t,70*.60*S.mods.basic*(1+((S.stats&&S.stats.might)||0)*.05),18,S.h.x,S.h.y);S.v37DamageClass=old||"";S.v41Fx.push({kind:"beatHit",x:t.x,y:t.y,t:.34,max:.34,hit:3})}}
 };
+})();
+</script>
+
+
+<script>
+/* ===== FOUR-SLOT LOADOUT + REWARD SAFETY V4.2 ===== */
+(function(){
+var _v42ShowDecision=showDecision,_v42ApplyUpgrade=applyUpgrade;
+var v42DecisionSerial=0,v42LockedSerial=-1;
+
+syncAbilityChoices=function(){
+ var ids=["ability1","ability2","ability3","ability4"],vals={},i,j,used;
+ for(i=0;i<ids.length;i++)vals[ids[i]]=byId(ids[i]).value;
+ for(i=0;i<ids.length;i++){used={};for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;rebuildSelect(ids[i],abilityChoices,used)}
+};
+
+readLoadout=function(){
+ var a=[byId("ability1").value,byId("ability2").value,byId("ability3").value,byId("ability4").value];
+ var p=[byId("passive1").value,byId("passive2").value],ao={},po={},i,k,ac=0,pc=0;
+ for(i=0;i<a.length;i++)ao[a[i]]=1;for(i=0;i<p.length;i++)po[p[i]]=1;
+ for(k in ao)if(ao.hasOwnProperty(k))ac++;for(k in po)if(po.hasOwnProperty(k))pc++;
+ if(ac!==4){byId("msg").innerHTML="Choose 4 different abilities.";return null}
+ if(pc!==2){byId("msg").innerHTML="Choose 2 different passives.";return null}
+ return{basic:byId("basic").value,abilities:a,ult:byId("ult").value,passives:p};
+};
+
+showDecision=function(title,text,cards,cols){
+ var serial=++v42DecisionSerial;v42LockedSerial=-1;
+ var safeCards=[];
+ for(var i=0;i<cards.length;i++)(function(c){
+   var copy={};for(var k in c)copy[k]=c[k];
+   copy.go=function(){
+     if(v42LockedSerial===serial)return;
+     v42LockedSerial=serial;
+     var buttons=byId("decisionCards").querySelectorAll("button");
+     for(var q=0;q<buttons.length;q++){buttons[q].disabled=true;buttons[q].style.opacity=.62;buttons[q].style.pointerEvents="none"}
+     if(c.go)c.go();
+   };
+   safeCards.push(copy);
+ })(cards[i]);
+ _v42ShowDecision(title,text,safeCards,cols);
+};
+
+applyUpgrade=function(id){
+ if(!S)return;
+ if(S.owned&&S.owned[id])return;
+ var beforeTitle=byId("decisionTitle")?byId("decisionTitle").innerHTML:"";
+ _v42ApplyUpgrade(id);
+ /* A reward must always leave the ROOM CLEARED screen after the first successful application. */
+ if(S&&beforeTitle==="ROOM CLEARED"&&byId("decisionTitle")&&byId("decisionTitle").innerHTML==="ROOM CLEARED"){
+   if(S.room===5&&!S.item)showItemHunt();
+   else if(S.roomKind==="elite"&&typeof showEliteBonus==="function")showEliteBonus();
+   else showPathChoice("Evolution acquired. Choose where Bigfoot goes next.");
+ }
+};
+
+syncAbilityChoices();
 })();
 </script>
 
