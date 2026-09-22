@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Rage & Prime v4.6</title>
+<title>Cryptids & Kings — Content Expansion v4.7</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -223,7 +223,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Rage & Prime v4.6: Bigfoot builds Rage through combat, spends it on abilities, and gets stronger casts when battlefield conditions PRIME an ability.</div>
+<div class="muted">Content Expansion v4.7: Bigfoot builds Rage through combat, spends it on abilities, and now faces a much larger roster of enemy specialists, formations, and Evolutions.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -358,7 +358,7 @@ body[data-screen="game"]{padding:6px}
 <div><b>PRIMED:</b> the battlefield is giving that ability its ideal opportunity. You can always cast unprimed, but a Primed cast gets a unique bonus. Primal Rush primes against a distant ranged target.</div>
 <div><b>Prime Evolutions:</b> Evolutions can make a Prime condition easier to reach or make the Primed payoff stronger.</div>
 </details>
-<div id="engine">ENGINE READY · RAGE & PRIME V4.6 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · CONTENT EXPANSION V4.7 · 12 ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -1529,7 +1529,7 @@ addMany([
 
  /* Logger's Chainsaw */
  {id:"chainFresh",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Fresh Chain",text:"Chainsaw Mode basic attacks deal +20% damage while keeping all normal basic scaling."},
- {id:"chainQuick",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Quick Start",text:"Chainsaw Mode reactivates every 12s instead of every 15s."},
+ {id:"chainQuick",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Quick Start",text:"Chainsaw Mode reactivates every 10.5s instead of every 13s."},
  {id:"chainGas",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Extra Gas",text:"Chainsaw Mode lasts 7s instead of 5s."},
  {id:"chainWide",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Wide Teeth",text:"Melee chainsaw basics splash nearby enemies. Ranged chainsaw basics fling 2 extra side rocks at 45% damage."},
  {id:"chainDust",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Sawdust Cloud",text:"Enemies within 115px during Chainsaw Mode move 30% slower."},
@@ -1548,7 +1548,7 @@ showItemHunt=function(){
   {item:"ring",title:"Wedding Ring",text:"Mrs. Bigfoot stays safely on the sideline, pelting enemies with Purse Tosses and unlocking fast independent buffs after her makeup delay."},
   {item:"baseball",title:"Baseball & Glove",text:"Bigfoot's son stays safely on the sideline and periodically throws Dad a ball to catch and fire back for big damage."},
   {item:"camera",title:"Trail Camera",text:"A stolen trail camera periodically flashes nearby enemies, stunning and Exposing them. It can evolve into a blunt weapon too."},
-  {item:"chainsaw",title:"Logger's Chainsaw",text:"Every 15s, Bigfoot enters 5s of Chainsaw Mode: his normal selected basic temporarily attacks roughly 5x faster while keeping its scaling."}
+  {item:"chainsaw",title:"Logger's Chainsaw",text:"Every 13s, Bigfoot enters 5s of Chainsaw Mode: his normal selected basic attacks roughly 5x faster and Bigfoot gains +20% Movement Speed while the saw is running."}
  ];
  shuffle(all);all=all.slice(0,3);var cards=[];
  for(var i=0;i<all.length;i++)(function(o){cards.push({cls:"item",tag:"UNIQUE ITEM",title:o.title,text:o.text,go:function(){chooseItem(o.item)}})})(all[i]);
@@ -1561,7 +1561,7 @@ function itemTutorialData(item){
  if(item==="ring")return{title:"WEDDING RING — BETTER HALF",html:"<div class='mechanicBox'><b>Mrs. Bigfoot:</b> stays safely on the sideline and cannot be targeted.<br><b>Purse Toss:</b> starts quickly and repeats about every <b>4.2s</b>, dealing <b>80 damage</b> from the sideline.<br><b>Makeup:</b> after <b>5s</b>, her full support kit activates. Evolutions can shorten this to 3s, 1s, or immediately.<br><b>Support Evolutions:</b> Packed His Lunch, Get Him Honey, and Watch Out each use <b>their own fast timer</b> and never replace one another.<br><b>Identity:</b> she never becomes another melee pet — her value is ranged damage, buffs, protection, Marks, and Rage support.</div>"};
  if(item==="baseball")return{title:"BASEBALL & GLOVE — PLAY CATCH",html:"<div class='mechanicBox'><b>Bigfoot's son:</b> stands safely on the sideline and cannot be targeted.<br><b>Every 7s:</b> he throws a baseball toward Bigfoot.<br><b>Catch:</b> Bigfoot catches it automatically, even while moving.<br><b>Return throw:</b> Bigfoot instantly fires it at the nearest enemy for <b>1.75x current basic-attack damage</b>.<br><b>Scaling:</b> the throw uses Bigfoot's normal basic damage scaling. Evolutions add faster throws, ricochets, a 6-Rage catch upgrade, cooldown reduction, and explosive Home Runs.</div>"};
  if(item==="camera")return{title:"TRAIL CAMERA — SAY CHEESE",html:"<div class='mechanicBox'><b>Flash:</b> every <b>8s</b>, the stolen camera flashes enemies within <b>170px</b> of Bigfoot.<br><b>Normal enemies:</b> stunned for <b>0.8s</b>.<br><b>Bosses/elites:</b> only briefly interrupted/hampered, not fully locked down.<br><b>Exposed:</b> flashed enemies take <b>+12% damage for 4s</b>.<br><b>Evolutions:</b> bigger flashes, stronger Exposed, faster recharge, swinging the camera as a weapon, throwing it, and overloaded flash explosions.</div>"};
- return{title:"LOGGER'S CHAINSAW — REV IT UP",html:"<div class='mechanicBox'><b>Chainsaw Mode:</b> every <b>15s</b>, Bigfoot enters Chainsaw Mode for <b>5s</b>.<br><b>Basic replacement:</b> while active, Bigfoot uses his normal selected basic at roughly <b>5x attack speed</b> while keeping its normal damage scaling.<br><b>Mighty Swipes:</b> rapid chainsaw sweeps.<br><b>Throwing Rocks:</b> the spinning chain/blades fling rocks forward in a rapid stream.<br><b>Evolutions:</b> longer mode, faster reactivation, splash, sawdust slow, kill explosions, and REDLINE.</div>"};
+ return{title:"LOGGER'S CHAINSAW — REV IT UP",html:"<div class='mechanicBox'><b>Chainsaw Mode:</b> every <b>13s</b>, Bigfoot enters Chainsaw Mode for <b>5s</b> and gains <b>+20% Movement Speed</b>.<br><b>Basic replacement:</b> while active, Bigfoot uses his normal selected basic at roughly <b>5x attack speed</b> while keeping its normal damage scaling.<br><b>Mighty Swipes:</b> rapid chainsaw sweeps.<br><b>Throwing Rocks:</b> the spinning chain/blades fling rocks forward in a rapid stream.<br><b>Evolutions:</b> longer mode, faster reactivation, splash, sawdust slow, kill explosions, and REDLINE.</div>"};
 }
 
 function showItemTutorial(item){var d=itemTutorialData(item);showDecision(d.title,d.html,[{cls:"item",tag:"MECHANIC EXPLAINED",title:"Continue the Hunt",text:"This item's Evolutions can now appear after combat rooms.",go:function(){showPathChoice("Unique item acquired: <b>"+V3_ITEM_NAMES[item]+"</b>.")}}],1)}
@@ -1573,7 +1573,7 @@ chooseItem=function(item){
  if(item==="ring"){S.ring={threshold:-1,shield:0};S.ringProc=true;S.mrs={x:720,y:465,joinDelay:5,ready:5,joined:false,purseTimer:2.2,lunchTimer:5,cheerTimer:6,guardTimer:7,damageBuffT:0,damage:42,attackRate:.8,atk:0,rage:0,slamTimer:6,face:0};byId("itemBadge").innerHTML="WEDDING RING · BETTER HALF"}
  if(item==="baseball"){S.ball={rate:999999,damage:1.75,bounces:0,speed:560,homeRun:false};S.son={x:720,y:468,throwRate:7,timer:2.5,count:0};S.sonBalls=[];byId("itemBadge").innerHTML="BASEBALL & GLOVE · PLAY CATCH"}
  if(item==="camera"){S.camera={rate:8,timer:2.8,radius:170,stun:.8,expose:4,vuln:.12,flashT:0,flashCount:0,bashRate:999,bashTimer:4.5,bashDamage:80,bashRadius:95,throwTimer:7,counterCd:0,x:S.h.x+38,y:S.h.y+28};byId("itemBadge").innerHTML="TRAIL CAMERA · SAY CHEESE"}
- if(item==="chainsaw"){S.chainsaw={cycle:15,timer:15,duration:5,active:0,damage:1,rateMult:5,killGuard:false};byId("itemBadge").innerHTML="LOGGER'S CHAINSAW · REV IT UP"}
+ if(item==="chainsaw"){S.chainsaw={cycle:13,timer:13,duration:5,active:0,damage:1,rateMult:5,killGuard:false};byId("itemBadge").innerHTML="LOGGER'S CHAINSAW · REV IT UP"}
  byId("itemBadge").style.display="block";byId("status").innerHTML=V3_ITEM_NAMES[item]+" acquired.";showItemTutorial(item);
 };
 
@@ -1616,7 +1616,7 @@ applyUpgrade=function(id){
  if(id==="mrsFiveMinute")S.mrs.joinDelay=3;if(id==="mrsGoodEnough")S.mrs.joinDelay=1;if(id==="mrsNoTime")S.mrs.joinDelay=0;if(id==="mrsLunch"){}if(id==="mrsCheer"){}if(id==="mrsWatchOut"){}if(id==="mrsPurse"){}if(id==="mrsPrepared"){}if(id==="mrsBetterHalf"){S.mrs.damage=65;S.mrs.attackRate=.68}if(id==="mrsHusband"){}if(id==="mrsCombo"){}if(id==="mrsSmash"){}if(id==="mrsPowerCouple"){};
  if(id==="sonGoodThrow")S.son.throwRate=5.5;if(id==="sonFastball"){S.ball.damage*=1.45;S.ball.speed*=1.20}if(id==="sonPlayCatch")S.ball.bounces=1;if(id==="sonCurveball")S.ball.bounces=2;if(id==="sonProudDad"){}if(id==="sonPerfectCatch"){}if(id==="sonDadStrength"){}if(id==="sonHomeRun")S.ball.homeRun=true;
  if(id==="camBlinding"){S.camera.radius=220;S.camera.stun=1.15}if(id==="camOverexposed"){S.camera.expose=5;S.camera.vuln=.22}if(id==="camRapid")S.camera.rate=6;if(id==="camBash"){S.camera.bashRate=5;S.camera.bashTimer=2.5}if(id==="camHeavy")S.camera.bashDamage=130;if(id==="camTripod")S.camera.bashRadius=140;if(id==="camFlashSmash"){}if(id==="camThrow")S.camera.throwTimer=3;if(id==="camNoPictures"){}if(id==="camProof"){};
- if(id==="chainFresh")S.chainsaw.damage*=1.20;if(id==="chainQuick")S.chainsaw.cycle=12;if(id==="chainGas")S.chainsaw.duration=7;if(id==="chainWide"){}if(id==="chainDust"){}if(id==="chainChipper"){}if(id==="chainThrottle"){}if(id==="chainCool"){}if(id==="chainLogging"){}if(id==="chainRedline"){};
+ if(id==="chainFresh")S.chainsaw.damage*=1.20;if(id==="chainQuick")S.chainsaw.cycle=10.5;if(id==="chainGas")S.chainsaw.duration=7;if(id==="chainWide"){}if(id==="chainDust"){}if(id==="chainChipper"){}if(id==="chainThrottle"){}if(id==="chainCool"){}if(id==="chainLogging"){}if(id==="chainRedline"){};
  afterV3Upgrade();
 };
 
@@ -1971,6 +1971,7 @@ damageEnemy=function(e,n,k,sx,sy){var wasAlive=e&&!e.dead&&e.hp>0,wasElite=wasAl
 
 /* Cooldowns have a fresh Starting Cooldown every room. Holding skills between rooms is never required. */
 function startingCooldown(id){var base={slam:0,tree:0,honey:2,shroud:1,rage:3,wall:2,roar:12,avalanche:13}[id]||0;if(id===S.ult&&S.owned.v37UltCharge)base=skillInfo[id].cd*.25;if(id==="rage"&&S.owned.v37RageReady)base=0;if(id!==S.ult&&S.owned.v37BattleReady)base=Math.max(0,base-1.5);return base}
+window.startingCooldown=startingCooldown;
 function resetRoomCombatState(){if(!S)return;ensureStats();S.h.shield=0;S.h.shieldT=0;S.h.shieldSource="";S.h.rage=0;S.h.inv=0;S.h.roarDR=0;S.h.armorTemp=0;S.h.armorTempT=0;S.h.bonusNext=false;S.h.bushT=0;S.v37FirstAbility=false;S.cds={};for(var i=0;i<S.abilities.length;i++)S.cds[S.abilities[i]]=startingCooldown(S.abilities[i]);S.cds[S.ult]=startingCooldown(S.ult);if(S.item==="fishing"&&S.hook)S.hook.timer=.6;if(S.item==="chainsaw"&&S.chainsaw){S.chainsaw.active=0;S.chainsaw.timer=S.chainsaw.cycle}if(S.item==="camera"&&S.camera)S.camera.timer=2.8;if(S.item==="baseball"&&S.son)S.son.timer=2.5;}
 spawnCombat=function(kind){_v37Spawn(kind);resetRoomCombatState();S.v37Reinforced=false;S.v37WaveKind=kind};
 enterFixedBoss=function(){_v37Boss();resetRoomCombatState();S.v37Reinforced=true;S.v37WaveKind="boss"};
@@ -2086,7 +2087,7 @@ function v38Ensure(){
 }
 function v38ClampArena(e){e.x=clamp(e.x,35,725);e.y=clamp(e.y,40,485)}
 function v38Find(uid){for(var i=0;i<S.en.length;i++)if(S.en[i].uid===uid&&!S.en[i].dead)return S.en[i];return null}
-function v38RangedAlly(e){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){var o=S.en[i];if(o===e||o.dead)continue;if(o.type!=="archer"&&o.type!=="poison"&&o.type!=="mush")continue;var d=dist(e,o);if(d<bd){bd=d;best=o}}return best}
+function v38RangedAlly(e){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){var o=S.en[i];if(o===e||o.dead)continue;if(o.type!=="archer"&&o.type!=="poison"&&o.type!=="mush"&&o.type!=="trapper"&&o.type!=="shaman"&&o.type!=="bomber"&&o.type!=="handler")continue;var d=dist(e,o);if(d<bd){bd=d;best=o}}return best}
 function v38SetTemp(e,k,v){var q="_v38Orig_"+k;if(e[q]===undefined)e[q]=e[k];e[k]=v}
 function v38Lock(e){v38SetTemp(e,"spd",0);v38SetTemp(e,"range",999);e.atk=Math.max(e.atk||0,.24)}
 function v38RestoreTemps(){if(!S)return;for(var i=0;i<S.en.length;i++){var e=S.en[i],keys=["spd","range"];for(var j=0;j<keys.length;j++){var k=keys[j],q="_v38Orig_"+k;if(e[q]!==undefined){e[k]=e[q];delete e[q]}}}}
@@ -2365,7 +2366,7 @@ function v39ThemedReinforcement(){
 }
 function v39Alive(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead)n++;return n}
 
-function v39NearestRanged(exclude,exclude2){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){var o=S.en[i];if(o.dead||o===exclude||o===exclude2)continue;if(o.type!=="archer"&&o.type!=="poison"&&o.type!=="mush")continue;var d=dist(exclude,o);if(d<bd){bd=d;best=o}}return best}
+function v39NearestRanged(exclude,exclude2){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){var o=S.en[i];if(o.dead||o===exclude||o===exclude2)continue;if(o.type!=="archer"&&o.type!=="poison"&&o.type!=="mush"&&o.type!=="trapper"&&o.type!=="shaman"&&o.type!=="bomber"&&o.type!=="handler")continue;var d=dist(exclude,o);if(d<bd){bd=d;best=o}}return best}
 function v39QueueMutationEvents(dt){var ev=[];for(var i=0;i<S.en.length;i++){var e=S.en[i],c=e.v38&&e.v38.cast;if(!e.dead&&e.v39Mutation&&c&&c.t<=dt+.002&&(e.stunT||0)<=0&&(e.fear||0)<=0)ev.push({e:e,kind:c.kind,data:c.data||{}})}return ev}
 function v39AfterMutationEvents(ev){for(var i=0;i<ev.length;i++){var e=ev[i].e;if(!e||e.dead)continue;if(e.v39Mutation==="DOUBLE DASH"&&ev[i].kind==="archerDash"){if(!e.v39DoubleDashUsed){e.v39DoubleDashUsed=true;e.v38.cd.dash=Math.min(e.v38.cd.dash,1.35)}else e.v39DoubleDashUsed=false}
  else if(e.v39Mutation==="TWIN GUARD"&&ev[i].kind==="guardAlly"){var first=null;if(ev[i].data&&ev[i].data.target)for(var q=0;q<S.en.length;q++)if(S.en[q].uid===ev[i].data.target)first=S.en[q];var t=v39NearestRanged(e,first);if(t&&t.v38){t.v38.guardT=Math.max(t.v38.guardT||0,4.2);t.v38.guardFrom=e.uid}}
@@ -2444,7 +2445,7 @@ function v41AbilityDamage(e,n,k,sx,sy){
  var old=S.v37DamageClass;S.v37DamageClass="ability";damageEnemy(e,n,k,sx,sy);S.v37DamageClass=old||"";
 }
 function v41Alive(){return S.en.filter(function(e){return !e.dead})}
-function v41IsRanged(e){return e&&(e.type==="archer"||e.type==="poison"||e.type==="mush")}
+function v41IsRanged(e){return e&&(e.type==="archer"||e.type==="poison"||e.type==="mush"||e.type==="trapper"||e.type==="shaman"||e.type==="bomber"||e.type==="handler")}
 function v41ChargeTarget(){
  if(!S||!S.en)return null;var list=v41Alive(),best=null,bd=-1,i,e,d;
  for(i=0;i<list.length;i++){e=list[i];if(!v41IsRanged(e))continue;d=dist(S.h,e);if(d>bd){bd=d;best=e}}
@@ -2538,7 +2539,7 @@ update=function(dt){
 };
 
 function v41DrawCombatFx(){
- if(!S)return;var i,f,a;
+ if(!S)return;v41Ensure();var i,f,a;
  if(S.v41InstinctT>0){ctx.save();ctx.globalAlpha=.55+.18*Math.sin(Date.now()/90);ctx.strokeStyle="#ff765e";ctx.lineWidth=5;ctx.beginPath();ctx.arc(S.h.x,S.h.y,45,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffd7cd";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("INSTINCT",S.h.x,S.h.y-50);ctx.restore()}
  for(i=0;i<S.en.length;i++)if(S.en[i].v41CrackedT>0&&!S.en[i].dead){var e=S.en[i];ctx.save();ctx.strokeStyle="rgba(255,126,92,.92)";ctx.lineWidth=3;ctx.setLineDash([5,4]);ctx.beginPath();ctx.arc(e.x,e.y,40*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#ffb29a";ctx.font="900 8px system-ui";ctx.textAlign="center";ctx.fillText("CRACKED",e.x,e.y+48*(e.scale||1));ctx.restore()}
  for(i=0;i<S.v41Fx.length;i++){f=S.v41Fx[i];a=Math.max(0,f.t/(f.max||1));ctx.save();ctx.globalAlpha=a;if(f.kind==="chargeHit"){ctx.strokeStyle="#89efff";ctx.lineWidth=9;ctx.beginPath();ctx.arc(f.x,f.y,54*(1-a*.25),0,Math.PI*2);ctx.stroke()}else if(f.kind==="beatHit"){ctx.strokeStyle=f.hit===3?"#ff795c":"#f7dfaa";ctx.lineWidth=f.hit===3?9:6;ctx.beginPath();ctx.arc(f.x,f.y,32+(1-a)*18,0,Math.PI*2);ctx.stroke()}ctx.restore()}
@@ -2658,7 +2659,7 @@ function v43Ensure(){
 function v43AddRage(n,label){if(!S)return;v43Ensure();var before=S.v43Rage;S.v43Rage=clamp(S.v43Rage+n,0,100);if(label&&S.v43Rage>before){S.v43Fx.push({kind:"rageGain",n:Math.round(S.v43Rage-before),x:S.h.x,y:S.h.y,t:.55,max:.55});S.v45RagePulse=.28}}
 window.v43GrantRage=v43AddRage;
 function v43IsBoss(e){return e&&(e.type==="boss"||e.type==="miniboss"||e.eliteMod)}
-function v43Ranged(e){return e&&(e.type==="archer"||e.type==="poison"||e.type==="mush")}
+function v43Ranged(e){return e&&(e.type==="archer"||e.type==="poison"||e.type==="mush"||e.type==="trapper"||e.type==="shaman"||e.type==="bomber"||e.type==="handler")}
 function v43Alive(){return S.en.filter(function(e){return !e.dead})}
 function v43Nearest(){return nearestTo(S.h)}
 function v43CountNear(r){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(S.h,S.en[i])<=r)n++;return n}
@@ -2918,6 +2919,440 @@ for(var ui=0;ui<upgrades.length;ui++){
 }
 
 })();
+</script>
+
+<style id="v47Styles">
+.skill .rageCost{white-space:nowrap}
+</style>
+<script>
+/* ===== CONTENT EXPANSION V4.7 — ENEMIES + ENCOUNTERS ===== */
+var _v47MakeEnemy=makeEnemy;
+var _v47SpawnBase=spawnCombat;
+var _v47EnemyAttack=enemyAttack;
+var _v47KnockBase=knockEnemy;
+var V47_RANGED={archer:1,poison:1,mush:1,trapper:1,shaman:1,bomber:1,handler:1};
+var V47_NEW_TYPES={berserker:1,trapper:1,shaman:1,bomber:1,runner:1,handler:1,hound:1,crusher:1};
+var V47_BASE={
+ berserker:[145,50,18,40],trapper:[112,34,14,165],shaman:[122,30,12,178],bomber:[132,28,16,190],
+ runner:[98,58,15,40],handler:[148,36,14,152],hound:[78,62,12,34],crusher:[350,24,29,50]
+};
+function v47RoomHpScale(){return 1+(Math.max(1,S.room)-1)*.08}
+function v47RoomDamageScale(){return 1+(Math.max(1,S.room)-1)*.045}
+function v47OldHpScale(){return 1+(Math.max(1,S.room)-1)*.07}
+function v47OldDamageScale(){return 1+(Math.max(1,S.room)-1)*.04}
+function v47InitEnemy(e){
+ if(!e||e.v47)return e;
+ e.v47={cd:{},cast:null,motion:null,powerT:0,enraged:false,owner:0};
+ if(e.type==="trapper")e.v47.cd.trap=rnd(2.8,4.8);
+ else if(e.type==="shaman")e.v47.cd.chant=rnd(3.8,6);
+ else if(e.type==="bomber")e.v47.cd.bomb=rnd(2.5,4.5);
+ else if(e.type==="runner")e.v47.cd.dash=rnd(2.6,4.4);
+ else if(e.type==="handler")e.v47.cd.summon=rnd(4.5,6.8);
+ else if(e.type==="crusher")e.v47.cd.smash=rnd(3.8,5.8);
+ return e;
+}
+makeEnemy=function(type,x,y){
+ var e,b,hr,dr;
+ if(V47_NEW_TYPES[type]){
+   e=_v47MakeEnemy("gob",x,y);b=V47_BASE[type];e.type=type;e.hp=e.max=b[0]*v47RoomHpScale();e.spd=b[1];e.dmg=b[2]*v47RoomDamageScale();e.range=b[3];e.scale=1;e.resist=0;e.regen=0;e.eliteMod=null;e.toxic=false;
+   if(type==="crusher"){e.resist=.24;e.scale=1.10}if(type==="hound")e.scale=.78;
+   return v47InitEnemy(e);
+ }
+ e=_v47MakeEnemy(type,x,y);hr=v47RoomHpScale()/v47OldHpScale();dr=v47RoomDamageScale()/v47OldDamageScale();e.hp*=hr;e.max*=hr;e.dmg*=dr;return e;
+};
+function v47Alive(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead)n++;return n}
+function v47Find(uid){for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i].uid===uid)return S.en[i];return null}
+function v47Add(type,x,y){addEnemy(type,clamp(x,44,716),clamp(y,50,476));return S.en[S.en.length-1]}
+function v47Outer(type,a,r){return v47Add(type,380+Math.cos(a)*r,270+Math.sin(a)*r)}
+function v47Fill(pool,target){while(S.en.length<target){var a=rnd(0,Math.PI*2),r=rnd(165,285);v47Outer(pickOne(pool),a,r)}}
+function v47Ranged(type){return !!V47_RANGED[type]}
+function v47CountOwnedHounds(owner){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i].type==="hound"&&S.en[i].v47&&S.en[i].v47.owner===owner)n++;return n}
+function v47LowestAlly(e){var best=null,ratio=2;for(var i=0;i<S.en.length;i++){var q=S.en[i];if(q.dead||q===e)continue;var r=q.hp/q.max;if(r<ratio&&dist(e,q)<290){ratio=r;best=q}}return best}
+function v47Lock(e){if(e._v47TempSpd===undefined)e._v47TempSpd=e.spd;if(e._v47TempRange===undefined)e._v47TempRange=e.range;e.spd=0;e.range=999;e.atk=Math.max(e.atk||0,.22)}
+function v47RestoreTemps(){for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e._v47TempSpd!==undefined){e.spd=e._v47TempSpd;delete e._v47TempSpd}if(e._v47TempRange!==undefined){e.range=e._v47TempRange;delete e._v47TempRange}if(e._v47TempDmg!==undefined){e.dmg=e._v47TempDmg;delete e._v47TempDmg}}}
+function v47StartCast(e,kind,t,data){e.v47.cast={kind:kind,t:t,max:t,data:data||{}};e.winding=false;e.wind=0;v47Lock(e)}
+function v47StartMotion(e,kind,t,speed,a,damage){e.v47.motion={kind:kind,t:t,max:t,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,hit:false,damage:damage}}
+function v47SpawnTraitHounds(e){for(var i=0;i<2;i++){var a=i*Math.PI+rnd(-.3,.3),h=v47Add("hound",e.x+Math.cos(a)*45,e.y+Math.sin(a)*45);v47InitEnemy(h);h.v47.owner=e.uid}}
+function v47ExecuteCast(e,c){
+ var d=c.data||{},t,a,q;
+ if(c.kind==="trap")S.v47Traps.push({x:d.x,y:d.y,r:42,arm:.45,t:6,max:6,triggered:false});
+ else if(c.kind==="chant"){
+   t=v47Find(d.target);if(t){t.hp=Math.min(t.max,t.hp+t.max*.12);for(var i=0;i<S.en.length;i++){q=S.en[i];if(!q.dead&&dist(t,q)<165){v47InitEnemy(q);q.v47.powerT=Math.max(q.v47.powerT,4.5)}}S.v47Fx.push({kind:"chant",x:t.x,y:t.y,t:.65,max:.65})}
+ }else if(c.kind==="bomb")S.v47Bombs.push({x:d.x,y:d.y,r:58,t:.85,max:.85,damage:e.dmg*1.55,source:e,done:false});
+ else if(c.kind==="runnerDash"){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);v47StartMotion(e,"runnerDash",.42,440,a,e.dmg*1.25)}
+ else if(c.kind==="summonHound"){for(var h=0;h<2-v47CountOwnedHounds(e.uid);h++){a=rnd(0,Math.PI*2);q=v47Add("hound",e.x+Math.cos(a)*46,e.y+Math.sin(a)*46);v47InitEnemy(q);q.v47.owner=e.uid}S.v47Fx.push({kind:"whistle",x:e.x,y:e.y,t:.55,max:.55})}
+ else if(c.kind==="crusherSmash"){if(dist(e,S.h)<112&&S.h.inv<=0){hurtHero(e.dmg*1.42,e);S.v47HeroSlowT=Math.max(S.v47HeroSlowT||0,1.15)}S.shake=Math.max(S.shake,.30);S.v47Fx.push({kind:"crusher",x:e.x,y:e.y,t:.5,max:.5})}
+ e.atk=Math.max(e.atk,.45);
+}
+function v47TickMotion(e,dt){var m=e.v47.motion;if(!m)return false;v47Lock(e);m.t-=dt;e.x=clamp(e.x+m.vx*dt,38,722);e.y=clamp(e.y+m.vy*dt,45,482);if(!m.hit&&dist(e,S.h)<48&&S.h.inv<=0){hurtHero(m.damage,e);m.hit=true;var a=Math.atan2(S.h.y-e.y,S.h.x-e.x);S.h.x=clamp(S.h.x+Math.cos(a)*24,35,725);S.h.y=clamp(S.h.y+Math.sin(a)*24,42,485);S.shake=Math.max(S.shake,.18)}if(m.t<=0)e.v47.motion=null;return true}
+function v47PreAI(dt){
+ for(var i=0;i<S.en.length;i++){
+   var e=S.en[i];if(e.dead||!V47_NEW_TYPES[e.type])continue;v47InitEnemy(e);var v=e.v47,k;for(k in v.cd)v.cd[k]=Math.max(0,v.cd[k]-dt);v.powerT=Math.max(0,v.powerT-dt);
+   if(v.powerT>0){e._v47TempDmg=e.dmg;e.dmg*=1.15}if(e.v47Trait==="FRENZIED")e.atk=Math.max(0,(e.atk||0)-dt*.35);
+   if(v47TickMotion(e,dt))continue;
+   if(v.cast){v47Lock(e);v.cast.t-=dt;if(v.cast.t<=0){var done=v.cast;v.cast=null;v47ExecuteCast(e,done)}continue}
+   if((e.stunT||0)>0||(e.fear||0)>0||e.winding)continue;
+   var d=dist(e,S.h),t;
+   if(e.type==="berserker"&&!v.enraged&&e.hp/e.max<=.45){v.enraged=true;e.dmg*=1.35;S.v47Fx.push({kind:"berserk",x:e.x,y:e.y,t:.75,max:.75})}
+   if(e.type==="trapper"&&v.cd.trap<=0&&d<275){v.cd.trap=7.2;v47StartCast(e,"trap",.62,{x:S.h.x,y:S.h.y});continue}
+   if(e.type==="shaman"&&v.cd.chant<=0){t=v47LowestAlly(e);if(t&&t.hp/t.max<.90){v.cd.chant=8.2;v47StartCast(e,"chant",.82,{target:t.uid});continue}}
+   if(e.type==="bomber"&&v.cd.bomb<=0&&d<310){v.cd.bomb=6;v47StartCast(e,"bomb",.70,{x:S.h.x,y:S.h.y});continue}
+   if(e.type==="runner"&&v.cd.dash<=0&&d>72&&d<245){v.cd.dash=6.1;v47StartCast(e,"runnerDash",.22,{});continue}
+   if(e.type==="handler"&&v.cd.summon<=0&&v47CountOwnedHounds(e.uid)<2){v.cd.summon=9;v47StartCast(e,"summonHound",.72,{});continue}
+   if(e.type==="crusher"&&v.cd.smash<=0&&d<118){v.cd.smash=7.6;v47StartCast(e,"crusherSmash",.86,{});continue}
+ }
+}
+function v47UpdateShots(dt){for(var i=S.v47Shots.length-1;i>=0;i--){var p=S.v47Shots[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.t-=dt;if(dist(p,S.h)<19&&S.h.inv<=0){hurtHero(p.dmg,p.source||null);p.t=0;S.v47Fx.push({kind:"shot",x:S.h.x,y:S.h.y,t:.3,max:.3})}if(p.t<=0||p.x<-40||p.x>800||p.y<-40||p.y>560)S.v47Shots.splice(i,1)}}
+function v47UpdateZones(dt){
+ for(var i=S.v47Traps.length-1;i>=0;i--){var t=S.v47Traps[i];t.arm=Math.max(0,t.arm-dt);t.t-=dt;if(!t.triggered&&t.arm<=0&&dist(t,S.h)<t.r){t.triggered=true;S.v47HeroSlowT=Math.max(S.v47HeroSlowT||0,2.2);hurtHero(10+S.room*.65,null);S.v47Fx.push({kind:"trap",x:t.x,y:t.y,t:.42,max:.42})}if(t.t<=0||t.triggered)S.v47Traps.splice(i,1)}
+ for(i=S.v47Bombs.length-1;i>=0;i--){var b=S.v47Bombs[i];b.t-=dt;if(!b.done&&b.t<=0){b.done=true;if(dist(b,S.h)<b.r&&S.h.inv<=0)hurtHero(b.damage,b.source||null);S.shake=Math.max(S.shake,.22);S.v47Fx.push({kind:"bomb",x:b.x,y:b.y,t:.45,max:.45});b.t=-.18}if(b.t<-.16)S.v47Bombs.splice(i,1)}
+ S.v47HeroSlowT=Math.max(0,(S.v47HeroSlowT||0)-dt);
+}
+function v47Fire(type,e,speed,dmg){var a=Math.atan2(S.h.y-e.y,S.h.x-e.x);S.v47Shots.push({type:type,x:e.x,y:e.y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,t:1.9,dmg:dmg,source:e,rot:a})}
+enemyAttack=function(e){
+ if(e&&V47_NEW_TYPES[e.type]){e.attackAnim=.23;if(e.type==="trapper"){v47Fire("bolt",e,380,e.dmg);return}if(e.type==="shaman"){v47Fire("hex",e,330,e.dmg);return}if(e.type==="bomber"){S.v47Bombs.push({x:S.h.x,y:S.h.y,r:44,t:.58,max:.58,damage:e.dmg*1.05,source:e,done:false});return}if(e.type==="handler"){v47Fire("sling",e,350,e.dmg);return}if(dist(e,S.h)<e.range+18)hurtHero(e.dmg,e);return}
+ _v47EnemyAttack(e);
+};
+knockEnemy=function(e,k,sx,sy){if(e&&e.v47Trait==="JUGGERNAUT")k*=.38;if(e&&e.type==="crusher")k*=.55;_v47KnockBase(e,k,sx,sy)};
+
+var V47_ENCOUNTERS={
+ firing:{name:"FIRING LINE",min:1,desc:"Shield bearers screen archers while side attackers punish anyone who tunnels forward.",wave:["archer","spear","shield"]},
+ pincer:{name:"PINCER ATTACK",min:1,desc:"Attackers collapse from both flanks while ranged pressure holds the center.",wave:["spear","runner","archer"]},
+ toxic:{name:"TOXIC GARDEN",min:2,desc:"Poison creatures and guards turn safe ground into a shrinking puzzle.",wave:["poison","mush","shield"]},
+ escort:{name:"BRUTE ESCORT",min:3,desc:"A heavy bruiser advances behind protection while shooters work from the back line.",wave:["gob","shield","brute"]},
+ pack:{name:"HUNTER PACK",min:1,desc:"Fast melee enemies start wide and collapse from several directions.",wave:["gob","spear","runner"]},
+ siege:{name:"SIEGE",min:4,desc:"A ranged-heavy formation forces Bigfoot to cross dangerous ground under fire.",wave:["archer","poison","trapper"]},
+ brawl:{name:"BRAWL",min:3,desc:"Almost everything wants arm's length. Expect slams, lunges, and very little breathing room.",wave:["gob","spear","berserker"]},
+ trapline:{name:"TRAP LINE",min:3,desc:"Trappers seed the clearing while knife runners herd Bigfoot toward armed snares.",wave:["trapper","runner","gob"]},
+ warcamp:{name:"WAR CHANT",min:4,desc:"A shaman keeps a berserker line empowered. Reaching the support unit changes the whole fight.",wave:["berserker","shaman","shield"]},
+ powder:{name:"POWDER KEG",min:4,desc:"Bombardiers layer delayed explosions behind a screen of melee pressure.",wave:["bomber","runner","shield"]},
+ kennel:{name:"KENNEL RAID",min:5,desc:"Beast handlers whistle in hounds while ranged units punish anyone chasing the pack blindly.",wave:["handler","hound","hound"]},
+ knives:{name:"KNIFE STORM",min:3,desc:"Knife runners and spear fighters constantly break and re-enter melee range.",wave:["runner","runner","spear"]},
+ ironwall:{name:"IRON WALL",min:7,desc:"Crushers and shields make a slow armored front with a shaman keeping it alive.",wave:["crusher","shield","shaman"]},
+ crossfire:{name:"CROSSFIRE",min:4,desc:"Traps and bombs lock down lanes while archers fire through the gaps.",wave:["trapper","bomber","archer"]},
+ bloodhunt:{name:"BLOOD HUNT",min:6,desc:"Berserkers and hounds race the player while a handler keeps feeding the chase.",wave:["berserker","hound","handler"]},
+ ritual:{name:"RITUAL GUARD",min:5,desc:"Two shamans support a mixed guard. Leaving them alive makes every other enemy harder to finish.",wave:["shaman","shield","berserker"]},
+ veteran:{name:"VETERAN PATROL",min:8,desc:"Late-run specialists arrive together: armor, bombs, traps, support, and fast pressure in one room.",wave:["crusher","bomber","trapper","runner"]}
+};
+var V47_ENCOUNTER_IDS=Object.keys(V47_ENCOUNTERS);
+function v47WeightedKind(list){var total=0,i,r;for(i=0;i<list.length;i++)total+=list[i][1];r=Math.random()*total;for(i=0;i<list.length;i++){r-=list[i][1];if(r<=0)return list[i][0]}return list[0][0]}
+function v47EligibleEncounters(kind,roomNumber){var out=[],r=roomNumber==null?S.room:roomNumber;for(var i=0;i<V47_ENCOUNTER_IDS.length;i++){var id=V47_ENCOUNTER_IDS[i],m=V47_ENCOUNTERS[id];if(r<m.min)continue;if(kind==="ambush"&&id==="ironwall")continue;out.push(id)}return out}
+function v47PickEncounter(kind,exclude,roomNumber){var ids=v47EligibleEncounters(kind,roomNumber),recent=(S.v47RecentEncounters||[]).concat(S.v47RecentEncounterOffers||[]).concat(exclude||[]),fresh=ids.filter(function(id){return recent.indexOf(id)<0});if(fresh.length)ids=fresh;return pickOne(ids)}
+function v47TargetCount(kind){return Math.min(17,7+Math.floor(S.room*.78)+(kind==="elite"?1:0))}
+function v47SpawnTemplate(id,kind){
+ var target=v47TargetCount(kind),i,a,types;
+ if(id==="firing"){v47Add("archer",245,72);v47Add("archer",380,64);v47Add("archer",515,72);v47Add("shield",300,150);v47Add("shield",460,150);v47Add(S.room>=4?"trapper":"spear",125,275);v47Fill(["archer","shield","spear","gob"],target)}
+ else if(id==="pincer"){v47Add("spear",68,175);v47Add(S.room>=3?"runner":"gob",70,355);v47Add("spear",692,175);v47Add(S.room>=3?"runner":"gob",690,355);v47Add("archer",165,78);v47Add("archer",595,78);v47Fill(["spear","runner","gob","archer"],target)}
+ else if(id==="toxic"){v47Add("poison",130,110);v47Add("poison",630,110);v47Add("mush",135,425);v47Add("mush",625,425);v47Add("shield",260,120);v47Add("shield",500,120);v47Fill(["poison","mush","shield","gob"],target)}
+ else if(id==="escort"){v47Add("brute",380,82);v47Add("shield",305,155);v47Add("shield",455,155);v47Add("archer",220,72);v47Add("archer",540,72);v47Add("berserker",120,310);v47Fill(["gob","shield","spear","archer","berserker"],target)}
+ else if(id==="pack"){types=S.room>=3?["runner","gob","gob","spear","runner","gob","gob","spear"]:["gob","gob","gob","spear","gob","gob","gob","spear"];for(i=0;i<types.length&&S.en.length<target;i++){a=i/types.length*Math.PI*2+.18;v47Outer(types[i],a,kind==="ambush"?122:165)}v47Fill(["gob","runner","spear"],target)}
+ else if(id==="siege"){v47Add("archer",105,80);v47Add("archer",270,65);v47Add("archer",490,65);v47Add("archer",655,80);v47Add("trapper",110,430);v47Add("poison",650,430);v47Add("shield",300,160);v47Add("shield",460,160);v47Fill(["archer","poison","trapper","shield"],target)}
+ else if(id==="brawl"){v47Add("brute",380,90);v47Add("berserker",180,150);v47Add("berserker",580,150);v47Add("spear",140,400);v47Add("runner",620,400);v47Fill(["gob","spear","berserker","runner"],target)}
+ else if(id==="trapline"){v47Add("trapper",120,95);v47Add("trapper",640,95);v47Add("runner",110,430);v47Add("runner",650,430);v47Add("shield",300,150);v47Add("shield",460,150);v47Fill(["trapper","runner","gob","shield"],target)}
+ else if(id==="warcamp"){v47Add("shaman",380,74);v47Add("berserker",280,145);v47Add("berserker",480,145);v47Add("shield",210,210);v47Add("shield",550,210);v47Fill(["berserker","gob","shield","shaman"],target)}
+ else if(id==="powder"){v47Add("bomber",130,78);v47Add("bomber",630,78);v47Add("shield",275,150);v47Add("shield",485,150);v47Add("runner",95,395);v47Add("runner",665,395);v47Fill(["bomber","runner","shield","gob"],target)}
+ else if(id==="kennel"){v47Add("handler",175,92);v47Add("handler",585,92);v47Add("hound",135,175);v47Add("hound",625,175);v47Add("archer",380,68);v47Add("shield",380,160);v47Fill(["hound","gob","archer","handler"],target)}
+ else if(id==="knives"){for(i=0;i<6;i++){a=i/6*Math.PI*2+.25;v47Outer(i%2?"runner":"spear",a,155)}v47Add("archer",380,68);v47Fill(["runner","spear","gob"],target)}
+ else if(id==="ironwall"){v47Add("crusher",300,100);v47Add("crusher",460,100);v47Add("shield",240,175);v47Add("shield",520,175);v47Add("shaman",380,65);v47Fill(["crusher","shield","shaman","gob"],target)}
+ else if(id==="crossfire"){v47Add("trapper",105,95);v47Add("trapper",655,95);v47Add("bomber",210,70);v47Add("bomber",550,70);v47Add("archer",380,62);v47Add("runner",110,430);v47Add("runner",650,430);v47Fill(["trapper","bomber","archer","runner"],target)}
+ else if(id==="bloodhunt"){v47Add("handler",380,70);for(i=0;i<4;i++){a=i/4*Math.PI*2+.4;v47Outer(i%2?"berserker":"hound",a,145)}v47Fill(["berserker","hound","runner","handler"],target)}
+ else if(id==="ritual"){v47Add("shaman",250,70);v47Add("shaman",510,70);v47Add("shield",300,160);v47Add("shield",460,160);v47Add("berserker",380,150);v47Fill(["shaman","shield","berserker","gob"],target)}
+ else{v47Add("crusher",380,78);v47Add("bomber",150,85);v47Add("trapper",610,85);v47Add("shaman",270,120);v47Add("runner",490,125);v47Add("shield",380,175);v47Fill(["crusher","bomber","trapper","runner","shaman","shield"],target)}
+ if(kind==="ambush"){for(i=0;i<S.en.length;i++){var e=S.en[i],dx=e.x-380,dy=e.y-270;if(!v47Ranged(e.type)){e.x=380+dx*.8;e.y=270+dy*.8}}}
+}
+function v47ApplyTrait(e,trait){if(!e||e.dead)return;e.v47Trait=trait;e.eliteMod=trait;e.hp*=1.18;e.max*=1.18;e.dmg*=1.1;if(trait==="JUGGERNAUT"){e.hp*=1.2;e.max*=1.2;e.resist=Math.max(e.resist||0,.18)}else if(trait==="FRENZIED")e.dmg*=1.12;else if(trait==="PACK LEADER")v47SpawnTraitHounds(e)}
+function v47EliteTraits(){var c=S.en.filter(function(e){return !e.dead&&e.type!=="hound"}),traits=["VOLATILE","COMMANDER","JUGGERNAUT","VAMPIRIC","FRENZIED","PACK LEADER"];shuffle(c);shuffle(traits);for(var i=0;i<Math.min(3,c.length);i++)v47ApplyTrait(c[i],traits[i])}
+function v47DebtPatrol(){var arr=S.room>=6?["runner","trapper","berserker"]:["spear","runner","gob"];for(var i=0;i<arr.length;i++){var a=i/arr.length*Math.PI*2+.3;v47Outer(arr[i],a,145)}}
+function v47SetEncounter(id,kind,hadDebt){var m=V47_ENCOUNTERS[id];S.en=[];S.v39Encounter={id:id,name:m.name,desc:m.desc,reinforce:m.wave.slice()};S.v47EncounterMeta=m;S.v47WaveDone=false;S.v39Reinforced=true;S.v37Reinforced=true;v47SpawnTemplate(id,kind);if(kind==="elite")v47EliteTraits();if(hadDebt)v47DebtPatrol();S.v39AmbushBonusPending=kind==="ambush";S.v47RecentEncounters=S.v47RecentEncounters||[];S.v47RecentEncounters.push(id);if(S.v47RecentEncounters.length>3)S.v47RecentEncounters.shift();byId("status").innerHTML="<b>"+m.name+"</b> — "+m.desc}
+spawnCombat=function(kind){var forced=S&&S.v47ForcedEncounter,hadDebt=!!(S&&S.ambushDebt);_v47SpawnBase(kind);if(!S||!(kind==="combat"||kind==="elite"||kind==="ambush"))return;var id=forced&&V47_ENCOUNTERS[forced]?forced:v47PickEncounter(kind,[],S.room);S.v47ForcedEncounter=null;v47SetEncounter(id,kind,hadDebt)};
+function v47SpawnWave(){var m=S.v47EncounterMeta;if(!m||S.v47WaveDone||S.roomKind==="boss")return;S.v47WaveDone=true;var count=S.roomKind==="elite"?2:Math.min(4,m.wave.length);for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.18,.18);v47Outer(m.wave[i%m.wave.length],a,rnd(230,290))}byId("status").innerHTML="<b>"+m.name+"</b> — second wave enters the clearing."}
+roomNames.combat.push("CEDAR SWITCHBACK","OWL CREEK","BOULDER FERN RUN","RAVEN TRAIL","SUNKEN PINE ROAD","FOGROOT PASS","BROKEN LOG WAY","OLD FIREBREAK");
+roomNames.elite.push("WARDRUM RIDGE","BLACK IRON CAMP","BONEFLAG CLEARING","POWDER POST","RITUAL ENCAMPMENT","CRUSHER'S CUT");
+roomNames.ambush.push("SNARE HOLLOW","KNIFE BRUSH","HOUND RUN","POWDER TRAP","BLOODFERN CHOKE");
+function v47BattleChoice(kind,used){var id=v47PickEncounter(kind,used,S.room+1),m=V47_ENCOUNTERS[id],loc=pickOne(roomNames[kind]||roomNames.combat),tag=kind==="elite"?"ELITE":(kind==="ambush"?"AMBUSH":"COMBAT"),tail=kind==="elite"?" Evolution + permanent Trophy.":(kind==="ambush"?" Evolution + Ambush stat reward.":" Evolution reward.");return{id:id,kind:kind,loc:loc,tag:tag,title:m.name,text:m.desc+tail}}
+showPathChoice=function(extra){
+ if(S.room>=12)return;
+ if(S.room===4){showDecision("THE BRIDGE AHEAD",extra||"The woods go quiet.",[{cls:"elite",tag:"BOSS ROOM",title:"Troll Bridge — Mossback",text:"A two-phase forest brute blocks the only way forward.",go:function(){S.room=5;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}],1);return}
+ if(S.room===11){showDecision("THE LAST CLEARING",extra||"A roar shakes the forest.",[{cls:"elite",tag:"FINAL BOSS",title:"Grumblegut's Hollow",text:"The Goblin King waits. His second phase is much more aggressive.",go:function(){S.room=12;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}],1);return}
+ if(!S.lastNonCombat){var canWeird=S.room>1&&(S.eventSeen||0)<6&&((S.room-(S.lastEventRoom||-99))>=3);if(canWeird&&Math.random()<.18){var rare=["event","event","treasure"];if(S.room>=5)rare.push("shrine");var strange=pickOne(rare);if(strange==="event")showEvent();else if(strange==="treasure")showTreasure();else showShrine();return}}
+ var want=2;if(Math.random()<.38)want=3;if(Math.random()<.12)want=4;var cards=[],used=[];
+ for(var i=0;i<want;i++){var kind=v47WeightedKind([["combat",50],["elite",28],["ambush",22]]),o=v47BattleChoice(kind,used);used.push(o.id);(function(p){cards.push({cls:p.kind==="elite"?"elite":(p.kind==="ambush"?"event":""),tag:p.tag+" · "+p.loc,title:p.title,text:p.text,go:function(){S.v47ForcedEncounter=p.id;S.room++;enterRoom({kind:p.kind,name:p.loc})}})})(o)}
+ S.v47RecentEncounterOffers=(S.v47RecentEncounterOffers||[]).concat(used).slice(-8);showDecision("CHOOSE THE NEXT BATTLE",extra||"Choose the formation Bigfoot wants to fight next. Recent battle types are deprioritized.",cards,Math.min(3,cards.length));
+};
+</script>
+
+<script>
+/* ===== CONTENT EXPANSION V4.7 — EVOLUTIONS + TROPHIES ===== */
+var V47_UPGRADE_IDS={
+ v47IronLungs:1,v47HeavyHands:1,v47PrimalStudy:1,v47TrailLegs:1,v47Executioner:1,v47BloodBoiler:1,v47BoilingStart:1,v47RedMist:1,
+ v47SwipeSecond:1,v47SwipeSixth:1,v47RockBoulder:1,v47RockQuick:1,v47LimbBackswing:1,v47LimbSap:1,
+ v47SlamCrater:1,v47SlamRage:1,v47Bloodwood:1,v47HoneyBreak:1,v47BushAdrenal:1,v47FrenzyFuel:1,v47WallBreakout:1,v47RushShock:1,v47BeatTherapy:1,v47RoarEcho:1,v47AvalancheRubble:1,
+ v47ReelIn:1,v47HookRage:1,v47PackFury:1,v47WolfRush:1,v47PurseRage:1,v47RingTempo:1,v47Curveball:1,v47FastHands:1,v47FlashRage:1,v47ChainPursuit:1,v47ChainFuel:1,v47ChainHot:1
+};
+upgrades.push(
+ {id:"v47IronLungs",tag:"BIGFOOT",title:"Iron Lungs",text:"+100 Max HP and +2% Damage Reduction."},
+ {id:"v47HeavyHands",tag:"BIGFOOT",title:"Heavy Hands",text:"+10% Basic Attack Damage and +10% knockback."},
+ {id:"v47PrimalStudy",tag:"BIGFOOT",title:"Primal Study",text:"+10% Ability Damage."},
+ {id:"v47TrailLegs",tag:"BIGFOOT",title:"Trail Legs",text:"+8% Movement Speed and +3% Cooldown Recovery."},
+ {id:"v47Executioner",tag:"BIGFOOT",title:"Finish the Job",text:"Deal +15% damage to enemies below 30% HP."},
+ {id:"v47BloodBoiler",tag:"RAGE",title:"Blood Boiler",text:"Kills grant 2 Rage. Elite kills grant 5 Rage instead."},
+ {id:"v47BoilingStart",tag:"RAGE",title:"Ready to Rumble",text:"Start each combat with 30 Rage instead of 20."},
+ {id:"v47RedMist",tag:"RAGE",title:"Red Mist",text:"While at 80+ Rage, deal +8% damage from all sources."},
+
+ {id:"v47SwipeSecond",needBasic:"swipe",tag:"MIGHTY SWIPES",title:"One-Two",text:"Every second Mighty Swipe deals +35 flat damage to its primary target."},
+ {id:"v47SwipeSixth",requires:"v47SwipeSecond",needBasic:"swipe",tag:"MIGHTY SWIPES",title:"Sixth Sense of Violence",text:"Every sixth Mighty Swipe erupts for 80 flat damage to nearby enemies."},
+ {id:"v47RockBoulder",needBasic:"rock",tag:"THROWING ROCKS",title:"Pocket Boulder",text:"Every fifth ranged basic throws an extra heavy rock for 85 flat damage."},
+ {id:"v47RockQuick",needBasic:"rock",tag:"THROWING ROCKS",title:"Fastball Rocks",text:"Thrown-rock projectiles travel 20% faster."},
+ {id:"v47LimbBackswing",needBasic:"limb",tag:"TREE LIMB",title:"Backswing",text:"Every third Tree Limb swing deals +55 flat damage to the primary target."},
+ {id:"v47LimbSap",needBasic:"limb",tag:"TREE LIMB",title:"Sap Slap",text:"Tree Limb slows its primary target by 25% for 1.8 seconds."},
+
+ {id:"v47SlamCrater",need:"slam",tag:"EARTH SLAM",title:"Crater Maker",text:"Enemies hit by Earth Slam are slowed by 30% for 2.5 seconds."},
+ {id:"v47SlamRage",need:"slam",tag:"EARTH SLAM",title:"Crowd Fuel",text:"Earth Slam hitting 3+ enemies grants 6 Rage."},
+ {id:"v47Bloodwood",need:"tree",tag:"UPROOT",title:"Bloodwood",text:"Enemies struck by Uproot bleed for 30 damage over 3 seconds."},
+ {id:"v47HoneyBreak",need:"honey",tag:"HONEY STASH",title:"Crack the Jar",text:"When Honey Stash's shield is fully broken, gain 8 Rage."},
+ {id:"v47BushAdrenal",need:"shroud",tag:"BUSH AMBUSH",title:"Adrenaline Hide",text:"The first enemy attack avoided during each Bush Ambush grants 6 Rage."},
+ {id:"v47FrenzyFuel",need:"rage",tag:"WILD FRENZY",title:"Feed the Frenzy",text:"Basic Attacks during Wild Frenzy generate +2 additional Rage."},
+ {id:"v47WallBreakout",need:"wall",tag:"BOULDER WALL",title:"Breakout",text:"If Boulder Wall's shield breaks, gain 5 Rage and blast nearby enemies for 60 flat damage."},
+ {id:"v47RushShock",need:"charge",tag:"PRIMAL RUSH",title:"Impact Wave",text:"Rush Impact also deals 60 flat damage to other enemies within 90px."},
+ {id:"v47BeatTherapy",need:"beatdown",tag:"SAVAGE BEATDOWN",title:"Anger Management",text:"Each Savage Beatdown hit grants 2 Rage."},
+ {id:"v47RoarEcho",need:"roar",tag:"PRIMAL ROAR",title:"Echoing Terror",text:"Two seconds after Primal Roar, a second fear pulse frightens nearby normal enemies for 1 second."},
+ {id:"v47AvalancheRubble",need:"avalanche",tag:"AVALANCHE",title:"Rubble Field",text:"Enemies surviving Avalanche are slowed by 25% for 3 seconds."},
+
+ {id:"v47ReelIn",item:"fishing",tag:"FISHING GEAR",title:"Reel Pressure",text:"Enemies with an embedded hook are slowed by 18%."},
+ {id:"v47HookRage",item:"fishing",tag:"FISHING GEAR",title:"Tension on the Line",text:"While at least one enemy is hooked, gain 1 Rage per second, up to 8 Rage each combat."},
+ {id:"v47PackFury",item:"bones",tag:"SKELETAL REMAINS",title:"Pack Fury",text:"Elite kills grant 8 Rage."},
+ {id:"v47WolfRush",item:"bones",tag:"SKELETAL REMAINS",title:"Hunting Legs",text:"Wolves deal +20% damage and move 10% faster."},
+ {id:"v47PurseRage",item:"ring",tag:"WEDDING RING",title:"Cheering Section",text:"Each Purse Toss that launches grants Bigfoot 2 Rage."},
+ {id:"v47RingTempo",item:"ring",tag:"WEDDING RING",title:"Family Rhythm",text:"Mrs. Bigfoot's independent support timers recharge 15% faster."},
+ {id:"v47Curveball",item:"baseball",tag:"BASEBALL & GLOVE",title:"Curveball",text:"Returned baseballs gain 1 additional ricochet."},
+ {id:"v47FastHands",item:"baseball",tag:"BASEBALL & GLOVE",title:"Quick Hands",text:"Bigfoot's son throws the ball 20% more often."},
+ {id:"v47FlashRage",item:"camera",tag:"TRAIL CAMERA",title:"Caught on Camera",text:"A camera flash hitting 3+ enemies grants 5 Rage."},
+ {id:"v47ChainPursuit",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Run Them Down",text:"Chainsaw Mode's Movement Speed bonus increases from +20% to +30%."},
+ {id:"v47ChainFuel",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Rage Engine",text:"Basic Attacks during Chainsaw Mode generate +1 additional Rage."},
+ {id:"v47ChainHot",item:"chainsaw",tag:"LOGGER'S CHAINSAW",title:"Hot Start",text:"For the first 2 seconds of Chainsaw Mode, Basic Attacks deal +25% damage."}
+);
+
+/* Recent unchosen Evolutions are temporarily deprioritized so reward screens rotate through the larger pool. */
+var _v47GetUpgradeBase=getUpgradeChoices;
+getUpgradeChoices=function(){
+ var pool=[],itemPool=[],fresh=[],i,u,recent=(S&&S.v47RecentUpgradeOffers)||[];
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;pool.push(u);if(u.item&&u.item===S.item)itemPool.push(u);if(recent.indexOf(u.id)<0)fresh.push(u)}
+ var source=fresh.length>=3?fresh:pool;shuffle(source);shuffle(itemPool);var out=[];
+ if(S.item&&itemPool.length){var freshItem=itemPool.filter(function(x){return recent.indexOf(x.id)<0});out.push((freshItem.length?freshItem:itemPool)[0])}
+ for(i=0;i<source.length&&out.length<3;i++)if(out.indexOf(source[i])<0)out.push(source[i]);
+ for(i=0;i<pool.length&&out.length<3;i++)if(out.indexOf(pool[i])<0)out.push(pool[i]);
+ if(S){S.v47RecentUpgradeOffers=(recent.concat(out.map(function(x){return x.id}))).slice(-12)}
+ return out;
+};
+
+function v47FinishEvolution(msg){if(S.room===5&&!S.item)showItemHunt();else if(S.roomKind==="elite"&&typeof showEliteBonus==="function")showEliteBonus();else showPathChoice(msg||"Evolution acquired. Choose the next battle.")}
+var _v47ApplyUpgradeBase=applyUpgrade;
+applyUpgrade=function(id){
+ if(!V47_UPGRADE_IDS[id])return _v47ApplyUpgradeBase(id);
+ if(!S||S.owned[id])return;S.owned[id]=true;
+ if(id==="v47IronLungs"){window.v37AddStat("body",2);window.v37AddStat("armor",1)}
+ else if(id==="v47HeavyHands")window.v37AddStat("might",2);
+ else if(id==="v47PrimalStudy")window.v37AddStat("power",2);
+ else if(id==="v47TrailLegs"){S.mods.move*=1.08;window.v37AddStat("focus",1)}
+ else if(id==="v47WolfRush"&&S.wolf){S.wolf.damage*=1.20;S.wolf.speed*=1.10}
+ else if(id==="v47FastHands"&&S.son)S.son.throwRate*=.80;
+ else if(id==="v47Curveball"&&S.ball)S.ball.bounces+=1;
+ v47FinishEvolution("New Evolution acquired. Choose the next battle.");
+};
+
+/* More permanent Elite trophies. Old trophy effects are reproduced here so the larger pool is self-contained. */
+var V47_TROPHIES=[
+ {id:"trophyHide",title:"Trophy Hide",text:"+100 Max HP, +2% Damage Reduction. Elite kills restore 2% max HP.",take:function(){window.v37AddStat("body",2);window.v37AddStat("armor",1)}},
+ {id:"warHorn",title:"Cracked War Horn",text:"+5% Ability Damage, +3% Cooldown Recovery. Your first ability used each room refunds 2s of its cooldown.",take:function(){window.v37AddStat("power",1);window.v37AddStat("focus",1)}},
+ {id:"ironPlate",title:"Ironbark Plate",text:"+6% Damage Reduction. Once each room, a heavy hit grants a temporary shield.",take:function(){window.v37AddStat("armor",3)}},
+ {id:"mushroomCrown",title:"Mushroom Crown",text:"+50 Max HP, +5% Ability Damage. Killing a debuffed enemy restores 1.5% max HP.",take:function(){window.v37AddStat("body",1);window.v37AddStat("power",1)}},
+ {id:"bruteKnuckle",title:"Brute Knuckle",text:"+100 Max HP, +5% Basic Attack Damage. All knockback is 15% stronger.",take:function(){window.v37AddStat("body",2);window.v37AddStat("might",1)}},
+ {id:"hunterCompass",title:"Hunter's Compass",text:"+3% Basic Attack Speed, +3% Cooldown Recovery, +8% Movement Speed.",take:function(){window.v37AddStat("haste",1);window.v37AddStat("focus",1);S.mods.move*=1.08}},
+ {id:"championCharm",title:"Champion's Charm",text:"+5% Basic Attack Damage, +5% Ability Damage, +3% Cooldown Recovery.",take:function(){window.v37AddStat("might",1);window.v37AddStat("power",1);window.v37AddStat("focus",1)}},
+ {id:"fangCord",title:"Goblin Fang Cord",text:"+10% Basic Attack Damage, +3% Basic Attack Speed.",take:function(){window.v37AddStat("might",2);window.v37AddStat("haste",1)}},
+ {id:"ritualStone",title:"Ritual Stone",text:"+10% Ability Damage, +2% Damage Reduction.",take:function(){window.v37AddStat("power",2);window.v37AddStat("armor",1)}},
+ {id:"v47PowderFlask",title:"Black Powder Flask",text:"+5% Ability Damage. The first kill each combat grants 6 Rage.",take:function(){window.v37AddStat("power",1)}},
+ {id:"v47SnareCutter",title:"Snare Cutter",text:"+8% Movement Speed and +3% Cooldown Recovery.",take:function(){S.mods.move*=1.08;window.v37AddStat("focus",1)}},
+ {id:"v47ShamanTotem",title:"Shaman Totem",text:"+50 Max HP and +10% Ability Damage.",take:function(){window.v37AddStat("body",1);window.v37AddStat("power",2)}},
+ {id:"v47CrusherPlate",title:"Crusher Plate",text:"+100 Max HP and +4% Damage Reduction.",take:function(){window.v37AddStat("body",2);window.v37AddStat("armor",2)}},
+ {id:"v47HoundFang",title:"Hound Fang",text:"+10% Basic Attack Damage and +5% Movement Speed.",take:function(){window.v37AddStat("might",2);S.mods.move*=1.05}},
+ {id:"v47BerserkerCord",title:"Berserker Cord",text:"Start each combat with +5 Rage and gain +3% Basic Attack Speed.",take:function(){window.v37AddStat("haste",1)}}
+];
+function v47TakeTrophy(t){S.trophies=S.trophies||[];S.trophies.push(t.id);t.take();showPathChoice("Elite trophy collected: <b>"+t.title+"</b>.")}
+showEliteBonus=function(){
+ S.trophies=S.trophies||[];var pool=V47_TROPHIES.filter(function(t){return S.trophies.indexOf(t.id)<0});shuffle(pool);pool=pool.slice(0,3);var cards=[];
+ for(var i=0;i<pool.length;i++)(function(t){cards.push({cls:"eliteBonus v37Trophy",tag:"ELITE TROPHY",title:t.title,text:t.text,go:function(){v47TakeTrophy(t)}})})(pool[i]);
+ if(!cards.length)cards=[{cls:"eliteBonus",tag:"ELITE TROPHY",title:"Champion's Cache",text:"+50 Max HP, +5% Basic Attack Damage, +5% Ability Damage.",go:function(){window.v37AddStat("body",1);window.v37AddStat("might",1);window.v37AddStat("power",1);showPathChoice("Elite cache collected.")}}];
+ showDecision("ELITE TROPHIES","Take one permanent trophy from the elite you defeated.",cards,3);
+};
+
+</script>
+
+<script>
+/* ===== CONTENT EXPANSION V4.7 — LIVE COMBAT + ART ===== */
+function v47EnsureRuntime(){
+ if(!S)return;S.v47Traps=S.v47Traps||[];S.v47Bombs=S.v47Bombs||[];S.v47Shots=S.v47Shots||[];S.v47HeroShots=S.v47HeroShots||[];S.v47Fx=S.v47Fx||[];
+ if(S.v47HeroSlowT==null)S.v47HeroSlowT=0;if(S.v47HookRageBudget==null)S.v47HookRageBudget=0;if(S.v47HookRageTick==null)S.v47HookRageTick=0;
+}
+function v47ResetRoomRuntime(){
+ if(!S)return;v47EnsureRuntime();S.v47Traps=[];S.v47Bombs=[];S.v47Shots=[];S.v47HeroShots=[];S.v47Fx=[];S.v47HeroSlowT=0;S.v47HookRageBudget=0;S.v47HookRageTick=0;S.v47FirstKillRage=false;S.v47BushRageUsed=false;S.v47HoneyBreakReady=false;S.v47WallBreakReady=false;S.v47RoarEchoT=0;S.v47AvalancheSlowPending=false;S.v47AvalancheWasActive=false;S.v47LastMrsToss=(S.mrs&&S.mrs.tossCount)||0;S.v47LastCameraFlash=(S.camera&&S.camera.flashCount)||0;
+ var start=S.owned&&S.owned.v47BoilingStart?30:20;if(S.trophies&&S.trophies.indexOf("v47BerserkerCord")>=0)start+=5;if(S.v43Rage!=null)S.v43Rage=Math.max(S.v43Rage,start);
+}
+var _v47SpawnRuntime=spawnCombat;
+spawnCombat=function(kind){_v47SpawnRuntime(kind);v47ResetRoomRuntime()};
+var _v47BossRuntime=enterFixedBoss;
+enterFixedBoss=function(){_v47BossRuntime();v47ResetRoomRuntime()};
+var _v47StartRuntime=startGame;
+startGame=function(){_v47StartRuntime();if(!S)return;S.v47RecentEncounters=S.v47RecentEncounters||[];S.v47RecentEncounterOffers=S.v47RecentEncounterOffers||[];S.v47RecentUpgradeOffers=[];v47EnsureRuntime();if(S.v43Rage!=null){var r=S.owned&&S.owned.v47BoilingStart?30:20;if(S.trophies&&S.trophies.indexOf("v47BerserkerCord")>=0)r+=5;S.v43Rage=Math.max(S.v43Rage,r)}updateUI()};
+
+/* Heavy Hands adds knockback without changing the displayed damage math. */
+var _v47KnockUpgrade=knockEnemy;
+knockEnemy=function(e,k,sx,sy){if(S&&S.owned&&S.owned.v47HeavyHands)k*=1.10;_v47KnockUpgrade(e,k,sx,sy)};
+
+/* Commander is an aura, not a hidden global speed/stat scaler. */
+var _v47PreAIOriginal=v47PreAI;
+v47PreAI=function(dt){
+ _v47PreAIOriginal(dt);if(!S)return;
+ var commanders=[];for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e.dead)continue;if(e.v47&&e.v47.cast)e.atk=Math.max(e.atk||0,e.v47.cast.t+.28);if(e.v47&&e.v47.motion)e.atk=Math.max(e.atk||0,e.v47.motion.t+.20);if(e.v47Trait==="COMMANDER")commanders.push(e)}
+ for(i=0;i<commanders.length;i++){var c=commanders[i];for(var j=0;j<S.en.length;j++){var q=S.en[j];if(q.dead||q===c||dist(c,q)>185)continue;if(q._v47TempDmg===undefined)q._v47TempDmg=q.dmg;q.dmg*=1.15}}
+};
+
+/* Damage hooks: new build payoffs plus active elite mutations. */
+var _v47DamageRuntime=damageEnemy;
+damageEnemy=function(e,n,k,sx,sy){
+ if(!e||e.dead)return;v47EnsureRuntime();var wasAlive=e.hp>0,wasElite=isElite(e),ratio=e.max?e.hp/e.max:1;
+ if(S.owned&&S.owned.v47Executioner&&ratio<.30)n*=1.15;if(S.owned&&S.owned.v47RedMist&&S.v43Rage>=80)n*=1.08;
+ _v47DamageRuntime(e,n,k,sx,sy);
+ if(wasAlive&&e.dead){
+   if(S.owned&&S.owned.v47BloodBoiler)window.v43GrantRage(wasElite?5:2,"kill");
+   if(S.item==="bones"&&S.owned&&S.owned.v47PackFury&&wasElite)window.v43GrantRage(8,"pack fury");
+   if(S.trophies&&S.trophies.indexOf("v47PowderFlask")>=0&&!S.v47FirstKillRage){S.v47FirstKillRage=true;window.v43GrantRage(6,"powder flask")}
+   if(e.v47Trait==="VOLATILE"){S.v47Bombs.push({x:e.x,y:e.y,r:72,t:.72,max:.72,damage:24+S.room*2.2,source:null,done:false,trait:true});S.v47Fx.push({kind:"volatile",x:e.x,y:e.y,t:.7,max:.7})}
+ }
+};
+
+var _v47HurtRuntime=hurtHero;
+hurtHero=function(n,source){
+ if(!S)return _v47HurtRuntime(n,source);v47EnsureRuntime();var raw=n||0,bush=S.h&&S.h.bushT>0,beforeShield=S.h.shield||0,shieldSource=S.h.shieldSource||"";
+ if(bush&&S.owned&&S.owned.v47BushAdrenal&&!S.v47BushRageUsed){S.v47BushRageUsed=true;window.v43GrantRage(6,"ambush dodge")}
+ _v47HurtRuntime(n,source);
+ if(source&&source.v47Trait==="VAMPIRIC"&&raw>0&&!bush){source.hp=Math.min(source.max,source.hp+Math.min(source.max*.05,raw*.35));S.v47Fx.push({kind:"vamp",x:source.x,y:source.y,t:.4,max:.4})}
+ if(beforeShield>0&&(S.h.shield||0)<=0){
+   if(shieldSource==="Honey Stash"&&S.owned&&S.owned.v47HoneyBreak&&S.v47HoneyBreakReady){S.v47HoneyBreakReady=false;window.v43GrantRage(8,"broken honey")}
+   if(shieldSource==="Boulder Wall"&&S.owned&&S.owned.v47WallBreakout&&S.v47WallBreakReady){S.v47WallBreakReady=false;window.v43GrantRage(5,"wall break");for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(S.h,S.en[i])<135)damageEnemy(S.en[i],60,28,S.h.x,S.h.y);S.v47Fx.push({kind:"breakout",x:S.h.x,y:S.h.y,t:.5,max:.5})}
+ }
+};
+
+function v47ApplyBleed(e){if(!e||e.dead)return;e.v47BleedT=Math.max(e.v47BleedT||0,3);e.v47BleedTick=Math.min(e.v47BleedTick==null?.5:e.v47BleedTick,.5)}
+function v47BloodwoodScan(){if(!S.owned||!S.owned.v47Bloodwood)return;for(var i=0;i<S.proj.length;i++){var p=S.proj[i];if(p.type!=="tree"||!p.v47Bloodwood)continue;p.v47BloodHits=p.v47BloodHits||{};for(var j=0;j<S.en.length;j++){var e=S.en[j],key=e.uid+"";if(e.dead||p.v47BloodHits[key])continue;if(dist(p,e)<S.mods.treeW+22){p.v47BloodHits[key]=1;v47ApplyBleed(e)}}}}
+function v47TickBleeds(dt){for(var i=0;i<S.en.length;i++){var e=S.en[i];if((e.v47BleedT||0)<=0)continue;e.v47BleedT=Math.max(0,e.v47BleedT-dt);e.v47BleedTick=(e.v47BleedTick||.5)-dt;if(e.v47BleedTick<=0){e.v47BleedTick+=.5;damageEnemy(e,5,0,e.x,e.y)}}}
+
+/* Ability Evolutions that need the actual cast moment. */
+var _v47CastRuntime=cast;
+cast=function(id){
+ if(!S)return _v47CastRuntime(id);v47EnsureRuntime();var beforeCd=S.cds[id]||0,beforeProj=S.proj.length,list=[],i,e;
+ if(id==="slam"){for(i=0;i<S.en.length;i++){e=S.en[i];if(!e.dead&&dist(S.h,e)<S.mods.slamR)list.push(e)}}
+ _v47CastRuntime(id);var casted=(S.cds[id]||0)>beforeCd;if(!casted&&id!=="charge")return;
+ if(id==="slam"&&casted){if(S.owned.v47SlamCrater)for(i=0;i<list.length;i++){list[i].slowDebuff=Math.max(list[i].slowDebuff||0,2.5);list[i].slowPct=Math.max(list[i].slowPct||0,.30)}if(S.owned.v47SlamRage&&list.length>=3)window.v43GrantRage(6,"slam crowd")}
+ if(id==="tree"&&casted&&S.owned.v47Bloodwood)for(i=beforeProj;i<S.proj.length;i++)if(S.proj[i].type==="tree")S.proj[i].v47Bloodwood=true;
+ if(id==="honey"&&casted)S.v47HoneyBreakReady=true;
+ if(id==="wall"&&casted)S.v47WallBreakReady=true;
+ if(id==="shroud"&&casted)S.v47BushRageUsed=false;
+ if(id==="roar"&&casted&&S.owned.v47RoarEcho)S.v47RoarEchoT=2;
+ if(id==="avalanche"&&casted&&S.owned.v47AvalancheRubble){S.v47AvalancheSlowPending=true;S.v47AvalancheWasActive=true}
+};
+
+function v47UpdateHeroShots(dt){
+ for(var i=S.v47HeroShots.length-1;i>=0;i--){var p=S.v47HeroShots[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.t-=dt;var hit=null;for(var j=0;j<S.en.length;j++){var e=S.en[j];if(!e.dead&&dist(p,e)<25){hit=e;break}}if(hit){damageEnemy(hit,p.damage||85,26,p.x,p.y);S.v47Fx.push({kind:"heavyRock",x:hit.x,y:hit.y,t:.4,max:.4});p.t=0}if(p.t<=0||p.x<-45||p.x>805||p.y<-45||p.y>575)S.v47HeroShots.splice(i,1)}
+}
+function v47BasicEvolutionProc(comboBefore,projBefore){
+ if(S.h.combo===comboBefore)return;var t=nearestTo(S.h),i,a;
+ if(S.basic==="swipe"&&t&&dist(S.h,t)<110&&S.owned.v47SwipeSecond&&S.h.combo%2===0)damageEnemy(t,35,16,S.h.x,S.h.y);
+ if(S.basic==="swipe"&&S.owned.v47SwipeSixth&&S.h.combo%6===0){for(i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(S.h,S.en[i])<105)damageEnemy(S.en[i],80,24,S.h.x,S.h.y);S.v47Fx.push({kind:"sixth",x:S.h.x,y:S.h.y,t:.45,max:.45})}
+ if(S.basic==="rock"&&S.owned.v47RockQuick){for(i=projBefore;i<S.proj.length;i++)if(S.proj[i].type==="rock"){S.proj[i].vx*=1.20;S.proj[i].vy*=1.20}}
+ if(S.basic==="rock"&&S.owned.v47RockBoulder&&S.h.combo%5===0){a=S.h.aim;var sp=S.owned.v47RockQuick?468:390;S.v47HeroShots.push({type:"heavyRock",x:S.h.x,y:S.h.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,t:1.8,damage:85,rot:a})}
+ if(S.basic==="limb"&&t&&dist(S.h,t)<150&&S.owned.v47LimbBackswing&&S.h.combo%3===0)damageEnemy(t,55,18,S.h.x,S.h.y);
+ if(S.basic==="limb"&&t&&dist(S.h,t)<150&&S.owned.v47LimbSap){t.slowDebuff=Math.max(t.slowDebuff||0,1.8);t.slowPct=Math.max(t.slowPct||0,.25)}
+ if(S.h.rage>0&&S.owned.v47FrenzyFuel)window.v43GrantRage(2,"frenzy basic");
+ if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0&&S.owned.v47ChainFuel)window.v43GrantRage(1,"chainsaw basic");
+}
+function v47CountHooked(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i].hooks&&S.en[i].hooks.length)n++;return n}
+function v47CountRecentExposed(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&(S.en[i].exposedT||0)>0)n++;return n}
+function v47FindLatestFx(kind){for(var i=S.v43Fx.length-1;i>=0;i--)if(S.v43Fx[i].kind===kind)return S.v43Fx[i];return null}
+
+var _v47UpdateRuntime=update;
+update=function(dt){
+ if(!S)return _v47UpdateRuntime(dt);v47EnsureRuntime();
+ /* Keep second waves tied to encounter identity instead of generic reinforcements. */
+ if(!S.paused&&!S.v47WaveDone&&S.roomKind!=="boss"&&v47Alive()>0&&v47Alive()<=4)v47SpawnWave();
+ v47UpdateShots(dt);v47UpdateZones(dt);v47UpdateHeroShots(dt);v47TickBleeds(dt);v47BloodwoodScan();v47PreAI(dt);
+ var oldMove=S.mods.move,oldBasic=S.mods.basic,comboBefore=S.h.combo,projBefore=S.proj.length,beatBefore=S.v41Beat?S.v41Beat.hits:-1,rushBefore=!!S.v45RushImpactDone,mrsBefore=(S.mrs&&S.mrs.tossCount)||0,flashBefore=(S.camera&&S.camera.flashCount)||0;
+ if(S.v47HeroSlowT>0)S.mods.move*=.72;
+ if(S.item==="ring"&&S.mrs&&S.owned.v47RingTempo){var mt=["purseTimer","lunchTimer","cheerTimer","guardTimer"];for(var mi=0;mi<mt.length;mi++)if(typeof S.mrs[mt[mi]]==="number"&&S.mrs[mt[mi]]>0)S.mrs[mt[mi]]-=dt*.1765}
+ if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0){S.mods.move*=S.owned.v47ChainPursuit?1.30:1.20;var elapsed=S.chainsaw.duration-S.chainsaw.active;if(S.owned.v47ChainHot&&elapsed<2)S.mods.basic*=1.25}
+ /* Reel Pressure uses the existing temporary slow system, not permanent enemy speed scaling. */
+ if(S.item==="fishing"&&S.owned.v47ReelIn)for(var ri=0;ri<S.en.length;ri++)if(S.en[ri].hooks&&S.en[ri].hooks.length){S.en[ri].slowDebuff=Math.max(S.en[ri].slowDebuff||0,.18);S.en[ri].slowPct=Math.max(S.en[ri].slowPct||0,.18)}
+ _v47UpdateRuntime(dt);
+ S.mods.move=oldMove;S.mods.basic=oldBasic;v47RestoreTemps();if(!S)return;
+ v47BasicEvolutionProc(comboBefore,projBefore);
+ /* Savage Beatdown Rage is based on confirmed hit-count advancement. */
+ if(S.owned.v47BeatTherapy&&beatBefore>=0){var now=S.v41Beat?S.v41Beat.hits:(beatBefore===2?3:beatBefore);var gained=Math.max(0,now-beatBefore);if(gained)window.v43GrantRage(gained*2,"beatdown")}
+ /* Rush Impact splash is independent flat damage and never scales from Basic Attack Power. */
+ if(S.owned.v47RushShock&&!rushBefore&&S.v45RushImpactDone){var rf=v47FindLatestFx("rushHit");if(rf){var primary=null,best=1e9;for(var rx=0;rx<S.en.length;rx++){var re=S.en[rx],rd=Math.hypot(re.x-rf.x,re.y-rf.y);if(!re.dead&&rd<best){best=rd;primary=re}}for(rx=0;rx<S.en.length;rx++){re=S.en[rx];if(re.dead||re===primary||Math.hypot(re.x-rf.x,re.y-rf.y)>90)continue;damageEnemy(re,60,18,rf.x,rf.y)}S.v47Fx.push({kind:"impactWave",x:rf.x,y:rf.y,t:.45,max:.45})}}
+  /* Purse Toss Rage: count launches, not projectile hit events. */
+ if(S.item==="ring"&&S.owned.v47PurseRage&&S.mrs){var mrsAfter=S.mrs.tossCount||0;if(mrsAfter>mrsBefore)window.v43GrantRage((mrsAfter-mrsBefore)*2,"purse")}
+ /* Fishing Rage is deliberately capped per combat. */
+ if(S.item==="fishing"&&S.owned.v47HookRage&&S.v47HookRageBudget<8&&v47CountHooked()>0){S.v47HookRageTick+=dt;while(S.v47HookRageTick>=1&&S.v47HookRageBudget<8){S.v47HookRageTick-=1;S.v47HookRageBudget++;window.v43GrantRage(1,"hook tension")}}
+ else if(v47CountHooked()===0)S.v47HookRageTick=0;
+ /* Camera Rage fires once for each actual flash event that catches a crowd. */
+ if(S.item==="camera"&&S.owned.v47FlashRage&&S.camera&&(S.camera.flashCount||0)>flashBefore&&v47CountRecentExposed()>=3)window.v43GrantRage(5,"camera crowd");
+ /* Echoing Roar and Avalanche rubble are delayed battlefield effects. */
+ if(S.v47RoarEchoT>0){S.v47RoarEchoT=Math.max(0,S.v47RoarEchoT-dt);if(S.v47RoarEchoT===0){for(var ei=0;ei<S.en.length;ei++){var ee=S.en[ei];if(!ee.dead&&!isElite(ee)&&dist(S.h,ee)<260)ee.fear=Math.max(ee.fear||0,1)}S.v47Fx.push({kind:"roarEcho",x:S.h.x,y:S.h.y,t:.65,max:.65})}}
+ if(S.v47AvalancheSlowPending){var avActive=!!(S.v3Boulders&&S.v3Boulders.length);if(S.v47AvalancheWasActive&&!avActive){S.v47AvalancheSlowPending=false;for(ei=0;ei<S.en.length;ei++)if(!S.en[ei].dead){S.en[ei].slowDebuff=Math.max(S.en[ei].slowDebuff||0,3);S.en[ei].slowPct=Math.max(S.en[ei].slowPct||0,.25)}S.v47Fx.push({kind:"rubbleSlow",x:S.h.x,y:S.h.y,t:.65,max:.65})}S.v47AvalancheWasActive=avActive||S.v47AvalancheWasActive}
+ for(var fi=S.v47Fx.length-1;fi>=0;fi--){S.v47Fx[fi].t-=dt;if(S.v47Fx[fi].t<=0)S.v47Fx.splice(fi,1)}
+};
+
+/* Correct the one accidental draft typo defensively if older browsers parsed around it. */
+
+/* Distinct cartoon silhouettes for the eight new enemies. */
+function v47DrawHp(e,w,off){ctx.fillStyle="#352822";ctx.fillRect(e.x-w/2,e.y-off,w,6);ctx.fillStyle="#d44a42";ctx.fillRect(e.x-w/2,e.y-off,w*Math.max(0,e.hp/e.max),6)}
+function v47DrawNewEnemy(e){
+ var x=e.x,y=e.y,sc=e.scale||1;ctx.save();ctx.translate(x,y);ctx.scale(sc,sc);ctx.fillStyle="#13201866";ctx.beginPath();ctx.ellipse(0,18,25,10,0,0,Math.PI*2);ctx.fill();
+ if(e.type==="berserker"){ctx.fillStyle=e.v47&&e.v47.enraged?"#a74735":"#714735";ctx.beginPath();ctx.arc(0,0,22,0,Math.PI*2);ctx.fill();ctx.fillStyle="#a7bd68";ctx.beginPath();ctx.arc(0,-15,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#d7c2a2";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-18,-3);ctx.lineTo(-34,-19);ctx.moveTo(18,-3);ctx.lineTo(34,-19);ctx.stroke();ctx.fillStyle="#d6d8cf";ctx.fillRect(-39,-25,12,8);ctx.fillRect(27,-25,12,8)}
+ else if(e.type==="trapper"){ctx.fillStyle="#55633b";ctx.fillRect(-17,-2,34,28);ctx.fillStyle="#99ad68";ctx.beginPath();ctx.arc(0,-12,15,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#b9a57b";ctx.lineWidth=3;ctx.beginPath();ctx.arc(18,5,12,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#5c4a33";ctx.fillRect(-25,4,9,20)}
+ else if(e.type==="shaman"){ctx.fillStyle="#58446f";ctx.beginPath();ctx.moveTo(-22,24);ctx.lineTo(0,-17);ctx.lineTo(22,24);ctx.closePath();ctx.fill();ctx.fillStyle="#9fb66c";ctx.beginPath();ctx.arc(0,-15,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#6f4a2d";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(20,20);ctx.lineTo(28,-30);ctx.stroke();ctx.fillStyle="#ba80dc";ctx.beginPath();ctx.arc(29,-33,7,0,Math.PI*2);ctx.fill()}
+ else if(e.type==="bomber"){ctx.fillStyle="#6b5735";ctx.fillRect(-19,-1,38,27);ctx.fillStyle="#a8b76b";ctx.beginPath();ctx.arc(0,-13,15,0,Math.PI*2);ctx.fill();ctx.fillStyle="#242526";ctx.beginPath();ctx.arc(22,2,11,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#d6933f";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(26,-7);ctx.quadraticCurveTo(35,-18,29,-25);ctx.stroke()}
+ else if(e.type==="runner"){ctx.fillStyle="#41614d";ctx.beginPath();ctx.ellipse(0,5,15,27,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#a8bb70";ctx.beginPath();ctx.arc(0,-17,12,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#d9d8cf";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-10,2);ctx.lineTo(-31,-12);ctx.moveTo(10,2);ctx.lineTo(31,-12);ctx.stroke()}
+ else if(e.type==="handler"){ctx.fillStyle="#67513b";ctx.fillRect(-18,0,36,27);ctx.fillStyle="#a0b56d";ctx.beginPath();ctx.arc(0,-13,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c8a66c";ctx.lineWidth=3;ctx.beginPath();ctx.arc(23,4,15,-1.1,1.2);ctx.stroke();ctx.fillStyle="#e2d39d";ctx.beginPath();ctx.arc(-19,-7,4,0,Math.PI*2);ctx.fill()}
+ else if(e.type==="hound"){ctx.fillStyle="#3b352f";ctx.beginPath();ctx.ellipse(0,4,25,13,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(20,-3,11,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(15,-11);ctx.lineTo(18,-23);ctx.lineTo(24,-11);ctx.closePath();ctx.fill();ctx.strokeStyle="#6e5e4e";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-15,10);ctx.lineTo(-22,24);ctx.moveTo(8,10);ctx.lineTo(6,25);ctx.stroke()}
+ else if(e.type==="crusher"){ctx.fillStyle="#4a5150";ctx.beginPath();ctx.ellipse(0,5,31,35,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#87907f";ctx.fillRect(-26,-12,52,17);ctx.fillStyle="#94a76a";ctx.beginPath();ctx.arc(0,-20,17,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#4c3828";ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(22,7);ctx.lineTo(40,-22);ctx.stroke();ctx.fillStyle="#777a73";ctx.fillRect(31,-31,22,17)}
+ ctx.restore();v47DrawHp(e,e.type==="crusher"?62:(e.type==="hound"?38:48),e.type==="crusher"?51:40);
+}
+function v47DrawTrait(e){if(!e.v47Trait||e.dead)return;ctx.save();ctx.strokeStyle=e.v47Trait==="VOLATILE"?"#ff9d54":(e.v47Trait==="VAMPIRIC"?"#c869a5":(e.v47Trait==="COMMANDER"?"#ffd45f":"#df7866"));ctx.lineWidth=3;ctx.setLineDash([5,4]);ctx.beginPath();ctx.arc(e.x,e.y,39*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#fff0bd";ctx.font="900 7px system-ui";ctx.textAlign="center";ctx.fillText(e.v47Trait,e.x,e.y+47*(e.scale||1));ctx.restore()}
+var _v47DrawEnemyRuntime=drawEnemy;
+drawEnemy=function(e){if(e&&V47_NEW_TYPES[e.type])v47DrawNewEnemy(e);else _v47DrawEnemyRuntime(e);v47DrawTrait(e)};
+
+function v47DrawRuntimeFx(){
+ if(!S)return;var i,p,e,c,a,label;
+ for(i=0;i<S.v47Traps.length;i++){p=S.v47Traps[i];ctx.save();ctx.globalAlpha=p.arm>0?.35:.75;ctx.strokeStyle=p.arm>0?"#d0b16e":"#e1d8a5";ctx.lineWidth=3;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(p.x,p.y,13,0,Math.PI*2);ctx.stroke();ctx.restore()}
+ for(i=0;i<S.v47Bombs.length;i++){p=S.v47Bombs[i];var q=clamp(p.t/(p.max||.8),0,1);ctx.save();ctx.globalAlpha=.35+.45*(1-q);ctx.strokeStyle=p.trait?"#ff765e":"#f2b354";ctx.lineWidth=5;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#251d1b";ctx.beginPath();ctx.arc(p.x,p.y,9,0,Math.PI*2);ctx.fill();ctx.restore()}
+ for(i=0;i<S.v47Shots.length;i++){p=S.v47Shots[i];ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot||0);ctx.fillStyle=p.type==="hex"?"#b786d7":(p.type==="sling"?"#c39d63":"#d7c9a2");ctx.fillRect(-7,-3,14,6);ctx.restore()}
+ for(i=0;i<S.v47HeroShots.length;i++){p=S.v47HeroShots[i];ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot||0);ctx.fillStyle="#696e69";ctx.beginPath();ctx.moveTo(-15,-10);ctx.lineTo(9,-13);ctx.lineTo(17,2);ctx.lineTo(6,13);ctx.lineTo(-14,9);ctx.closePath();ctx.fill();ctx.restore()}
+ for(i=0;i<S.en.length;i++){e=S.en[i];if(e.dead||!e.v47||!e.v47.cast)continue;c=e.v47.cast;a=clamp(c.t/c.max,0,1);label=({trap:"TRAP",chant:"CHANT",bomb:"BOMB",runnerDash:"DASH",summonHound:"WHISTLE",crusherSmash:"SMASH"})[c.kind]||"CAST";ctx.save();ctx.globalAlpha=.35+.55*(1-a);ctx.strokeStyle="#ffd16f";ctx.lineWidth=4;ctx.beginPath();ctx.arc(e.x,e.y,45+(1-a)*13,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#fff0bd";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText(label,e.x,e.y-51);ctx.restore()}
+ for(i=0;i<S.v47Fx.length;i++){p=S.v47Fx[i];a=clamp(p.t/(p.max||1),0,1);ctx.save();ctx.globalAlpha=a;ctx.strokeStyle=p.kind==="vamp"?"#dc79b0":(p.kind==="berserk"?"#ff6651":"#f0cb74");ctx.lineWidth=6;ctx.beginPath();ctx.arc(p.x,p.y,28+(1-a)*45,0,Math.PI*2);ctx.stroke();ctx.restore()}
+ if(S.v47HeroSlowT>0){ctx.save();ctx.fillStyle="#f1ddb0";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("SNARED",S.h.x,S.h.y-58);ctx.restore()}
+}
+var _v47DrawRuntime=draw;
+draw=function(){_v47DrawRuntime();if(S)v47DrawRuntimeFx()};
+
+/* Build screen documents the content expansion and keeps new Trophy names readable. */
+var _v47RenderBuildRuntime=renderBuildSummary;
+renderBuildSummary=function(){
+ _v47RenderBuildRuntime();if(!S)return;var b=byId("v3BuildBody");if(!b)return;
+ for(var i=0;i<V47_TROPHIES.length;i++)b.innerHTML=b.innerHTML.split(">"+V47_TROPHIES[i].id+"<").join(">"+V47_TROPHIES[i].title+"<");
+ b.innerHTML+='<h3>Content Expansion v4.7</h3><div class="buildRow"><b>Enemy scaling:</b> +8% base HP and +4.5% base damage per room. Movement speed, range, projectile speed, and authored attack cadence do not globally scale.</div><div class="buildRow"><b>New enemies:</b> Berserker · Trapper · Shaman · Bombardier · Knife Runner · Beast Handler · Hound · Crusher.</div><div class="buildRow"><b>Battle pool:</b> 17 named formations with recent-encounter protection and formation-specific second waves.</div><div class="buildRow"><b>Elite mutations:</b> Volatile · Commander · Juggernaut · Vampiric · Frenzied · Pack Leader.</div>';
+};
+
 </script>
 
 </body>
