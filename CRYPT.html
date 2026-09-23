@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Content Expansion v4.7</title>
+<title>Cryptids & Kings — Content Expansion v4.7.1</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -883,8 +883,11 @@ function update(dt){
  if(t){
    ranged=S.basic==="rock";d=dist(h,t);ideal=(S.v45RushT>0?(ranged?78:(S.basic==="limb"?78:52)):(ranged?160:(S.basic==="limb"?78:52)));a=Math.atan2(t.y-h.y,t.x-h.x);h.aim=a;
    if(d>ideal+15)moveUnit(h,t,(ranged?65:80)*S.mods.move,dt,false);
-   else if(ranged&&d<110&&!(S.v45RushT>0))moveUnit(h,t,70*S.mods.move,dt,true);
-   else if(h.atk<=0){
+   else {
+     /* Ranged Bigfoot can keep throwing while backpedaling. The old mutually-exclusive
+        retreat branch could deadlock basics forever against fast melee enemies. */
+     if(ranged&&d<110&&!(S.v45RushT>0))moveUnit(h,t,70*S.mods.move,dt,true);
+     if(h.atk<=0){
      h.combo++;h.swing=.22;
      mult=S.mods.basic*(h.rage>0?S.mods.rageDmg:1)*(h.bonusNext?S.mods.shroudMult:1);h.bonusNext=false;
      if(S.passives.indexOf("strength")>=0&&h.combo%3===0)mult*=1.6;
@@ -899,6 +902,7 @@ function update(dt){
        if(S.basic!=="limb")S.fx.push({type:"swipe",x:h.x,y:h.y,a:a,t:.22,side:h.combo%2?1:-1});
      }
      h.atk=S.basic==="limb" ? (h.rage>0?.50:1.00) : (h.rage>0 ? .35 : .72);
+     }
    }
  }
  throwAutoHooks(dt);updateWolves(dt);
@@ -925,7 +929,7 @@ function update(dt){
      continue;
    }
    for(j=0;j<S.en.length;j++){
-     e=S.en[j];if(e.dead)continue;key=j+"";
+     e=S.en[j];if(e.dead)continue;key=(e.uid!=null?e.uid:j)+"";
      if(!p.hits[key]&&dist(p,e)<(p.type==="tree"?S.mods.treeW+20:(p.type==="hook"?22:20))){
        p.hits[key]=1;
        if(p.type==="tree"){
@@ -933,7 +937,7 @@ function update(dt){
          if(S.mods.splinter)for(var q=0;q<S.en.length;q++)if(S.en[q]!==e&&!S.en[q].dead&&dist(e,S.en[q])<82)damageEnemy(S.en[q],46*v37PowerMult(),10,e.x,e.y);
        }else if(p.type==="rock"){
          damageEnemy(e,h.dmg*.82*p.mult,12,p.x,p.y);
-         if(p.bounce>0){p.bounce--;var nt=nearestOther(e,p.hits);if(nt){a=Math.atan2(nt.y-p.y,nt.x-p.x);p.vx=Math.cos(a)*430;p.vy=Math.sin(a)*430;p.rot=a}else p.t=0}else p.t=0;
+         if(p.bounce>0){p.bounce--;var nt=nearestOther(e,p.hits);if(nt){a=Math.atan2(nt.y-p.y,nt.x-p.x);var rockSpeed=Math.sqrt(p.vx*p.vx+p.vy*p.vy)||430;p.vx=Math.cos(a)*rockSpeed;p.vy=Math.sin(a)*rockSpeed;p.rot=a}else p.t=0}else p.t=0;
        }else if(p.type==="hook"){
          e.hooks.push({t:S.hook.duration,tick:.25});damageEnemy(e,12,0,p.x,p.y);p.t=0;S.fx.push({type:"hookhit",x:e.x,y:e.y,t:.35});
        }
@@ -949,7 +953,7 @@ function update(dt){
  updateUI();
 }
 function nearestOther(from,hits){
- var best=null,bd=1e9,i,e,d;for(i=0;i<S.en.length;i++){e=S.en[i];if(e.dead||hits[i+""])continue;d=dist(from,e);if(d<bd){bd=d;best=e}}return best;
+ var best=null,bd=1e9,i,e,d,key;for(i=0;i<S.en.length;i++){e=S.en[i];key=(e.uid!=null?e.uid:i)+"";if(e.dead||hits[key])continue;d=dist(from,e);if(d<bd){bd=d;best=e}}return best;
 }
 
 function drawBackground(){
@@ -1775,8 +1779,8 @@ update=function(dt){
  var comboChanged=S.h.combo!==comboBefore;
  if(comboChanged&&S.owned.followThrough&&S.basic==="swipe"&&S.h.combo%3===0)S.h.atk=Math.min(S.h.atk,.36);
  if(comboChanged&&S.owned.ironMomentum&&S.basic==="swipe"&&S.h.combo%3===0)v37GrantShield(24,3.5,"Iron Momentum");
- if(comboChanged&&S.basic==="rock"&&S.owned.heavyArc){for(var pi=S.proj.length-1;pi>=0;pi--){var pp=S.proj[pi];if(pp.type==="rock"&&!pp.v3Heavy){pp.v3Heavy=true;pp.vx*=.85;pp.vy*=.85;pp.mult=(pp.mult||1)*1.35;break}}}
- if(comboChanged&&S.basic==="rock"&&S.owned.scatterShot&&S.h.combo%3===0){var aa=S.h.aim;for(var si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.16)*410,vy:Math.sin(aa+si*.16)*410,t:1.45,hits:{},rot:aa+si*.16,bounce:0,mult:S.mods.basic*.55})}
+ if(comboChanged&&S.basic==="rock"&&S.owned.heavyArc){for(var pi=S.proj.length-1;pi>=0;pi--){var pp=S.proj[pi];if(pp.type==="rock"&&!pp.v3Heavy){pp.v3Heavy=true;pp.vx*=.85;pp.vy*=.85;pp.mult=(pp.mult||1)*1.35}}}
+ if(comboChanged&&S.basic==="rock"&&S.owned.scatterShot&&S.h.combo%3===0){var aa=S.h.aim;for(var si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.16)*348.5,vy:Math.sin(aa+si*.16)*348.5,t:1.45,hits:{},rot:aa+si*.16,bounce:0,mult:S.mods.basic*.55*1.35,v3Heavy:true})}
  if(comboChanged&&S.owned.ragingSwings&&S.basic==="swipe"&&S.h.rage>0){for(var ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<80)knockEnemy(S.en[ri],20,S.h.x,S.h.y)}
  if(comboChanged&&S.item==="chainsaw"&&S.chainsaw.active>0){var baseDelay=S.h.rage>0? .35:.72,rate=S.owned.chainRedline&&S.chainsaw.active<=2?7:S.chainsaw.rateMult;S.h.atk=Math.min(S.h.atk,baseDelay/rate);if(S.owned.chainWide){if(S.basic!=="rock"){for(ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<92)damageEnemy(S.en[ri],S.h.dmg*.30,12,S.h.x,S.h.y)}else{aa=S.h.aim;for(si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.12)*425,vy:Math.sin(aa+si*.12)*425,t:1.4,hits:{},rot:aa+si*.12,bounce:0,mult:S.mods.basic*.45})}}}
  if(S.owned.rootDrag){for(pi=0;pi<S.proj.length;pi++)if(S.proj[pi].type==="tree")for(ri=0;ri<S.en.length;ri++)if(dist(S.proj[pi],S.en[ri])<S.mods.treeW+24){S.en[ri].slowDebuff=Math.max(S.en[ri].slowDebuff||0,2);S.en[ri].slowPct=Math.max(S.en[ri].slowPct||0,.30)}}
