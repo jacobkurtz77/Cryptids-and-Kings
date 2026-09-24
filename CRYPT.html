@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Content Expansion v4.7.1</title>
+<title>Cryptids & Kings — The Long Hunt v4.8</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -223,7 +223,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Content Expansion v4.7: Bigfoot builds Rage through combat, spends it on abilities, and now faces a much larger roster of enemy specialists, formations, and Evolutions.</div>
+<div class="muted">The Long Hunt v4.8: 20 core combat rooms, risk/reward routes, universal Relics, stronger enemy scaling, and a build that has to earn its way ahead.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -244,7 +244,7 @@ body[data-screen="game"]{padding:6px}
 <div class="section">ABILITIES — PICK 4</div>
 <label class="caption">Ability 1</label>
 <select id="ability1" onchange="syncAbilityChoices()">
-<option value="slam" selected>Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="slam" selected>Earth Slam — 8s • 360° AoE + knockback</option>
 <option value="tree">Uproot — 7s • piercing tree line</option>
 <option value="honey">Honey Stash — 12s • timed shield + recovery boost</option>
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
@@ -255,7 +255,7 @@ body[data-screen="game"]{padding:6px}
 </select>
 <label class="caption">Ability 2</label>
 <select id="ability2" onchange="syncAbilityChoices()">
-<option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="slam">Earth Slam — 8s • 360° AoE + knockback</option>
 <option value="tree" selected>Uproot — 7s • piercing tree line</option>
 <option value="honey">Honey Stash — 12s • timed shield + recovery boost</option>
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
@@ -266,7 +266,7 @@ body[data-screen="game"]{padding:6px}
 </select>
 <label class="caption">Ability 3</label>
 <select id="ability3" onchange="syncAbilityChoices()">
-<option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="slam">Earth Slam — 8s • 360° AoE + knockback</option>
 <option value="tree">Uproot — 7s • piercing tree line</option>
 <option value="honey" selected>Honey Stash — 12s • timed shield + recovery boost</option>
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
@@ -277,7 +277,7 @@ body[data-screen="game"]{padding:6px}
 </select>
 <label class="caption">Ability 4</label>
 <select id="ability4" onchange="syncAbilityChoices()">
-<option value="slam">Earth Slam — 5s • 360° AoE + knockback</option>
+<option value="slam">Earth Slam — 8s • 360° AoE + knockback</option>
 <option value="tree">Uproot — 7s • piercing tree line</option>
 <option value="honey">Honey Stash — 12s • timed shield + recovery boost</option>
 <option value="shroud">Bush Ambush — 11s • hide 1s, invulnerable, burst out</option>
@@ -322,7 +322,7 @@ body[data-screen="game"]{padding:6px}
 <div class="section">PASSIVES — PICK 2</div>
 <label class="caption">Passive 1</label>
 <select id="passive1" onchange="syncPassiveChoices()">
-<option value="recover" selected>Cryptid Recovery — Camp Recovery becomes 14%</option>
+<option value="recover" selected>Cryptid Recovery — Camp Recovery becomes 10%</option>
 <option value="hide">Thick Hide — 12% less damage taken</option>
 <option value="heavy">Heavyweight — stronger knockback</option>
 <option value="instinct">Wild Instinct — 60+ raw-damage hits trigger Instinct</option>
@@ -331,7 +331,7 @@ body[data-screen="game"]{padding:6px}
 </select>
 <label class="caption">Passive 2</label>
 <select id="passive2" onchange="syncPassiveChoices()">
-<option value="recover">Cryptid Recovery — Camp Recovery becomes 14%</option>
+<option value="recover">Cryptid Recovery — Camp Recovery becomes 10%</option>
 <option value="hide">Thick Hide — 12% less damage taken</option>
 <option value="heavy">Heavyweight — stronger knockback</option>
 <option value="instinct">Wild Instinct — 60+ raw-damage hits trigger Instinct</option>
@@ -341,7 +341,7 @@ body[data-screen="game"]{padding:6px}
 <div class="infoGrid">
 <details>
 <summary>Passive details</summary>
-<div><b>Cryptid Recovery</b> — Camp Recovery heals 14% max HP instead of 7%.</div>
+<div><b>Cryptid Recovery</b> — Camp Recovery heals 10% max HP instead of 5%.</div>
 <div><b>Thick Hide</b> — Bigfoot takes 12% less damage from all incoming hits.</div>
 <div><b>Heavyweight</b> — all knockback from Bigfoot gets stronger.</div>
 <div><b>Wild Instinct</b> — when an incoming attack has 60+ raw damage <i>before Armor, Thick Hide, shields, or other damage reduction</i>, Bigfoot gains Instinct for 3 seconds: +30% Basic Attack Speed and +20% Movement Speed. 8-second internal cooldown. Max Health never changes the trigger.</div>
@@ -358,14 +358,14 @@ body[data-screen="game"]{padding:6px}
 <div><b>PRIMED:</b> the battlefield is giving that ability its ideal opportunity. You can always cast unprimed, but a Primed cast gets a unique bonus. Primal Rush primes against a distant ranged target.</div>
 <div><b>Prime Evolutions:</b> Evolutions can make a Prime condition easier to reach or make the Primed payoff stronger.</div>
 </details>
-<div id="engine">ENGINE READY · CONTENT EXPANSION V4.7 · 12 ROOMS</div>
+<div id="engine">ENGINE READY · THE LONG HUNT V4.8 · 20 CORE ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
 
 <section id="game">
 <div class="hud">
-<span class="pill">Room <b id="roomNum">1</b>/12</span>
+<span class="pill">Room <b id="roomNum">1</b>/20</span>
 <span class="pill">Lv. <b id="lvl">1</b></span>
 <span class="pill">HP <b id="hpText">800 / 800</b></span>
 <span class="pill">XP <b id="xpText">0 / 8</b></span>
@@ -385,7 +385,7 @@ body[data-screen="game"]{padding:6px}
 </div>
 <div id="status">Starting...</div>
 <div id="skills"></div>
-<div class="runTip">Camp Recovery triggers after every completed room. Bigfoot item hunts begin after the first boss.</div><div id="runRules">Combat paths always appear. Rare weird events can interrupt travel before the next combat choice.</div>
+<div class="runTip">Camp Recovery triggers after each core combat room. The Long Hunt is 20 core fights; rare secrets can add bonus fights.</div><div id="runRules">Routes now trade danger for Evolutions, Relics, Signature Items, and persistent run modifiers. Secret side fights do not replace core rooms.</div>
 </section>
 </div>
 
@@ -394,7 +394,7 @@ var S=null,running=false,last=0,raf=0;
 var field=document.getElementById("field"),ctx=null;
 
 var abilityChoices=[
- ["slam","Earth Slam — 5s • 360° AoE + knockback"],
+ ["slam","Earth Slam — 8s • 360° AoE + knockback"],
  ["tree","Uproot — 7s • piercing tree line"],
  ["honey","Honey Stash — 12s • timed shield + recovery boost"],
  ["shroud","Bush Ambush — 11s • hide 1s, invulnerable, burst out"],
@@ -404,7 +404,7 @@ var abilityChoices=[
  ["beatdown","Savage Beatdown — 10s • focused 3-hit combo"]
 ];
 var passiveChoices=[
- ["recover","Cryptid Recovery — Camp Recovery becomes 14%"],
+ ["recover","Cryptid Recovery — Camp Recovery becomes 10%"],
  ["hide","Thick Hide — 12% less damage taken"],
  ["heavy","Heavyweight — stronger knockback"],
  ["instinct","Wild Instinct — 60+ raw-damage hits trigger Instinct"],
@@ -2015,7 +2015,7 @@ showShrine=function(){S.paused=true;S.lastEventRoom=S.room;showDecision("SHRINE 
  {cls:"shrine",tag:"SACRIFICE",title:"Burn the Future",text:"Gain +15% Ability Damage, but Camp Recovery is -5% for the rest of the run.",go:function(){v37AddStat("power",3);S.mods.campBonus=(S.mods.campBonus||0)-.05;finishNonCombat("The shrine grants violence now and comfort later.")}}
 ],3)};
 showEvent=function(){S.paused=true;S.eventSeen++;S.lastEventRoom=S.room;var which=Math.floor(Math.random()*5);if(which===0)showDecision("WEIRD EVENT — ABANDONED CABIN","The cabin smells like smoke, food, and old hunters.",[
- {cls:"event",tag:"TRADEOFF",title:"Eat What You Can",text:"Heal 21% max HP, but lose 1 Armor if you have any.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.21);ensureStats();S.stats.armor=Math.max(0,S.stats.armor-1);finishNonCombat("The meal helps. The escape costs some protection.")}},
+ {cls:"event",tag:"TRADEOFF",title:"Eat What You Can",text:"Heal 18% max HP, but lose 1 Armor if you have any.",go:function(){S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.18);ensureStats();S.stats.armor=Math.max(0,S.stats.armor-1);finishNonCombat("The meal helps. The escape costs some protection.")}},
  {cls:"event",tag:"GAMBLE",title:"Search the Back Room",text:"50% chance: +10% Basic Attack Damage. Otherwise lose 20% current HP.",go:function(){if(Math.random()<.5){v37AddStat("might",2);finishNonCombat("Bigfoot finds something worth carrying.")}else{S.h.hp=Math.max(1,S.h.hp-S.h.max*.20);finishNonCombat("The floor trap snaps shut.")}}}
  ],2);else if(which===1)showDecision("WEIRD EVENT — HUNTER'S SNARE","A locked supply case hangs above a marked trail.",[
  {cls:"event",tag:"CONSEQUENCE",title:"Take the Supplies",text:"Gain +50 Max HP and +5% Basic Attack Damage, but an armed patrol joins the next combat.",go:function(){v37AddStat("body",1);v37AddStat("might",1);S.ambushDebt=true;finishNonCombat("Bigfoot takes the supplies. Someone will notice.")}},
@@ -3357,6 +3357,389 @@ renderBuildSummary=function(){
  b.innerHTML+='<h3>Content Expansion v4.7</h3><div class="buildRow"><b>Enemy scaling:</b> +8% base HP and +4.5% base damage per room. Movement speed, range, projectile speed, and authored attack cadence do not globally scale.</div><div class="buildRow"><b>New enemies:</b> Berserker · Trapper · Shaman · Bombardier · Knife Runner · Beast Handler · Hound · Crusher.</div><div class="buildRow"><b>Battle pool:</b> 17 named formations with recent-encounter protection and formation-specific second waves.</div><div class="buildRow"><b>Elite mutations:</b> Volatile · Commander · Juggernaut · Vampiric · Frenzied · Pack Leader.</div>';
 };
 
+</script>
+
+
+<style id="v48Styles">
+#v48RunBar{margin:7px 0 8px;padding:7px 9px;border:2px solid #6c5138;border-radius:11px;background:#132f29;color:#d9cda8;font-size:11px;line-height:1.35;font-weight:800}
+#v48RunBar b{color:#ffe08a}.card.relic{border-color:#d2a95d;background:linear-gradient(#4f452d,#352f24)}
+.card.cursed{border-color:#a76cd2;background:linear-gradient(#493454,#30283a)}.card.secret{border-color:#6ab8a6;background:linear-gradient(#294c46,#203a36)}
+.card.hunt{border-color:#d77f55;background:linear-gradient(#583a2f,#392b28)}
+.v48RouteLine{display:block;margin-top:3px;color:#f0d99b;font-weight:900}.v48Danger{color:#ffba77}.v48Reward{color:#9ee6b0}
+#v48RelicBurst{position:absolute;left:50%;top:78px;transform:translateX(-50%);z-index:20;pointer-events:none;font-weight:1000;color:#ffe8a0;text-shadow:0 2px 4px #000;font-size:12px}
+</style>
+
+<script>
+/* ===== THE LONG HUNT V4.8 — ROUTES, RELICS, 20 ROOMS ===== */
+(function(){
+var V48_CORE_ROOMS=20;
+
+/* ---------- balance backbone ---------- */
+skillInfo.slam.cd=8;
+for(var ai=0;ai<abilityChoices.length;ai++)if(abilityChoices[ai][0]==="slam")abilityChoices[ai][1]="Earth Slam — 8s • 360° AoE + knockback";
+
+/* Two new Bigfoot passives. */
+if(!passiveChoices.some(function(x){return x[0]==="predatorEye"}))passiveChoices.push(["predatorEye","Predator's Eye — +15% damage to controlled or exposed enemies"]);
+if(!passiveChoices.some(function(x){return x[0]==="cornered"}))passiveChoices.push(["cornered","Cornered Beast — below 40% HP: +20% Basic Attack Speed, +12% Movement Speed"]);
+function v48EnsurePassiveOptions(){
+ var defs=[
+  ["predatorEye","Predator's Eye — +15% damage to stunned, feared, rooted, slowed, Exposed, or Cracked enemies"],
+  ["cornered","Cornered Beast — below 40% HP: +20% Basic Attack Speed, +12% Movement Speed"]
+ ];
+ ["passive1","passive2"].forEach(function(id){var el=byId(id);if(!el)return;for(var i=0;i<defs.length;i++)if(!el.querySelector('option[value="'+defs[i][0]+'"]')){var o=document.createElement("option");o.value=defs[i][0];o.textContent=defs[i][1];el.appendChild(o)}});
+ var d=document.querySelector('#setup details summary');
+ var passDetails=null,all=document.querySelectorAll('#setup details');for(var q=0;q<all.length;q++)if(all[q].querySelector('summary')&&all[q].querySelector('summary').textContent.indexOf('Passive details')>=0)passDetails=all[q];
+ if(passDetails&&!passDetails.querySelector('.v48PassiveDetail')){var box=document.createElement('div');box.className='v48PassiveDetail';box.innerHTML='<b>Predator\'s Eye</b> — +15% damage against enemies that are stunned, feared, rooted, slowed, Exposed, or Cracked.<br><b>Cornered Beast</b> — while below 40% HP, +20% Basic Attack Speed and +12% Movement Speed.';passDetails.appendChild(box)}
+}
+v48EnsurePassiveOptions();
+
+/* Enemy growth intentionally beats automatic character growth. */
+v47RoomHpScale=function(){return 1+(Math.max(1,S.room)-1)*.085};
+v47RoomDamageScale=function(){return 1+(Math.max(1,S.room)-1)*.055};
+v47TargetCount=function(kind){return Math.min(20,7+Math.floor((Math.max(1,S.room)-1)*.72)+(kind==="elite"?1:0))};
+
+gainXP=function(n){
+ if(!S)return;S.xp+=n;
+ while(S.xp>=S.need){S.xp-=S.need;S.level++;S.need=Math.ceil(S.need*1.28);S.h.max+=12;S.h.dmg*=1.02;S.fx.push({type:"level",x:S.h.x,y:S.h.y,t:1});byId("status").innerHTML="LEVEL UP — +12 Max HP, +2% Base Damage."}
+};
+
+var _v48CampBase=campRecovery;
+campRecovery=function(){
+ if(!S)return 0;
+ if(S.owned&&S.owned.goldenReserve&&S.h.shield>0){var extra=Math.min(S.h.max*.05,S.h.shield*.20);S.h.hp=Math.min(S.h.max,S.h.hp+extra);S.h.shield=0}
+ var pct=(S.passives.indexOf("recover")>=0?.10:.05)+(S.mods.campBonus||0)*.70;
+ if(v48HasMod("rottenCamps"))pct-=.02;
+ if(S.honeyBoost){pct+=(S.mods.honeyCamp||0)*.70;S.honeyBoost=false}
+ var before=S.h.hp;S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*Math.max(0,pct));return Math.round(S.h.hp-before)
+};
+
+/* ---------- universal relic catalogue ---------- */
+var V48_RELICS=[
+ {id:"batJar",tier:1,title:"Vampire Bat in a Jar",text:"Every 2.4s in combat, a bat bites the nearest enemy for 30 flat damage. Every third bite returns and heals your character for 6 HP."},
+ {id:"strangeEgg",tier:2,title:"Strange Egg",text:"After clearing 3 core combat rooms after finding it, the egg hatches into 1 of 3 permanent companion creatures."},
+ {id:"shatteredMirror",tier:2,title:"Shattered Mirror",text:"The first time each combat one enemy attack deals 60+ raw damage before mitigation, a spectral copy appears for 3s and repeats 3 Basic Attacks at 70% damage."},
+ {id:"graveLantern",tier:2,title:"Grave Lantern",text:"Every 4th enemy kill captures 1 soul. At 3 souls, summon a Wraith for 8s, then empty the lantern. Souls persist between rooms."},
+ {id:"witchBottle",tier:2,title:"Witch Bottle",text:"The first lethal hit leaves you at 1 HP, grants 2s invulnerability, then permanently shatters this relic."},
+ {id:"stormBottle",tier:2,title:"Storm in a Bottle",text:"After your side deals 1200 damage while the bottle is inactive, unleash a 5s storm. Lightning strikes every 0.7s for 55 flat damage."},
+ {id:"teddy",tier:1,title:"Possessed Teddy Bear",text:"The first time each combat you fall below 35% HP, the bear transforms and fights until combat ends, dealing 42 flat damage every 1.1s."},
+ {id:"funeralBell",tier:2,title:"Black Funeral Bell",text:"Once per combat when 6+ enemies are alive, interrupt normal enemies for 0.6s and bosses for 0.2s, then summon a spectral Warden for 6s."},
+ {id:"tinyDoor",tier:2,title:"Tiny Wooden Door",text:"After 4 core rooms, a Hidden Clearing side route appears. Taking it adds a bonus fight and Relic reward, then the door begins counting again."},
+ {id:"mimicCoin",tier:2,title:"Mimic Coin",text:"After at least 3 core rooms between uses, path screens have an 18% chance to reveal a Mimic Cache bonus fight. Winning awards a Rare Relic."},
+ {id:"bearTrap",tier:1,title:"Broken Bear Trap",text:"The first enemy damaged each combat has its Movement Speed reduced by 100% for 2s. It can still attack if you remain in range."},
+ {id:"oldRadio",tier:1,title:"Old Radio",text:"When a normal encounter's second wave would arrive, the radio marks their entry points 1.5s early. Reinforcements enter slowed by 35% for 2s."},
+ {id:"mothMap",tier:1,title:"Moth-Eaten Map",text:"After clearing 4 core rooms while carrying it, your next non-boss path screen offers 1 additional main route, then the map begins counting again."},
+ {id:"cursedLocket",tier:1,title:"Cursed Locket",text:"Once per combat, dropping below 25% HP slows every enemy by 35% for 4s."},
+ {id:"sundial",tier:1,title:"Pocket Sundial",text:"Once per combat, when all 4 normal abilities are simultaneously on cooldown, reduce each of those cooldowns by 1.5s."}
+];
+var V48_RELIC_BY_ID={};for(var ri=0;ri<V48_RELICS.length;ri++)V48_RELIC_BY_ID[V48_RELICS[ri].id]=V48_RELICS[ri];
+
+var V48_MODIFIERS=[
+ {id:"bloodMoon",title:"Blood Moon",text:"Every non-boss core combat gains 1 additional Elite mutation. Relic rewards show 1 additional choice."},
+ {id:"predatorNight",title:"Predator's Night",text:"Every non-boss core combat gains 1 additional specialist enemy. DANGEROUS Evolution rewards show 1 additional choice."},
+ {id:"rottenCamps",title:"Rotten Camps",text:"Camp Recovery is reduced by 2 percentage points. Every Evolution reward shows 1 additional choice."},
+ {id:"hauntedForest",title:"Haunted Forest",text:"Every 3rd core combat adds 2 spectral hounds. Relic Hunt routes appear more often."}
+];
+var V48_MOD_BY_ID={};for(var mi=0;mi<V48_MODIFIERS.length;mi++)V48_MOD_BY_ID[V48_MODIFIERS[mi].id]=V48_MODIFIERS[mi];
+
+function v48Init(){
+ if(!S)return;
+ S.v48Relics=S.v48Relics||[];S.v48ConsumedRelics=S.v48ConsumedRelics||[];S.v48Modifiers=S.v48Modifiers||[];S.v48CurrentReward=S.v48CurrentReward||"evolution";S.v48EvolutionCount=S.v48EvolutionCount||3;S.v48RouteDifficulty=S.v48RouteDifficulty||0;
+ if(S.v48CoreClears==null)S.v48CoreClears=0;if(S.v48EggProgress==null)S.v48EggProgress=0;if(S.v48DoorProgress==null)S.v48DoorProgress=0;if(S.v48MimicCooldown==null)S.v48MimicCooldown=0;if(S.v48SideCooldown==null)S.v48SideCooldown=0;if(S.v48MapProgress==null)S.v48MapProgress=0;if(S.v48MapCharges==null)S.v48MapCharges=0;
+ if(S.v48StormCharge==null)S.v48StormCharge=0;if(S.v48StormT==null)S.v48StormT=0;if(S.v48StormTick==null)S.v48StormTick=0;if(S.v48LanternKills==null)S.v48LanternKills=0;if(S.v48LanternSouls==null)S.v48LanternSouls=0;
+ S.v48BossZones=S.v48BossZones||[];S.v48BossShots=S.v48BossShots||[];S.v48RelicShots=S.v48RelicShots||[];S.v48RelicFx=S.v48RelicFx||[];
+ S.v48RecentRoutes=S.v48RecentRoutes||[];
+}
+function v48HasRelic(id){return !!(S&&S.v48Relics&&S.v48Relics.indexOf(id)>=0)}
+function v48HasMod(id){return !!(S&&S.v48Modifiers&&S.v48Modifiers.indexOf(id)>=0)}
+function v48AddFx(kind,x,y,t,data){if(!S)return;v48Init();S.v48RelicFx.push({kind:kind,x:x,y:y,t:t||.6,max:t||.6,data:data||{}})}
+function v48RelicName(id){return V48_RELIC_BY_ID[id]?V48_RELIC_BY_ID[id].title:id}
+function v48ModName(id){return V48_MOD_BY_ID[id]?V48_MOD_BY_ID[id].title:id}
+function v48ModShort(id){return({bloodMoon:"+1 Elite mutation · +1 Relic choice",predatorNight:"+1 specialist · DANGEROUS +1 Evolution choice",rottenCamps:"Camp Recovery -2 points · +1 Evolution choice",hauntedForest:"Ghost hounds every 3rd room · more Relic Hunts"})[id]||""}
+
+function v48EnsureRunBar(){
+ if(byId("v48RunBar"))return;var anchor=byId("v43RageWrap")||byId("status"),d=document.createElement("div");d.id="v48RunBar";d.innerHTML="<b>THE LONG HUNT</b> · 20 core rooms";anchor.parentNode.insertBefore(d,anchor.nextSibling)
+}
+function v48UpdateRunBar(){
+ if(!S)return;v48EnsureRunBar();var r=S.v48Relics||[],m=S.v48Modifiers||[],rn=r.slice(-3).map(v48RelicName).join(" · "),mn=m.map(function(id){return v48ModName(id)+" ("+v48ModShort(id)+")"}).join(" · ");
+ byId("v48RunBar").innerHTML='<b>RELICS '+r.length+'</b>'+(rn?' · '+rn:' · none yet')+(r.length>3?' · +'+(r.length-3):'')+'<br><b>RUN MODIFIERS '+m.length+'</b>'+(mn?' · '+mn:' · none')
+}
+
+/* ---------- route modifiers ---------- */
+function v48AvailableModifiers(){return V48_MODIFIERS.filter(function(m){return !v48HasMod(m.id)})}
+function v48ApplyModifier(id){if(!S||v48HasMod(id))return;S.v48Modifiers.push(id);v48AddFx("modifier",S.h.x,S.h.y,1,{name:v48ModName(id)});v48UpdateRunBar()}
+
+/* ---------- encounter expansion ---------- */
+V47_ENCOUNTERS.gauntlet={name:"IRON GAUNTLET",min:10,desc:"Crushers lock the center while runners and bombardiers attack from both flanks.",wave:["crusher","runner","bomber"]};
+V47_ENCOUNTERS.witchfire={name:"WITCHFIRE CROSSING",min:11,desc:"Shamans empower a field of bombs and traps while the front line keeps Bigfoot inside it.",wave:["shaman","bomber","trapper"]};
+V47_ENCOUNTERS.kennelsiege={name:"KENNEL SIEGE",min:12,desc:"Handlers flood the clearing with hounds behind an armored crusher screen.",wave:["handler","hound","crusher"]};
+V47_ENCOUNTERS.blackmarch={name:"BLACK MARCH",min:16,desc:"A late-run veteran column mixes crushers, shamans, bombs, traps, and fast flankers.",wave:["crusher","shaman","bomber","trapper"]};
+["gauntlet","witchfire","kennelsiege","blackmarch"].forEach(function(id){if(V47_ENCOUNTER_IDS.indexOf(id)<0)V47_ENCOUNTER_IDS.push(id)});
+var _v48SpawnTemplate=v47SpawnTemplate;
+v47SpawnTemplate=function(id,kind){
+ var target=v47TargetCount(kind),i,a;
+ if(id==="gauntlet"){v47Add("crusher",300,90);v47Add("crusher",460,90);v47Add("bomber",130,80);v47Add("bomber",630,80);v47Add("runner",100,420);v47Add("runner",660,420);v47Fill(["crusher","runner","bomber","shield"],target);return}
+ if(id==="witchfire"){v47Add("shaman",250,68);v47Add("shaman",510,68);v47Add("bomber",120,95);v47Add("trapper",640,95);v47Add("shield",300,165);v47Add("shield",460,165);v47Fill(["shaman","bomber","trapper","shield","runner"],target);return}
+ if(id==="kennelsiege"){v47Add("crusher",380,82);v47Add("handler",175,90);v47Add("handler",585,90);for(i=0;i<4;i++){a=i/4*Math.PI*2+.35;v47Outer("hound",a,145)}v47Fill(["handler","hound","crusher","shield"],target);return}
+ if(id==="blackmarch"){v47Add("crusher",285,88);v47Add("crusher",475,88);v47Add("shaman",380,62);v47Add("bomber",120,86);v47Add("trapper",640,86);v47Add("runner",105,425);v47Add("runner",655,425);v47Fill(["crusher","shaman","bomber","trapper","runner","shield"],target);return}
+ _v48SpawnTemplate(id,kind)
+};
+function v48SpecialistPool(){if(S.room>=14)return["crusher","bomber","trapper","shaman","runner","handler","berserker"];if(S.room>=8)return["bomber","trapper","shaman","runner","handler","berserker"];return["runner","trapper","berserker"]}
+function v48AddSpecialists(n,ghost){for(var i=0;i<n;i++){var a=rnd(0,Math.PI*2),r=rnd(215,280),t=ghost?"hound":pickOne(v48SpecialistPool()),e=v47Outer(t,a,r);if(ghost)e.v48Ghost=true}}
+function v48AddTraits(n){var c=S.en.filter(function(e){return !e.dead&&e.type!=="hound"&&!e.v47Trait&&!e.eliteMod});shuffle(c);var traits=["VOLATILE","COMMANDER","JUGGERNAUT","VAMPIRIC","FRENZIED","PACK LEADER"];shuffle(traits);for(var i=0;i<Math.min(n,c.length);i++)v47ApplyTrait(c[i],traits[i%traits.length])}
+
+function v48ResetPerCombat(){if(!S)return;v48Init();S.v48BearUsed=false;S.v48BellUsed=false;S.v48MirrorUsed=false;S.v48TrapUsed=false;S.v48LocketUsed=false;S.v48SundialUsed=false;S.v48RadioPending=null;S.v48BatTimer=.7;S.v48BatBites=0;S.v48Bear=null;S.v48Warden=null;S.v48Mirror=null;S.v48BossZones=[];S.v48BossShots=[];S.v48RelicShots=[]}
+var _v48SpawnCombat=spawnCombat;
+spawnCombat=function(kind){
+ _v48SpawnCombat(kind);if(!S)return;v48ResetPerCombat();
+ if(kind==="combat"||kind==="elite"||kind==="ambush"){
+   var extra=0,traits=0;
+   if(!S.v48SideActive){if(S.room>=11)extra++;if(S.room>=16)extra++;if(v48HasMod("predatorNight"))extra++;if(v48HasMod("hauntedForest")&&S.room%3===0)v48AddSpecialists(2,true);if(v48HasMod("bloodMoon"))traits++}
+   if(S.v48RouteDifficulty>=1)extra++;if(S.v48RouteDifficulty>=2){extra++;traits++}if(S.v48RouteDifficulty>=3)traits++;
+   if(extra)v48AddSpecialists(extra,false);if(traits)v48AddTraits(traits)
+ }
+ v48UpdateRunBar()
+};
+
+/* ---------- boss expansion ---------- */
+function v48ResetBossScene(){S.en=[];S.proj=[];S.fx=[];S.hazards=[];S.h.x=380;S.h.y=365;S.paused=false;S.roomKind="boss";v48ResetPerCombat();if(typeof v47ResetRoomRuntime==="function")v47ResetRoomRuntime()}
+function v48SpawnCustomBoss(id,name,status,hpMult){v48ResetBossScene();addEnemy("boss",380,125);var b=S.en[S.en.length-1];b.v48Boss=id;b.v39Boss={cd:999999,cast:null,lastPhase:1};b.hp*=hpMult||1;b.max=b.hp;b.phase=1;b.v48State={a:rnd(2.2,3.2),b:rnd(3.7,4.7),c:rnd(5,6),action:null,motion:null,phaseSpawn:false};b.dmg*=1.10;S.currentName=name;S.v39Encounter={id:"v48boss",name:name,desc:"A Long Hunt boss encounter.",reinforce:[]};byId("status").innerHTML=status;updateRoomLabel();updateUI();return b}
+var _v48EnterBoss=enterFixedBoss;
+enterFixedBoss=function(){
+ if(S.room===10){v48SpawnCustomBoss("cinderhorn","ASHEN GROVE · CINDERHORN","CINDERHORN lowers its antlers. The ash-stag owns this clearing.",.92);return}
+ if(S.room===15){v48SpawnCustomBoss("widow","LANTERN MARSH · THE LANTERN WIDOW","THE LANTERN WIDOW descends through green fire and webbing.",1.02);return}
+ _v48EnterBoss();if(!S)return;v48ResetPerCombat();if(S.room===20&&S.v39Encounter)S.v39Encounter.name="THE KING\'S HOLLOW";for(var i=0;i<S.en.length;i++)if(S.en[i].type==="boss"||S.en[i].type==="miniboss")S.en[i].dmg*=1.10
+};
+function v48FindBoss(){if(!S)return null;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i].v48Boss)return S.en[i];return null}
+function v48BossZone(kind,x,y,r,t,damage,source,slow){S.v48BossZones.push({kind:kind,x:x,y:y,r:r,t:t,max:t,damage:damage,source:source,slow:slow||0,hit:false})}
+function v48BossShot(kind,x,y,a,speed,damage,source){S.v48BossShots.push({kind:kind,x:x,y:y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,t:2.4,damage:damage,source:source,rot:a})}
+function v48StartBossAction(e,kind,wind){e.v48State.action={kind:kind,t:wind,max:wind};e.atk=Math.max(e.atk,wind+.15);e.winding=true;e.wind=wind;e.windMax=wind;byId("status").innerHTML=(kind==="charge"?"ANTLER CHARGE":kind==="embers"?"EMBER HOOVES":kind==="fan"?"ANTLER FAN":kind==="web"?"WEB SNARE":kind==="lantern"?"LANTERN VOLLEY":kind==="step"?"SHADOW STEP":kind==="saw"?"SAW RUSH":kind==="timber"?"FALLING TIMBER":"THE MAW OPENS")+" — react to the telegraph."}
+function v48BossExecute(e,kind){
+ var st=e.v48State,a,i;
+ if(e.v48Boss==="cinderhorn"){
+   if(kind==="charge"){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);st.motion={kind:"charge",t:.72,vx:Math.cos(a)*(e.phase===2?470:420),vy:Math.sin(a)*(e.phase===2?470:420),hit:false,damage:e.dmg*1.65}}
+   else if(kind==="embers"){for(i=0;i<(e.phase===2?5:3);i++){a=i/Math.max(1,(e.phase===2?5:3))*Math.PI*2+.2;var rr=i===0?0:82;v48BossZone("embers",clamp(S.h.x+Math.cos(a)*rr,55,705),clamp(S.h.y+Math.sin(a)*rr,60,465),48,.82,e.dmg*1.15,e,.18)}}
+   else{a=Math.atan2(S.h.y-e.y,S.h.x-e.x);for(i=-2;i<=2;i++)v48BossShot("antler",e.x,e.y,a+i*.16,330,e.dmg*.72,e)}
+ }else if(e.v48Boss==="widow"){
+   if(kind==="web"){for(i=0;i<(e.phase===2?5:3);i++){a=i/Math.max(1,(e.phase===2?5:3))*Math.PI*2+.4;var wr=i===0?0:76;v48BossZone("web",clamp(S.h.x+Math.cos(a)*wr,55,705),clamp(S.h.y+Math.sin(a)*wr,60,465),46,.78,e.dmg*.86,e,.45)}}
+   else if(kind==="lantern"){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);for(i=-2;i<=2;i++)v48BossShot("lantern",e.x,e.y,a+i*.20,290,e.dmg*.70,e)}
+   else{var dx=S.h.x<380?680:80,dy=clamp(S.h.y+rnd(-70,70),70,455);e.x=dx;e.y=dy;v48BossZone("shadow",e.x,e.y,86,.42,e.dmg*1.28,e,.25)}
+ }else if(e.v48Boss==="foreman"){
+   if(kind==="saw"){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);st.motion={kind:"saw",t:.78,vx:Math.cos(a)*430,vy:Math.sin(a)*430,hit:false,damage:e.dmg*1.55}}
+   else if(kind==="timber"){for(i=0;i<4;i++){a=i/4*Math.PI*2+.25;v48BossZone("timber",clamp(S.h.x+Math.cos(a)*70,55,705),clamp(S.h.y+Math.sin(a)*70,60,465),50,.9,e.dmg*1.12,e,.2)}}
+   else{v48AddSpecialists(2,false)}
+ }else if(e.v48Boss==="mimic"){
+   if(kind==="snap"){a=Math.atan2(S.h.y-e.y,S.h.x-e.x);st.motion={kind:"snap",t:.52,vx:Math.cos(a)*390,vy:Math.sin(a)*390,hit:false,damage:e.dmg*1.45}}
+   else{for(i=0;i<6;i++)v48BossShot("coin",e.x,e.y,i/6*Math.PI*2,260,e.dmg*.55,e)}
+ }
+ e.winding=false;e.wind=0
+}
+function v48TickBossMotion(e,dt){var m=e.v48State.motion;if(!m)return false;m.t-=dt;e.x=clamp(e.x+m.vx*dt,42,718);e.y=clamp(e.y+m.vy*dt,48,478);if(!m.hit&&dist(e,S.h)<58&&S.h.inv<=0){hurtHero(m.damage,e);m.hit=true;var a=Math.atan2(S.h.y-e.y,S.h.x-e.x);S.h.x=clamp(S.h.x+Math.cos(a)*32,35,725);S.h.y=clamp(S.h.y+Math.sin(a)*32,42,485);S.shake=Math.max(S.shake,.3)}if(m.t<=0)e.v48State.motion=null;return true}
+function v48UpdateBoss(e,dt){
+ var st=e.v48State;if(!st)return true;e.atk=Math.max(0,(e.atk||0)-dt);
+ if(e.phase===1&&e.hp/e.max<=(e.v48Boss==="widow"?.45:.50)){e.phase=2;e.dmg*=1.12;st.a=Math.min(st.a,1);st.b=Math.min(st.b,1.5);st.c=Math.min(st.c,2);if(!st.phaseSpawn){st.phaseSpawn=true;if(e.v48Boss==="cinderhorn")v48AddSpecialists(2,false);if(e.v48Boss==="widow")v48AddSpecialists(2,true)}v48AddFx("bossPhase",e.x,e.y,1);byId("status").innerHTML="PHASE II — the boss changes its attack pattern."}
+ if(v48TickBossMotion(e,dt))return true;
+ if(st.action){st.action.t-=dt;e.spd=0;if(st.action.t<=0){var k=st.action.kind;st.action=null;v48BossExecute(e,k)}return true}
+ st.a-=dt;st.b-=dt;st.c-=dt;
+ if(e.v48Boss==="cinderhorn"){
+   if(st.a<=0){st.a=e.phase===2?4.3:5.6;v48StartBossAction(e,"charge",.82);return true}
+   if(st.b<=0){st.b=e.phase===2?5.1:6.8;v48StartBossAction(e,"embers",.68);return true}
+   if(st.c<=0){st.c=e.phase===2?5.8:7.4;v48StartBossAction(e,"fan",.62);return true}
+ }else if(e.v48Boss==="widow"){
+   if(st.a<=0){st.a=e.phase===2?4.5:5.8;v48StartBossAction(e,"web",.78);return true}
+   if(st.b<=0){st.b=e.phase===2?4.9:6.4;v48StartBossAction(e,"lantern",.64);return true}
+   if(st.c<=0){st.c=e.phase===2?6.0:7.6;v48StartBossAction(e,"step",.68);return true}
+ }else if(e.v48Boss==="foreman"){
+   if(st.a<=0){st.a=4.8;v48StartBossAction(e,"saw",.72);return true}if(st.b<=0){st.b=6.2;v48StartBossAction(e,"timber",.75);return true}if(st.c<=0){st.c=8.5;v48StartBossAction(e,"crew",.7);return true}
+ }else if(e.v48Boss==="mimic"){
+   if(st.a<=0){st.a=4.2;v48StartBossAction(e,"snap",.58);return true}if(st.b<=0){st.b=5.5;v48StartBossAction(e,"coins",.62);return true}
+ }
+ var d=dist(e,S.h);if(d>e.range+18)moveUnit(e,S.h,e.spd,dt,false);else if(e.atk<=0){hurtHero(e.dmg,e);e.atk=e.phase===2?.9:1.15;e.attackAnim=.25}return true
+}
+var _v48BossSpecial=updateBossSpecial;
+updateBossSpecial=function(e,dt){if(e&&e.v48Boss)return v48UpdateBoss(e,dt);return _v48BossSpecial(e,dt)};
+
+function v48UpdateBossEffects(dt){
+ for(var i=S.v48BossZones.length-1;i>=0;i--){var z=S.v48BossZones[i];z.t-=dt;if(!z.hit&&z.t<=0){z.hit=true;if(dist(z,S.h)<z.r&&S.h.inv<=0){hurtHero(z.damage,z.source||null);if(z.slow){S.v47HeroSlowT=Math.max(S.v47HeroSlowT||0,z.slow>0.3?2.2:1.2)}S.shake=Math.max(S.shake,.22)}z.t=-.18}if(z.t<-.16)S.v48BossZones.splice(i,1)}
+ for(i=S.v48BossShots.length-1;i>=0;i--){var p=S.v48BossShots[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.t-=dt;if(dist(p,S.h)<20&&S.h.inv<=0){hurtHero(p.damage,p.source||null);p.t=0}if(p.t<=0||p.x<-40||p.x>800||p.y<-40||p.y>560)S.v48BossShots.splice(i,1)}
+}
+
+/* ---------- relic runtime ---------- */
+function v48AliveEnemies(){return S.en.filter(function(e){return !e.dead})}
+function v48FlatHit(e,n,k){if(!e||e.dead)return;damageEnemy(e,n,k||0,S.h.x,S.h.y)}
+function v48CompanionTarget(){return nearestTo(S.h)}
+function v48SpawnMirror(){S.v48Mirror={t:3,timer:.08,left:3};v48AddFx("mirror",S.h.x,S.h.y,.8)}
+function v48MirrorAttack(){var t=v48CompanionTarget();if(!t)return;var dmg=(S.basic==="limb"?70:S.h.dmg)*S.mods.basic*.70;S.v48RelicShots.push({kind:"mirror",x:S.h.x-30,y:S.h.y-20,target:t.uid,speed:470,damage:dmg,t:1.4})}
+function v48SummonWraith(){S.v48Warden={t:8,timer:.15,damage:38,rate:.85,kind:"wraith"};S.v48LanternSouls=0;v48AddFx("wraith",S.h.x,S.h.y,.8)}
+function v48HatchEgg(){if(!v48HasRelic("strangeEgg")||S.v48EggHatched)return;S.v48EggHatched=true;var pets=["crow","toad","horn"];S.v48EggPet={type:pickOne(pets),timer:.5};v48AddFx("hatch",S.h.x,S.h.y,1,{name:S.v48EggPet.type});byId("status").innerHTML="THE STRANGE EGG HATCHED — "+S.v48EggPet.type.toUpperCase()+" joins the run."}
+function v48UpdateRelicShots(dt){for(var i=S.v48RelicShots.length-1;i>=0;i--){var p=S.v48RelicShots[i],t=null;for(var j=0;j<S.en.length;j++)if(!S.en[j].dead&&S.en[j].uid===p.target){t=S.en[j];break}p.t-=dt;if(!t){S.v48RelicShots.splice(i,1);continue}var dx=t.x-p.x,dy=t.y-p.y,z=Math.hypot(dx,dy)||1;p.x+=dx/z*p.speed*dt;p.y+=dy/z*p.speed*dt;if(z<22){v48FlatHit(t,p.damage,12);p.t=0}if(p.t<=0)S.v48RelicShots.splice(i,1)}}
+function v48UpdateRelics(dt){
+ if(!S||S.paused)return;var t;
+ if(v48HasRelic("batJar")){S.v48BatTimer-=dt;if(S.v48BatTimer<=0){S.v48BatTimer=2.4;t=v48CompanionTarget();if(t){S.v48BatBites++;v48FlatHit(t,30,4);if(S.v48BatBites%3===0)S.h.hp=Math.min(S.h.max,S.h.hp+6);v48AddFx("bat",t.x,t.y,.32)}}}
+ if(S.v48Mirror){S.v48Mirror.t-=dt;S.v48Mirror.timer-=dt;if(S.v48Mirror.left>0&&S.v48Mirror.timer<=0){S.v48Mirror.timer=.55;S.v48Mirror.left--;v48MirrorAttack()}if(S.v48Mirror.t<=0)S.v48Mirror=null}
+ if(S.v48Warden){S.v48Warden.t-=dt;S.v48Warden.timer-=dt;if(S.v48Warden.timer<=0){S.v48Warden.timer=S.v48Warden.rate;t=v48CompanionTarget();if(t)v48FlatHit(t,S.v48Warden.damage,10)}if(S.v48Warden.t<=0)S.v48Warden=null}
+ if(S.v48Bear){S.v48Bear.timer-=dt;if(S.v48Bear.timer<=0){S.v48Bear.timer=1.1;t=v48CompanionTarget();if(t)v48FlatHit(t,42,18)}}
+ if(S.v48EggPet){S.v48EggPet.timer-=dt;if(S.v48EggPet.timer<=0){t=v48CompanionTarget();if(S.v48EggPet.type==="crow"){S.v48EggPet.timer=2;t&&v48FlatHit(t,38,5)}else if(S.v48EggPet.type==="horn"){S.v48EggPet.timer=1.8;t&&v48FlatHit(t,45,24)}else{S.v48EggPet.timer=5;for(var ei=0;ei<S.en.length;ei++)if(!S.en[ei].dead&&dist(S.h,S.en[ei])<190){S.en[ei].slowDebuff=Math.max(S.en[ei].slowDebuff||0,2);S.en[ei].slowPct=Math.max(S.en[ei].slowPct||0,.30)}v48AddFx("toad",S.h.x,S.h.y,.5)}}}
+ if(v48HasRelic("stormBottle")&&S.v48StormT>0){S.v48StormT-=dt;S.v48StormTick-=dt;if(S.v48StormTick<=0){S.v48StormTick=.7;var alive=v48AliveEnemies();if(alive.length){t=pickOne(alive);S.v48StormSelf=true;v48FlatHit(t,55,8);S.v48StormSelf=false;v48AddFx("lightning",t.x,t.y,.3)}}}
+ if(v48HasRelic("teddy")&&!S.v48BearUsed&&S.h.hp/S.h.max<.35){S.v48BearUsed=true;S.v48Bear={timer:.2};v48AddFx("teddy",S.h.x,S.h.y,.8)}
+ if(v48HasRelic("funeralBell")&&!S.v48BellUsed&&v48AliveEnemies().length>=6){S.v48BellUsed=true;for(var bi=0;bi<S.en.length;bi++){var be=S.en[bi];if(be.dead)continue;be.stunT=Math.max(be.stunT||0,(be.type==="boss"||be.type==="miniboss")?.2:.6)}S.v48Warden={t:6,timer:.1,damage:30,rate:.9,kind:"warden"};v48AddFx("bell",S.h.x,S.h.y,.8)}
+ if(v48HasRelic("cursedLocket")&&!S.v48LocketUsed&&S.h.hp/S.h.max<.25){S.v48LocketUsed=true;for(var li=0;li<S.en.length;li++)if(!S.en[li].dead){S.en[li].slowDebuff=Math.max(S.en[li].slowDebuff||0,4);S.en[li].slowPct=Math.max(S.en[li].slowPct||0,.35)}v48AddFx("locket",S.h.x,S.h.y,.8)}
+ if(v48HasRelic("sundial")&&!S.v48SundialUsed&&S.abilities&&S.abilities.length===4){var allDown=true;for(var si=0;si<S.abilities.length;si++)if((S.cds[S.abilities[si]]||0)<=0)allDown=false;if(allDown){S.v48SundialUsed=true;for(si=0;si<S.abilities.length;si++)S.cds[S.abilities[si]]=Math.max(0,(S.cds[S.abilities[si]]||0)-1.5);v48AddFx("sundial",S.h.x,S.h.y,.7)}}
+ v48UpdateRelicShots(dt)
+}
+
+/* Radio replaces instant second-wave spawn with an explicit 1.5s warning. */
+var _v48SpawnWave=v47SpawnWave;
+v47SpawnWave=function(){
+ if(!S||!v48HasRelic("oldRadio"))return _v48SpawnWave();
+ if(S.v47WaveDone||S.v48RadioPending)return;var m=S.v47EncounterMeta;if(!m||S.roomKind==="boss")return;var count=S.roomKind==="elite"?2:Math.min(4,m.wave.length),spawns=[];for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.18,.18),r=rnd(230,290);spawns.push({type:m.wave[i%m.wave.length],x:380+Math.cos(a)*r,y:270+Math.sin(a)*r})}S.v48RadioPending={t:1.5,meta:m,spawns:spawns};S.v47WaveDone=true;byId("status").innerHTML="OLD RADIO — reinforcements marked for 1.5s.";v48AddFx("radio",S.h.x,S.h.y,1.2)
+};
+function v48UpdateRadio(dt){if(!S.v48RadioPending)return;S.v48RadioPending.t-=dt;if(S.v48RadioPending.t>0)return;var sp=S.v48RadioPending.spawns||[];for(var i=0;i<sp.length;i++){var e=v47Add(sp[i].type,sp[i].x,sp[i].y);e.slowDebuff=Math.max(e.slowDebuff||0,2);e.slowPct=Math.max(e.slowPct||0,.35)}S.v48RadioPending=null;byId("status").innerHTML="OLD RADIO — warned reinforcements enter slowed."}
+
+/* Passive + relic damage hooks. */
+var _v48DamageEnemy=damageEnemy;
+damageEnemy=function(e,n,k,sx,sy){
+ if(!e||e.dead)return;v48Init();var hp=e.hp,wasAlive=hp>0;
+ if(S.passives.indexOf("predatorEye")>=0&&((e.stunT||0)>0||(e.fear||0)>0||(e.slowDebuff||0)>0||(e.exposedT||0)>0||(e.v41CrackedT||0)>0||(e.v48RootT||0)>0))n*=1.15;
+ if(v48HasRelic("bearTrap")&&!S.v48TrapUsed){S.v48TrapUsed=true;e.slowDebuff=Math.max(e.slowDebuff||0,2);e.slowPct=Math.max(e.slowPct||0,1);e.v48RootT=2;v48AddFx("trapRelic",e.x,e.y,.6)}
+ _v48DamageEnemy(e,n,k,sx,sy);var dealt=Math.max(0,Math.min(hp,n));
+ if(v48HasRelic("stormBottle")&&!S.v48StormSelf&&S.v48StormT<=0&&dealt>0){S.v48StormCharge+=dealt;if(S.v48StormCharge>=1200){S.v48StormCharge-=1200;S.v48StormT=5;S.v48StormTick=.05;v48AddFx("storm",S.h.x,S.h.y,.9)}}
+ if(wasAlive&&e.dead&&v48HasRelic("graveLantern")){S.v48LanternKills++;if(S.v48LanternKills%4===0){S.v48LanternSouls++;v48AddFx("soul",e.x,e.y,.7);if(S.v48LanternSouls>=3)v48SummonWraith()}}
+};
+var _v48HurtHero=hurtHero;
+hurtHero=function(n,source){
+ if(!S)return _v48HurtHero(n,source);v48Init();var raw=n||0;
+ if(v48HasRelic("shatteredMirror")&&!S.v48MirrorUsed&&raw>=60&&source){S.v48MirrorUsed=true;v48SpawnMirror()}
+ _v48HurtHero(n,source);
+ if(v48HasRelic("witchBottle")&&S.h.hp<=0){S.h.hp=1;S.h.inv=Math.max(S.h.inv||0,2);var ix=S.v48Relics.indexOf("witchBottle");if(ix>=0)S.v48Relics.splice(ix,1);if(S.v48ConsumedRelics.indexOf("witchBottle")<0)S.v48ConsumedRelics.push("witchBottle");v48AddFx("bottle",S.h.x,S.h.y,1);byId("status").innerHTML="WITCH BOTTLE SHATTERS — lethal damage stopped at 1 HP.";v48UpdateRunBar()}
+};
+
+/* ---------- relic visuals ---------- */
+var _v48DrawEnemy=drawEnemy;
+drawEnemy=function(e){
+ if(e&&e.v48Boss){v48DrawBoss(e);return}_v48DrawEnemy(e);if(e&&e.v48Ghost&&!e.dead){ctx.save();ctx.globalAlpha=.45;ctx.strokeStyle="#b9e9dc";ctx.lineWidth=4;ctx.beginPath();ctx.arc(e.x,e.y,28,0,Math.PI*2);ctx.stroke();ctx.restore()}
+};
+function v48DrawBoss(e){var x=e.x,y=e.y;ctx.save();ctx.translate(x,y);ctx.fillStyle="#13201866";ctx.beginPath();ctx.ellipse(0,22,48,17,0,0,Math.PI*2);ctx.fill();
+ if(e.v48Boss==="cinderhorn"){ctx.fillStyle="#7a4930";ctx.beginPath();ctx.ellipse(0,5,38,47,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#a9683d";ctx.beginPath();ctx.arc(0,-30,24,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#e0c48b";ctx.lineWidth=7;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(-13,-46);ctx.lineTo(-34,-70);ctx.lineTo(-48,-60);ctx.moveTo(13,-46);ctx.lineTo(34,-70);ctx.lineTo(48,-60);ctx.stroke();ctx.fillStyle="#ff8d4f";ctx.beginPath();ctx.arc(-9,-34,4,0,Math.PI*2);ctx.arc(9,-34,4,0,Math.PI*2);ctx.fill()}
+ else if(e.v48Boss==="widow"){ctx.fillStyle="#2d2437";ctx.beginPath();ctx.ellipse(0,4,38,45,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#44334e";ctx.lineWidth=8;for(var i=0;i<4;i++){var sy=-18+i*12;ctx.beginPath();ctx.moveTo(-25,sy);ctx.lineTo(-55,sy+(i-1.5)*12);ctx.moveTo(25,sy);ctx.lineTo(55,sy+(i-1.5)*12);ctx.stroke()}ctx.fillStyle="#8fcb76";ctx.beginPath();ctx.arc(0,-24,19,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e5ff8d";ctx.beginPath();ctx.arc(0,-24,8,0,Math.PI*2);ctx.fill()}
+ else if(e.v48Boss==="foreman"){ctx.fillStyle="#5d4634";ctx.beginPath();ctx.ellipse(0,4,39,44,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#b5865d";ctx.beginPath();ctx.arc(0,-29,23,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#b9b7ae";ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(23,5);ctx.lineTo(53,-24);ctx.stroke();ctx.strokeStyle="#d76b48";ctx.lineWidth=5;ctx.beginPath();ctx.arc(53,-24,17,0,Math.PI*2);ctx.stroke()}
+ else{ctx.fillStyle="#866739";ctx.fillRect(-38,-22,76,50);ctx.fillStyle="#d9b75e";ctx.fillRect(-34,-18,68,10);ctx.fillStyle="#241813";ctx.beginPath();ctx.moveTo(-30,20);ctx.lineTo(0,-3);ctx.lineTo(30,20);ctx.closePath();ctx.fill();ctx.fillStyle="#f0e1b0";for(var t=-20;t<=20;t+=10){ctx.beginPath();ctx.moveTo(t,17);ctx.lineTo(t+5,4);ctx.lineTo(t+10,17);ctx.fill()}}
+ ctx.restore();
+}
+function v48DrawRelicRuntime(){
+ if(!S)return;var i,p,a;
+ if(v48HasRelic("batJar")){var bt=Date.now()/360,bx=S.h.x+Math.cos(bt)*52,by=S.h.y-28+Math.sin(bt*1.7)*12;ctx.save();ctx.translate(bx,by);ctx.fillStyle="#241d2d";ctx.beginPath();ctx.arc(0,0,6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(-4,0);ctx.quadraticCurveTo(-17,-10,-23,1);ctx.quadraticCurveTo(-14,-2,-5,5);ctx.moveTo(4,0);ctx.quadraticCurveTo(17,-10,23,1);ctx.quadraticCurveTo(14,-2,5,5);ctx.fill();ctx.restore()}
+ if(S.v48Mirror){ctx.save();ctx.globalAlpha=.38+.12*Math.sin(Date.now()/90);ctx.translate(S.h.x-34,S.h.y-14);ctx.fillStyle="#d8f3ee";ctx.beginPath();ctx.ellipse(0,5,22,30,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(0,-22,15,0,Math.PI*2);ctx.fill();ctx.restore()}
+ if(S.v48Warden){var wt=Date.now()/500,wx=S.h.x+Math.cos(wt)*58,wy=S.h.y+Math.sin(wt)*38;ctx.save();ctx.globalAlpha=.62;ctx.translate(wx,wy);ctx.fillStyle=S.v48Warden.kind==="wraith"?"#b7d7d0":"#d5e7df";ctx.beginPath();ctx.arc(0,-12,11,0,Math.PI*2);ctx.moveTo(-14,-4);ctx.quadraticCurveTo(0,30,14,-4);ctx.closePath();ctx.fill();ctx.restore()}
+ if(S.v48RadioPending&&S.v48RadioPending.spawns){for(i=0;i<S.v48RadioPending.spawns.length;i++){p=S.v48RadioPending.spawns[i];ctx.save();ctx.globalAlpha=.65+.25*Math.sin(Date.now()/80+i);ctx.strokeStyle="#d7e7a4";ctx.lineWidth=4;ctx.setLineDash([7,5]);ctx.beginPath();ctx.arc(p.x,p.y,28,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#f0efc1";ctx.font="900 8px system-ui";ctx.textAlign="center";ctx.fillText("INCOMING",p.x,p.y-34);ctx.restore()}}
+ for(i=0;i<S.v48BossZones.length;i++){p=S.v48BossZones[i];a=clamp(1-p.t/p.max,0,1);ctx.save();ctx.fillStyle=p.kind==="web"?"rgba(168,211,190,"+(.08+.18*a)+")":p.kind==="embers"?"rgba(232,91,48,"+(.08+.18*a)+")":"rgba(238,196,104,"+(.08+.18*a)+")";ctx.strokeStyle=p.kind==="web"?"#c9eee1":p.kind==="embers"?"#ff9a61":"#f0d391";ctx.lineWidth=5;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore()}
+ for(i=0;i<S.v48BossShots.length;i++){p=S.v48BossShots[i];ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot||0);ctx.fillStyle=p.kind==="lantern"?"#b8e66f":p.kind==="coin"?"#e9c65d":"#d8c9a8";ctx.beginPath();ctx.arc(0,0,p.kind==="coin"?6:8,0,Math.PI*2);ctx.fill();ctx.restore()}
+ for(i=0;i<S.v48RelicShots.length;i++){p=S.v48RelicShots[i];ctx.save();ctx.globalAlpha=.6;ctx.fillStyle="#cde7df";ctx.beginPath();ctx.arc(p.x,p.y,8,0,Math.PI*2);ctx.fill();ctx.restore()}
+ if(S.v48Bear){ctx.save();ctx.translate(S.h.x-48,S.h.y+30);ctx.fillStyle="#7e543c";ctx.beginPath();ctx.arc(0,0,17,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e3b17d";ctx.beginPath();ctx.arc(-7,-10,6,0,Math.PI*2);ctx.arc(7,-10,6,0,Math.PI*2);ctx.fill();ctx.restore()}
+ if(S.v48EggPet){ctx.save();ctx.translate(S.h.x+46,S.h.y+30);ctx.fillStyle=S.v48EggPet.type==="crow"?"#222a31":S.v48EggPet.type==="toad"?"#6d8c54":"#a86d43";ctx.beginPath();ctx.arc(0,0,13,0,Math.PI*2);ctx.fill();ctx.restore()}
+ for(i=0;i<S.v48RelicFx.length;i++){p=S.v48RelicFx[i];a=clamp(p.t/p.max,0,1);ctx.save();ctx.globalAlpha=a;ctx.strokeStyle=p.kind==="lightning"?"#dff7ff":p.kind==="storm"?"#9bd8e8":"#ffe38e";ctx.lineWidth=5;ctx.beginPath();ctx.arc(p.x,p.y,24+(1-a)*38,0,Math.PI*2);ctx.stroke();ctx.restore()}
+}
+function v48SyncBossUI(){var b=v48FindBoss();if(!b)return;var wrap=byId("bossBarWrap");if(!wrap)return;wrap.style.display="block";var names={cinderhorn:"CINDERHORN — ASH-STAG",widow:"LANTERN WIDOW — WEB QUEEN",foreman:"THE FOREMAN — DEADWOOD LOGGER",mimic:"GILDED MAW — MIMIC"};byId("bossName").innerHTML=names[b.v48Boss]||"BOSS";byId("bossPhase").innerHTML=b.phase===2?"PHASE II · UNLEASHED":"PHASE I";byId("bossFill").style.width=Math.max(0,b.hp/b.max*100)+"%"}
+var _v48Draw=draw;
+draw=function(){_v48Draw();if(S){v48DrawRelicRuntime();v48SyncBossUI()}};
+
+/* ---------- reward flow ---------- */
+function v48UpgradeChoices(n){
+ var pool=[],itemPool=[],fresh=[],recent=(S.v47RecentUpgradeOffers||[]),i,u,out=[];
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;pool.push(u);if(u.item&&u.item===S.item)itemPool.push(u);if(recent.indexOf(u.id)<0)fresh.push(u)}
+ var source=fresh.length>=n?fresh.slice():pool.slice();shuffle(source);shuffle(itemPool);
+ if(S.item&&itemPool.length&&Math.random()<.75)out.push(itemPool[0]);
+ for(i=0;i<source.length&&out.length<n;i++)if(out.indexOf(source[i])<0)out.push(source[i]);
+ for(i=0;i<pool.length&&out.length<n;i++)if(out.indexOf(pool[i])<0)out.push(pool[i]);
+ S.v47RecentUpgradeOffers=(recent.concat(out.map(function(x){return x.id}))).slice(-18);return out
+}
+function v48UpgradeClass(u){if(typeof v3UpgradeClass==="function")return v3UpgradeClass(u);return u.item?"item":""}
+function v48UpgradeLabel(u){if(typeof v3UpgradeLabel==="function")return v3UpgradeLabel(u);return (u.tag||"EVOLUTION")}
+function v48ShowEvolution(heal,n,after){
+ v48Init();n=n||3;if(v48HasMod("rottenCamps"))n++;if(S.v48CurrentRoute==="dangerous"&&v48HasMod("predatorNight"))n++;n=Math.min(5,n);S.v48AfterEvolution=after||"path";var c=v48UpgradeChoices(n),cards=[];
+ for(var i=0;i<c.length;i++)(function(up){cards.push({cls:v48UpgradeClass(up),tag:v48UpgradeLabel(up)+" · EVOLUTION",title:up.title,text:up.text,go:function(){v48TakeEvolution(up.id)}})})(c[i]);
+ showDecision("EVOLUTION REWARD","Camp Recovery restored <b>"+heal+" HP</b>. Choose 1 of "+cards.length+" Evolutions.",cards,Math.min(3,cards.length))
+}
+var _v48ApplyUpgrade=applyUpgrade;
+var _v48ShowItemHunt=showItemHunt;
+var _v48ShowEliteBonus=showEliteBonus;
+var _v48ShowPathChoice=null;
+showItemHunt=function(){if(S&&S.v48ApplyingUpgrade){S.v48SuppressedNav=true;return}return _v48ShowItemHunt()};
+showEliteBonus=function(){if(S&&S.v48ApplyingUpgrade){S.v48SuppressedNav=true;return}return _v48ShowEliteBonus()};
+function v48TakeEvolution(id){S.v48ApplyingUpgrade=true;S.v48SuppressedNav=false;_v48ApplyUpgrade(id);S.v48ApplyingUpgrade=false;var after=S.v48AfterEvolution||"path";S.v48AfterEvolution=null;if(after==="room5")S.v48ForceItemRoute=true;if(after==="side")return v48FinishSide();showPathChoice("Evolution acquired. Choose the next route.")}
+
+function v48RelicPool(rare){var owned=S.v48Relics||[],gone=S.v48ConsumedRelics||[],p=V48_RELICS.filter(function(r){return owned.indexOf(r.id)<0&&gone.indexOf(r.id)<0&&(rare?r.tier>=2:true)});if(p.length<3)p=V48_RELICS.filter(function(r){return owned.indexOf(r.id)<0&&gone.indexOf(r.id)<0});shuffle(p);return p}
+function v48ShowRelicReward(rare,context,heal){var pool=v48RelicPool(rare),count=3+(v48HasMod("bloodMoon")?1:0);pool=pool.slice(0,count);if(!pool.length){v48ShowEvolution(heal||0,4,context==="side"?"side":"path");return}S.v48RelicContext=context||"path";var cards=[];for(var i=0;i<pool.length;i++)(function(r){cards.push({cls:"relic",tag:(r.tier>=2?"RARE ":"")+"UNIVERSAL RELIC",title:r.title,text:r.text,go:function(){v48TakeRelic(r)}})})(pool[i]);showDecision(rare?"RARE RELIC":"RELIC CACHE",(heal!=null?"Camp Recovery restored <b>"+heal+" HP</b>. ":"")+"Relics have no slot limit and remain for the rest of this run.",cards,Math.min(3,cards.length))}
+function v48TakeRelic(r){if(!S||v48HasRelic(r.id))return;S.v48Relics.push(r.id);if(r.id==="strangeEgg"){S.v48EggProgress=0;S.v48EggHatched=false;S.v48EggPet=null}if(r.id==="tinyDoor")S.v48DoorProgress=0;if(r.id==="mothMap"){S.v48MapProgress=0;S.v48MapCharges=0}if(r.id==="mimicCoin")S.v48MimicCooldown=3;if(r.id==="stormBottle")S.v48StormCharge=0;if(r.id==="graveLantern"){S.v48LanternKills=0;S.v48LanternSouls=0}v48UpdateRunBar();byId("status").innerHTML="RELIC ACQUIRED — "+r.title;var c=S.v48RelicContext;S.v48RelicContext=null;if(c==="side")return v48FinishSide();showPathChoice("Relic acquired: <b>"+r.title+"</b>.")}
+
+/* ---------- side rooms ---------- */
+function v48StartSideCombat(type,title,reward){S.v48SideActive={type:type,title:title,reward:reward};S.v48SideCooldown=3;S.currentName=title;S.v48RouteDifficulty=type==="hidden"?2:3;if(type==="hidden"){S.v47ForcedEncounter=S.room>=12?"witchfire":"ritual";spawnCombat("elite");S.roomKind="side";updateRoomLabel();return}if(type==="foreman"){v48SpawnCustomBoss("foreman","DEADWOOD CAMP · THE FOREMAN","THE FOREMAN revs a ruined saw. This fight was not on the main trail.",.62);S.roomKind="side";return}if(type==="mimic"){v48SpawnCustomBoss("mimic","GILDED CACHE · THE MAW","The treasure chest opens its mouth. GILDED MAW was waiting.",.48);S.roomKind="side";return}}
+function v48FinishSide(){S.v48SideActive=null;S.v48RouteDifficulty=0;S.currentName="FOREST CROSSROADS";updateRoomLabel();showPathChoice("Bonus encounter cleared. The core hunt continues at Room "+(S.room+1)+".")}
+
+/* ---------- 20-room route system ---------- */
+function v48CoreClearedProgress(){
+ S.v48CoreClears++;if(S.v48MimicCooldown>0)S.v48MimicCooldown--;if(S.v48SideCooldown>0)S.v48SideCooldown--;
+ if(v48HasRelic("strangeEgg")&&!S.v48EggHatched){S.v48EggProgress++;if(S.v48EggProgress>=3)v48HatchEgg()}
+ if(v48HasRelic("tinyDoor"))S.v48DoorProgress++;if(v48HasRelic("mothMap")){S.v48MapProgress++;if(S.v48MapProgress>=4){S.v48MapProgress-=4;S.v48MapCharges++}}
+}
+function v48RouteMeta(type,next,used){
+ var kind="combat",reward="evolution",difficulty=0,tag="STANDARD",cls="",desc="Standard combat. Reward: Evolution — choose 1 of 3.",choices=3,mod=null;
+ if(type==="dangerous"){kind=Math.random()<.5?"ambush":"elite";reward="evolution";difficulty=1;tag="DANGEROUS";cls="event";choices=4;desc="High danger: extra specialist pressure. Reward: Evolution — choose 1 of 4."}
+ if(type==="relic"){kind="elite";reward="relic";difficulty=2;tag="RELIC HUNT";cls="relic";desc="Very high danger: extra specialists + Elite mutation. Reward: Universal Relic."}
+ if(type==="item"){kind="elite";reward="item";difficulty=2;tag="ITEM HUNT";cls="item";desc="Very high danger: guarded cache. Reward: choose 1 of 3 Signature Items."}
+ if(type==="cursed"){kind=Math.random()<.5?"elite":"ambush";reward="rareRelic";difficulty=3;tag="CURSED TRAIL";cls="cursed";var mods=v48AvailableModifiers();mod=mods.length?pickOne(mods):null;if(!mod)return v48RouteMeta("relic",next,used);desc="Severe danger. Apply <b>"+mod.title+"</b>: "+mod.text+" Reward: Rare Relic."}
+ var id=v47PickEncounter(kind,used,next),m=V47_ENCOUNTERS[id],loc=pickOne(roomNames[kind]||roomNames.combat);return{type:type,kind:kind,reward:reward,difficulty:difficulty,choices:choices,tag:tag,cls:cls,id:id,name:loc,title:m.name,text:m.desc+'<span class="v48RouteLine"><span class="v48Danger">Danger: '+(difficulty===0?'Standard':difficulty===1?'High':difficulty===2?'Very High':'Severe')+'</span> · <span class="v48Reward">'+desc+'</span></span>',modifier:mod}
+}
+function v48ChooseRoute(r,next){if(r.modifier)v48ApplyModifier(r.modifier.id);S.v48CurrentRoute=r.type;S.v48CurrentReward=r.reward;S.v48EvolutionCount=r.choices;S.v48RouteDifficulty=r.difficulty;S.v47ForcedEncounter=r.id;if(r.type==="item")S.v48ForceItemRoute=false;S.v48RecentRoutes.push(r.type);S.v48RecentRoutes=S.v48RecentRoutes.slice(-4);S.room=next;enterRoom({kind:r.kind,name:r.name})}
+function v48MainRouteTypes(next,count){count=count||3;var types=["standard","dangerous"],special=[],mods=v48AvailableModifiers(),haunted=v48HasMod("hauntedForest");if(next>=3&&Math.random()<(haunted?.80:.48))special.push("relic");if(!S.item&&next>=6&&(S.v48ForceItemRoute||Math.random()<.32))special.push("item");if(next>=7&&mods.length&&Math.random()<.34)special.push("cursed");shuffle(special);if(haunted&&special.indexOf("relic")>=0){special=special.filter(function(t){return t!=="relic"});special.unshift("relic")}for(var i=0;i<special.length&&types.length<count;i++)if(types.indexOf(special[i])<0)types.push(special[i]);if(S.v48ForceItemRoute&&!S.item&&types.indexOf("item")<0){if(types.length>=count)types[types.length-1]="item";else types.push("item")}if(count>3&&types.length<count){var extra=[];if(next>=3)extra.push("relic");if(!S.item&&next>=6)extra.push("item");if(next>=7&&mods.length)extra.push("cursed");shuffle(extra);for(i=0;i<extra.length&&types.length<count;i++)if(types.indexOf(extra[i])<0)types.push(extra[i])}return types.slice(0,count)}
+function v48BossGate(next,extra){var data={5:["TROLL BRIDGE — MOSSBACK","A two-phase forest brute blocks the bridge."],10:["ASHEN GROVE — CINDERHORN","The ash-stag waits beyond a burned stand of cedar."],15:["LANTERN MARSH — THE LANTERN WIDOW","Green lantern light hangs over a web-choked marsh."],20:["GRUMBLEGUT'S HOLLOW","The Goblin King waits at the end of the 20-room hunt."]}[next];showDecision(next===20?"THE FINAL HOLLOW":"BOSS TERRITORY",extra||"The main trail narrows.",[{cls:"elite",tag:next===20?"FINAL BOSS":"BOSS ROOM",title:data[0],text:data[1],go:function(){S.room=next;S.v48CurrentRoute="boss";S.v48CurrentReward="boss";S.v48RouteDifficulty=0;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}],1)}
+function v48SideCards(){var cards=[];if(S.v48SideCooldown>0)return cards;if(v48HasRelic("tinyDoor")&&S.v48DoorProgress>=4){cards.push({cls:"secret",tag:"SECRET SIDE ROOM · +1 FIGHT",title:"The Tiny Wooden Door Opens",text:"Enter a Hidden Clearing without advancing the 20-room core path. Reward: Relic.",go:function(){S.v48DoorProgress=0;v48StartSideCombat("hidden","HIDDEN CLEARING · TINY DOOR","relic")}})}
+ if(v48HasRelic("mimicCoin")&&S.v48MimicCooldown<=0&&Math.random()<.18){cards.push({cls:"secret",tag:"MIMIC COIN · +1 FIGHT",title:"Gilded Cache",text:"A suspicious treasure cache has appeared off the trail. Bonus boss: Gilded Maw. Reward: Rare Relic.",go:function(){S.v48MimicCooldown=3;v48StartSideCombat("mimic","GILDED CACHE · THE MAW","rareRelic")}})}
+ if(S.room>=7&&Math.random()<.03){cards.push({cls:"hunt",tag:"MONSTER TRACKS · +1 FIGHT",title:"Deadwood Tracks",text:"Leave the core path to hunt The Foreman. Bonus boss fight; winning awards a Rare Relic.",go:function(){v48StartSideCombat("foreman","DEADWOOD CAMP · THE FOREMAN","rareRelic")}})}return cards}
+
+showPathChoice=function(extra){
+ if(!S)return;if(S.v48ApplyingUpgrade){S.v48SuppressedNav=true;return}v48Init();if(S.room>=V48_CORE_ROOMS)return;var next=S.room+1;if(next===5||next===10||next===15||next===20)return v48BossGate(next,extra);
+ var used=[],mapBonus=v48HasRelic("mothMap")&&S.v48MapCharges>0,mainCount=mapBonus?4:3,types=v48MainRouteTypes(next,mainCount),cards=[];if(mapBonus)S.v48MapCharges--;
+ for(var i=0;i<types.length;i++){var r=v48RouteMeta(types[i],next,used);used.push(r.id);(function(rr){cards.push({cls:rr.cls,tag:rr.tag+" · "+rr.name,title:rr.title,text:rr.text,go:function(){v48ChooseRoute(rr,next)}})})(r)}
+ var side=v48SideCards();for(i=0;i<side.length;i++)cards.push(side[i]);showDecision("CHOOSE THE NEXT ROUTE",extra||"The next core room is "+next+" of 20. Harder routes pay better, but every core room advances enemy scaling.",cards,Math.min(3,cards.length));v48UpdateRunBar()
+};
+
+/* Complete rooms using the reward promised by the route. */
+completeRoom=function(){
+ if(!S||S.paused)return;v48Init();S.paused=true;
+ if(S.v48SideActive){var side=S.v48SideActive,reward=side.reward;if(reward==="rareRelic")return v48ShowRelicReward(true,"side",null);if(reward==="relic")return v48ShowRelicReward(false,"side",null);return v48ShowEvolution(0,4,"side")}
+ var heal=campRecovery();v48CoreClearedProgress();
+ if(S.room===20&&S.roomKind==="boss")return showVictory(heal);
+ if(S.room===5&&S.roomKind==="boss")return v48ShowEvolution(heal,4,"room5");
+ if((S.room===10||S.room===15)&&S.roomKind==="boss")return v48ShowRelicReward(true,"path",heal);
+ var reward=S.v48CurrentReward||"evolution";
+ if(reward==="item"){byId("status").innerHTML="ITEM HUNT CLEARED — Camp Recovery +"+heal+" HP.";return showItemHunt()}
+ if(reward==="relic")return v48ShowRelicReward(false,"path",heal);
+ if(reward==="rareRelic")return v48ShowRelicReward(true,"path",heal);
+ return v48ShowEvolution(heal,S.v48EvolutionCount||3,"path")
+};
+
+var _v48ChooseItem=chooseItem;
+chooseItem=function(item){if(S){S.v48ForceItemRoute=false;S.v48CurrentReward="evolution"}var r=_v48ChooseItem(item);v48UpdateRunBar();return r};
+
+/* Victory now reflects the 20-room core hunt. */
+showVictory=function(heal){running=false;S.paused=true;v48Init();showDecision("THE LONG HUNT COMPLETE","Room 20 is cleared. Camp Recovery restored "+heal+" HP. You finished with <b>"+S.v48Relics.length+" Relics</b> and <b>"+S.v48Modifiers.length+" run modifiers</b>.",[{cls:"item",tag:"VICTORY",title:"GRUMBLEGUT FALLS",text:"Start another run and take a different route through the same 20-room hunt.",go:function(){byId("startToggle").checked=false;stopGame()}}],1);byId("status").innerHTML="GRUMBLEGUT DEFEATED — 20 CORE ROOMS CLEARED"};
+
+/* ---------- final update / reset wrappers ---------- */
+var _v48Start=startGame;
+startGame=function(){_v48Start();if(!S)return;v48Init();S.v48CurrentReward="evolution";S.v48EvolutionCount=3;S.v48CurrentRoute="start";S.v48RouteDifficulty=0;S.v48ForceItemRoute=false;v48EnsureRunBar();v48UpdateRunBar();updateUI()};
+var _v48UpdateUI=updateUI;
+updateUI=function(){_v48UpdateUI();if(S){v48UpdateRunBar();v48SyncBossUI()}};
+
+var _v48Update=update;
+update=function(dt){
+ if(!S)return _v48Update(dt);v48Init();var oldMove=S.mods.move,combo=S.h.combo,corner=S.passives.indexOf("cornered")>=0&&S.h.hp/S.h.max<.40;if(corner)S.mods.move*=1.12;_v48Update(dt);if(!S)return;S.mods.move=oldMove;if(corner&&S.h.combo!==combo)S.h.atk/=1.20;if(!S.paused){v48UpdateBossEffects(dt);v48UpdateRelics(dt);v48UpdateRadio(dt);for(var i=0;i<S.en.length;i++)if(S.en[i].v48RootT>0)S.en[i].v48RootT=Math.max(0,S.en[i].v48RootT-dt)}for(i=S.v48RelicFx.length-1;i>=0;i--){S.v48RelicFx[i].t-=dt;if(S.v48RelicFx[i].t<=0)S.v48RelicFx.splice(i,1)}
+};
+
+/* Build summary documents the actual v4.8 rules. */
+var _v48RenderBuild=renderBuildSummary;
+renderBuildSummary=function(){_v48RenderBuild();if(!S)return;var b=byId("v3BuildBody");if(!b)return;b.innerHTML+='<h3>The Long Hunt v4.8</h3><div class="buildRow"><b>Core run:</b> 20 combat rooms. Bosses at 5, 10, 15, and 20. Rare secret/bonus fights can extend a run without advancing core-room scaling.</div><div class="buildRow"><b>Automatic level growth:</b> +12 Max HP and +2% Base Damage per level. No level-up healing or Armor.</div><div class="buildRow"><b>Enemy scaling:</b> +8.5% HP and +5.5% damage per core room. Enemy movement speed, attack speed, range, projectile speed, and telegraph timing still do not globally scale.</div><div class="buildRow"><b>Relics:</b> '+(S.v48Relics.length?S.v48Relics.map(function(id){var r=V48_RELIC_BY_ID[id];return '<br><b>'+v48RelicName(id)+'</b> — '+(r?r.text:'');}).join(''):'none yet')+'</div><div class="buildRow"><b>Run modifiers:</b> '+(S.v48Modifiers.length?S.v48Modifiers.map(function(id){var m=V48_MOD_BY_ID[id];return '<br><b>'+v48ModName(id)+'</b> — '+(m?m.text:'');}).join(''):'none')+'</div>'};
+
+})();
 </script>
 
 </body>
