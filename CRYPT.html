@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — The Long Hunt v4.8</title>
+<title>Cryptids & Kings — Primal Arsenal v4.9</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -223,7 +223,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">The Long Hunt v4.8: 20 core combat rooms, risk/reward routes, universal Relics, stronger enemy scaling, and a build that has to earn its way ahead.</div>
+<div class="muted">Primal Arsenal v4.9: 20-room Long Hunt, rebuilt Bigfoot passives, a new ranged ability, four Ultimates, and exclusive boss relic rewards.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -358,7 +358,7 @@ body[data-screen="game"]{padding:6px}
 <div><b>PRIMED:</b> the battlefield is giving that ability its ideal opportunity. You can always cast unprimed, but a Primed cast gets a unique bonus. Primal Rush primes against a distant ranged target.</div>
 <div><b>Prime Evolutions:</b> Evolutions can make a Prime condition easier to reach or make the Primed payoff stronger.</div>
 </details>
-<div id="engine">ENGINE READY · THE LONG HUNT V4.8 · 20 CORE ROOMS</div>
+<div id="engine">ENGINE READY · PRIMAL ARSENAL V4.9 · 20 CORE ROOMS</div>
 <div id="msg">Bigfoot auto-moves and auto-attacks. You control the selected abilities.</div>
 <label id="startControl" for="startToggle">START RUN</label>
 </section>
@@ -513,7 +513,7 @@ function nearestTo(p){
 function isElite(e){return e.type==="brute"||e.type==="miniboss"||e.type==="boss"}
 
 function knockEnemy(e,k,sx,sy){
- if(!k)return;var dx=e.x-sx,dy=e.y-sy,z=Math.sqrt(dx*dx+dy*dy)||1,m=S.passives.indexOf("heavy")>=0?1.35:1;
+ if(!k)return;var dx=e.x-sx,dy=e.y-sy,z=Math.sqrt(dx*dx+dy*dy)||1,m=S.passives.indexOf("heavy")>=0?1.25:1;
  e.kbx+=dx/z*k*6*m;e.kby+=dy/z*k*6*m;
 }
 function deathFx(e){
@@ -538,7 +538,7 @@ function damageEnemy(e,n,k,sx,sy){
  }
 }
 function hurtHero(n,source){
- var h=S.h,red=S.passives.indexOf("hide")>=0 ? .88 : 1;
+ var h=S.h,red=S.passives.indexOf("hide")>=0 ? .90 : 1;
  if(h.roarDR>0)red*=.75;n*=red*100/(100+h.armor);
  if(h.shield>0){var z=Math.min(h.shield,n);h.shield-=z;n-=z}
  if(n>0)h.hp-=n;
@@ -889,16 +889,17 @@ function update(dt){
      if(ranged&&d<110&&!(S.v45RushT>0))moveUnit(h,t,70*S.mods.move,dt,true);
      if(h.atk<=0){
      h.combo++;h.swing=.22;
-     mult=S.mods.basic*(h.rage>0?S.mods.rageDmg:1)*(h.bonusNext?S.mods.shroudMult:1);h.bonusNext=false;
-     if(S.passives.indexOf("strength")>=0&&h.combo%3===0)mult*=1.6;
+     var v49RhythmBasic=!!(S.v49PrimalReady&&S.v49PrimalRhythmT>0),v49BasicKb=1;if(v49RhythmBasic){S.v49PrimalReady=false;S.v49PrimalRhythmT=0;v49BasicKb*=1.5;if(S.v49Fx)S.v49Fx.push({kind:"rhythmHit",x:h.x,y:h.y,t:.5,max:.5})}if(S.passives.indexOf("strength")>=0&&h.combo%4===0)v49BasicKb*=2.2;
+     mult=S.mods.basic*(h.rage>0?S.mods.rageDmg:1)*(h.bonusNext?S.mods.shroudMult:1)*(v49RhythmBasic?1.35:1);h.bonusNext=false;
+     if(S.passives.indexOf("strength")>=0&&h.combo%4===0)mult*=1.75;
      if(ranged){
-       for(i=0;i<S.mods.rocks;i++){var off=(i-(S.mods.rocks-1)/2)*.12,ang=a+off;S.proj.push({type:"rock",x:h.x,y:h.y,vx:Math.cos(ang)*430,vy:Math.sin(ang)*430,t:1.6,hits:{},rot:ang,bounce:S.mods.rockBounce,mult:mult})}
+       for(i=0;i<S.mods.rocks;i++){var off=(i-(S.mods.rocks-1)/2)*.12,ang=a+off;S.proj.push({type:"rock",x:h.x,y:h.y,vx:Math.cos(ang)*430,vy:Math.sin(ang)*430,t:1.6,hits:{},rot:ang,bounce:S.mods.rockBounce,mult:mult,kbMult:v49BasicKb})}
      }else{
        var hitDamage=S.basic==="limb"?70:h.dmg;
-       damageEnemy(t,hitDamage*mult,S.basic==="limb"?28:(h.combo%3===0?62:18),h.x,h.y);
-       if(S.basic==="limb"){var limbR=S.owned&&S.owned.limbLong?135:112,limbHalf=.96;for(i=0;i<S.en.length;i++){e=S.en[i];if(e===t||e.dead||dist(h,e)>limbR)continue;var ea=Math.atan2(e.y-h.y,e.x-h.x),da=Math.atan2(Math.sin(ea-a),Math.cos(ea-a));if(Math.abs(da)<=limbHalf)damageEnemy(e,hitDamage*.86*mult,S.owned&&S.owned.limbHeavy?38:24,h.x,h.y)}S.fx.push({type:"limb",x:h.x,y:h.y,a:a,t:.28,max:.28});}
-       if(S.mods.cleave)for(i=0;i<S.en.length;i++){e=S.en[i];if(e!==t&&!e.dead&&dist(h,e)<95)damageEnemy(e,h.dmg*.52*mult,14,h.x,h.y)}
-       if(S.mods.spin&&h.combo%3===0)for(i=0;i<S.en.length;i++){e=S.en[i];if(!e.dead&&dist(h,e)<125)damageEnemy(e,h.dmg*.62*mult,38,h.x,h.y)}
+       damageEnemy(t,hitDamage*mult,(S.basic==="limb"?28:(h.combo%3===0?62:18))*v49BasicKb,h.x,h.y);
+       if(S.basic==="limb"){var limbR=S.owned&&S.owned.limbLong?135:112,limbHalf=.96;for(i=0;i<S.en.length;i++){e=S.en[i];if(e===t||e.dead||dist(h,e)>limbR)continue;var ea=Math.atan2(e.y-h.y,e.x-h.x),da=Math.atan2(Math.sin(ea-a),Math.cos(ea-a));if(Math.abs(da)<=limbHalf)damageEnemy(e,hitDamage*.86*mult,(S.owned&&S.owned.limbHeavy?38:24)*v49BasicKb,h.x,h.y)}S.fx.push({type:"limb",x:h.x,y:h.y,a:a,t:.28,max:.28});}
+       if(S.mods.cleave)for(i=0;i<S.en.length;i++){e=S.en[i];if(e!==t&&!e.dead&&dist(h,e)<95)damageEnemy(e,h.dmg*.52*mult,14*v49BasicKb,h.x,h.y)}
+       if(S.mods.spin&&h.combo%3===0)for(i=0;i<S.en.length;i++){e=S.en[i];if(!e.dead&&dist(h,e)<125)damageEnemy(e,h.dmg*.62*mult,38*v49BasicKb,h.x,h.y)}
        if(S.basic!=="limb")S.fx.push({type:"swipe",x:h.x,y:h.y,a:a,t:.22,side:h.combo%2?1:-1});
      }
      h.atk=S.basic==="limb" ? (h.rage>0?.50:1.00) : (h.rage>0 ? .35 : .72);
@@ -936,7 +937,7 @@ function update(dt){
          damageEnemy(e,170*v37PowerMult(),72,p.x,p.y);
          if(S.mods.splinter)for(var q=0;q<S.en.length;q++)if(S.en[q]!==e&&!S.en[q].dead&&dist(e,S.en[q])<82)damageEnemy(S.en[q],46*v37PowerMult(),10,e.x,e.y);
        }else if(p.type==="rock"){
-         damageEnemy(e,h.dmg*.82*p.mult,12,p.x,p.y);
+         damageEnemy(e,h.dmg*.82*p.mult,12*(p.kbMult||1),p.x,p.y);
          if(p.bounce>0){p.bounce--;var nt=nearestOther(e,p.hits);if(nt){a=Math.atan2(nt.y-p.y,nt.x-p.x);var rockSpeed=Math.sqrt(p.vx*p.vx+p.vy*p.vy)||430;p.vx=Math.cos(a)*rockSpeed;p.vy=Math.sin(a)*rockSpeed;p.rot=a}else p.t=0}else p.t=0;
        }else if(p.type==="hook"){
          e.hooks.push({t:S.hook.duration,tick:.25});damageEnemy(e,12,0,p.x,p.y);p.t=0;S.fx.push({type:"hookhit",x:e.x,y:e.y,t:.35});
@@ -1175,7 +1176,7 @@ function triggerRing(){
 }
 
 hurtHero=function(n,source){
- var h=S.h,red=S.passives.indexOf("hide")>=0 ? .88 : 1,armor=h.armor+(h.armorTemp||0);
+ var h=S.h,red=S.passives.indexOf("hide")>=0 ? .90 : 1,armor=h.armor+(h.armorTemp||0);
  if(h.roarDR>0)red*=.75;n*=red*100/(100+armor);
  if(h.shield>0){var z=Math.min(h.shield,n);h.shield-=z;n-=z}
  if(n>0)h.hp-=n;
@@ -1503,7 +1504,7 @@ addMany([
  {id:"mrsPurse",item:"ring",tag:"WEDDING RING",title:"Heavy Purse",text:"Improves Purse Toss to 130 damage and a 0.75s stun against normal enemies."},
  {id:"mrsPrepared",item:"ring",tag:"WEDDING RING",title:"Always Prepared",text:"All of Mrs. Bigfoot's independent sideline support timers recharge 20% faster."},
  {id:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"Better Half",text:"Purse Toss deals +35% damage and all of Mrs. Bigfoot's timed buffs last 1 second longer."},
- {id:"mrsHusband",requires:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"You Hit My Husband?!",text:"When Bigfoot takes 60+ raw damage from one hit, Mrs. Bigfoot immediately readies an enraged Purse Toss that deals double damage."},
+ {id:"mrsHusband",requires:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"You Hit My Husband?!",text:"Once per combat, when Bigfoot is below 50% HP after taking damage, Mrs. Bigfoot immediately readies an enraged Purse Toss that deals double damage."},
  {id:"mrsCombo",requires:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"Date Night",text:"Purse Toss Marks its target for 5s. Marked enemies take +12% damage from all sources."},
  {id:"mrsSmash",requires:"mrsBetterHalf",item:"ring",tag:"WEDDING RING",title:"Mrs. Bigfoot SMASH",text:"Every third Purse Toss becomes Everything But the Kitchen Sink, splashing 70 damage around its target."},
  {id:"mrsPowerCouple",requires:["mrsPrepared","mrsBetterHalf"],item:"ring",tag:"WEDDING RING",title:"Power Couple",text:"All Mrs. Bigfoot timers recharge another 20% faster, Purse Toss deals +25% damage, and each support assist grants Bigfoot 6 Rage."},
@@ -2095,7 +2096,7 @@ function v38RangedAlly(e){var best=null,bd=1e9;for(var i=0;i<S.en.length;i++){va
 function v38SetTemp(e,k,v){var q="_v38Orig_"+k;if(e[q]===undefined)e[q]=e[k];e[k]=v}
 function v38Lock(e){v38SetTemp(e,"spd",0);v38SetTemp(e,"range",999);e.atk=Math.max(e.atk||0,.24)}
 function v38RestoreTemps(){if(!S)return;for(var i=0;i<S.en.length;i++){var e=S.en[i],keys=["spd","range"];for(var j=0;j<keys.length;j++){var k=keys[j],q="_v38Orig_"+k;if(e[q]!==undefined){e[k]=e[q];delete e[q]}}}}
-function v38PushHero(e,amount){if(!S||!S.h||!e)return;if(S.v45RushT>0)amount*=.35;var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1;S.h.x=clamp(S.h.x+dx/z*amount,35,725);S.h.y=clamp(S.h.y+dy/z*amount,40,485)}
+function v38PushHero(e,amount){if(!S||!S.h||!e)return;if(S.v49UnbreakableActive&&S.v49UnbreakableActive())return;if(S.passives&&S.passives.indexOf("hide")>=0)amount*=.75;if(S.v45RushT>0)amount*=.35;var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1;S.h.x=clamp(S.h.x+dx/z*amount,35,725);S.h.y=clamp(S.h.y+dy/z*amount,40,485)}
 function v38Fx(x,y,r,kind){v38Ensure();S.v38Impacts.push({x:x,y:y,r:r||35,t:.32,max:.32,kind:kind||"hit"})}
 
 function v38InitEnemy(e){
@@ -2262,7 +2263,7 @@ draw=function(){_v38Draw();if(!S)return;v38DrawShots();v38DrawImpacts();v38DrawI
 
 /* BUILD screen now exposes the actual current combat values instead of only abstract stat points. */
 renderBuildSummary=function(){
- _v38RenderBuild();if(!S)return;var b=byId("v3BuildBody");if(!b)return;var s=S.stats||{body:0,might:0,power:0,armor:0,haste:0,focus:0},basic=S.h.dmg*S.mods.basic*(1+s.might*.05),focusRate=1+s.focus*.03,baseDR=1-(100/(100+S.h.armor))*(1-Math.min(.50,s.armor*.02))*(S.passives.indexOf("hide")>=0?.88:1),html='<h3>Current Combat Values</h3>';
+ _v38RenderBuild();if(!S)return;var b=byId("v3BuildBody");if(!b)return;var s=S.stats||{body:0,might:0,power:0,armor:0,haste:0,focus:0},basic=S.h.dmg*S.mods.basic*(1+s.might*.05),focusRate=1+s.focus*.03,baseDR=1-(100/(100+S.h.armor))*(1-Math.min(.50,s.armor*.02))*(S.passives.indexOf("hide")>=0?.90:1),html='<h3>Current Combat Values</h3>';
  html+='<div class="buildRow v38BuildNote"><b>Max HP:</b> '+Math.round(S.h.max)+' · <b>Basic hit:</b> ~'+Math.round(basic)+' · <b>Total damage reduction:</b> ~'+Math.round(baseDR*100)+'%</div>';
  html+='<div class="buildRow"><b>Attack-speed bonus:</b> +'+Math.round(s.haste*3)+'% · <b>Cooldown recovery:</b> +'+Math.round(s.focus*3)+'%</div>';
  html+='<div class="buildRow"><b>Selected cooldowns:</b> '+S.abilities.concat([S.ult]).map(function(id){return skillInfo[id].name+' '+(skillInfo[id].cd/focusRate).toFixed(1)+'s'}).join(' · ')+'</div>';
@@ -2648,7 +2649,7 @@ var _v43Cast=cast,
     _v43DrawProjectile=drawProjectile,
     _v43GrantShield=window.v37GrantShield;
 
-var V43_COST={slam:25,tree:20,honey:10,shroud:10,rage:20,wall:15,charge:20,beatdown:30,roar:50,avalanche:60};
+var V43_COST={slam:25,tree:20,honey:10,shroud:10,rage:20,wall:15,charge:20,beatdown:30,boulder:25,roar:50,avalanche:60,king:55,unbreakable:50};
 var V43_PRIME_UPGRADES={slamPrimeEasy:1,treePrimeEasy:1,honeyPrimeEarly:1,bushPrimeSense:1,frenzyPrimeFast:1,wallPrimeEasy:1,chargePrimeNear:1,beatPrimeOpen:1};
 
 function v43Ensure(){
@@ -2701,11 +2702,12 @@ function v43Prime(id){
  if(id==="wall")return v43CountNear(130)>=2||v43IncomingThreat(1.05,true)||(S.owned.wallPrimeEasy&&v43CountNear(130)>=1&&v43IsBoss(v43Nearest()));
  if(id==="charge"){var c=v43ChargeTarget();if(!c||!v43Ranged(c))return false;var d=dist(S.h,c),normal=S.owned.chargePrimeNear?120:170;return d>=normal}
  if(id==="beatdown"){var b=v43BeatTarget();if(!b)return false;return !!(b.winding||(b.chargeWind||0)>0||(b.stunT||0)>0||(b.exposedT||0)>0||(b.v41CrackedT||0)>0||(S.owned.beatPrimeOpen&&b.hp/b.max<=.35))}
+ if(id==="boulder"){var bt=v43Nearest();if(!bt)return false;var bn=0,bneed=S.owned.boulderBullseye?2:3;for(var bi=0;bi<S.en.length;bi++)if(!S.en[bi].dead&&dist(bt,S.en[bi])<=85)bn++;return bn>=bneed||(v43Ranged(bt)&&dist(S.h,bt)>=220)}
  return false;
 }
-function v43PrimeShort(id){return({slam:"PRIMED — CROWD / CLOSE BOSS ATTACK",tree:"PRIMED — MULTI-HIT LINE",honey:"PRIMED — LOW HEALTH",shroud:"PRIMED — ATTACK INCOMING",rage:"PRIMED — HELD READY",wall:"PRIMED — HEAVY PRESSURE",charge:"PRIMED — DISTANT RANGED TARGET",beatdown:"PRIMED — TARGET EXPOSED"})[id]||"PRIMED"}
+function v43PrimeShort(id){return({slam:"PRIMED — CROWD / CLOSE BOSS ATTACK",tree:"PRIMED — MULTI-HIT LINE",honey:"PRIMED — LOW HEALTH",shroud:"PRIMED — ATTACK INCOMING",rage:"PRIMED — HELD READY",wall:"PRIMED — HEAVY PRESSURE",charge:"PRIMED — DISTANT RANGED TARGET",beatdown:"PRIMED — TARGET EXPOSED",boulder:"PRIMED — CLUSTER / DISTANT RANGED TARGET"})[id]||"PRIMED"}
 function v43Cost(id){return V43_COST[id]||0}
-function v43AbilityValid(id){if(id==="tree"&&!v43Nearest())return false;if(id==="charge"&&!v43ChargeTarget())return false;if(id==="beatdown"&&!v43BeatTarget())return false;return true}
+function v43AbilityValid(id){if(id==="tree"&&!v43Nearest())return false;if(id==="charge"&&!v43ChargeTarget())return false;if(id==="beatdown"&&!v43BeatTarget())return false;if(id==="boulder"&&!v43Nearest())return false;return true}
 
 /* All temporary shields are globally ~30% weaker. Prime can earn some of that value back. */
 window.v37GrantShield=function(amount,duration,source){
@@ -2735,7 +2737,7 @@ hurtHero=function(n,source){
  /* Primal Rush mitigation is 15%, or 22% with Thick Skull, for the full Rush. */
  if(S.v45RushT>0)n=raw*((S.owned&&S.owned.chargeRunDown)?0.78:0.85);
  S.v45RawIncoming=raw;_v43Hurt(n,source);S.v45RawIncoming=null;
- if(S.item==="ring"&&S.mrs&&S.owned.mrsHusband&&raw>=60){S.mrs.furyReady=true;S.mrs.purseTimer=Math.min(S.mrs.purseTimer||9,.12)}
+ if(S.item==="ring"&&S.mrs&&S.owned.mrsHusband&&!S.mrs.husbandTriggered&&S.h.hp/S.h.max<.50){S.mrs.husbandTriggered=true;S.mrs.furyReady=true;S.mrs.purseTimer=Math.min(S.mrs.purseTimer||9,.12)}
 };
 
 /* Date Night Mark: Mrs. creates a vulnerability window instead of becoming another melee pet. */
@@ -2760,7 +2762,7 @@ cast=function(id){
  /* Primal Rush replaces the old forced-dash Charge. Bigfoot keeps normal AI movement. */
  if(id==="charge"&&normal){
    var rt=v43ChargeTarget();if(!rt){S.v43CastingPrime="";return}
-   S.cds.charge=skillInfo.charge.cd;S.v43Rage=Math.max(0,S.v43Rage-cost);if(prime&&S.owned.rageBattleRhythm)v43AddRage(Math.ceil(cost*.20),"prime refund");S.v43ReadyAge.charge=0;
+   S.cds.charge=skillInfo.charge.cd;S.v43Rage=Math.max(0,S.v43Rage-cost);if(prime&&S.owned.rageBattleRhythm&&window.v43GrantRage)window.v43GrantRage(Math.ceil(cost*.20),"prime refund");S.v43ReadyAge.charge=0;
    S.v45RushT=5;S.v45RushMax=5;S.v45RushPrime=prime;S.v45RushTargetUid=rt.uid;S.v45RushSpeedSpent=false;S.v45RushImpactDone=false;S.v45RushShoved={};
    S.v43Fx.push({kind:"rushStart",x:S.h.x,y:S.h.y,t:.55,max:.55});
    if(prime)S.v43Fx.push({kind:"primeCast",name:skillInfo[id].name,label:"PRIMAL RUSH!",x:S.h.x,y:S.h.y,t:.7,max:.7});
@@ -2886,7 +2888,7 @@ updateUI=function(){
 
 function v43ResetCombat(){
  if(!S)return;v43Ensure();S.v43Rage=20;S.v43ReadyAge={};S.v43BushDodged=false;S.v43BushPrimeCast=false;S.v43MrsThrows=[];S.v43PrimeTrees=[];S.v45RushT=0;S.v45RushPrime=false;S.v45RushSpeedSpent=false;S.v45RushImpactDone=false;S.v45RushTargetUid=0;S.v45RushShoved={};S.v45RagePulse=0;S.v45PrimeLive={};S.v45PrimePopUntil={};
- if(S.item==="ring"&&S.mrs){var m=S.mrs;m.x=720;m.y=455;m.ready=m.joinDelay;m.joined=m.joinDelay<=0;m.purseTimer=.8;m.lunchTimer=1.8;m.cheerTimer=1.2;m.guardTimer=2.5;m.damageBuffT=0;m.attackBuffT=0;m.furyReady=false;m.tossCount=0}
+ if(S.item==="ring"&&S.mrs){var m=S.mrs;m.x=720;m.y=455;m.ready=m.joinDelay;m.joined=m.joinDelay<=0;m.purseTimer=.8;m.lunchTimer=1.8;m.cheerTimer=1.2;m.guardTimer=2.5;m.damageBuffT=0;m.attackBuffT=0;m.furyReady=false;m.husbandTriggered=false;m.tossCount=0}
 }
 spawnCombat=function(kind){_v43Spawn(kind);v43ResetCombat()};
 enterFixedBoss=function(){_v43Boss();v43ResetCombat()};
@@ -2988,7 +2990,7 @@ function v47ExecuteCast(e,c){
  else if(c.kind==="crusherSmash"){if(dist(e,S.h)<112&&S.h.inv<=0){hurtHero(e.dmg*1.42,e);S.v47HeroSlowT=Math.max(S.v47HeroSlowT||0,1.15)}S.shake=Math.max(S.shake,.30);S.v47Fx.push({kind:"crusher",x:e.x,y:e.y,t:.5,max:.5})}
  e.atk=Math.max(e.atk,.45);
 }
-function v47TickMotion(e,dt){var m=e.v47.motion;if(!m)return false;v47Lock(e);m.t-=dt;e.x=clamp(e.x+m.vx*dt,38,722);e.y=clamp(e.y+m.vy*dt,45,482);if(!m.hit&&dist(e,S.h)<48&&S.h.inv<=0){hurtHero(m.damage,e);m.hit=true;var a=Math.atan2(S.h.y-e.y,S.h.x-e.x);S.h.x=clamp(S.h.x+Math.cos(a)*24,35,725);S.h.y=clamp(S.h.y+Math.sin(a)*24,42,485);S.shake=Math.max(S.shake,.18)}if(m.t<=0)e.v47.motion=null;return true}
+function v47TickMotion(e,dt){var m=e.v47.motion;if(!m)return false;v47Lock(e);m.t-=dt;e.x=clamp(e.x+m.vx*dt,38,722);e.y=clamp(e.y+m.vy*dt,45,482);if(!m.hit&&dist(e,S.h)<48&&S.h.inv<=0){hurtHero(m.damage,e);m.hit=true;var a=Math.atan2(S.h.y-e.y,S.h.x-e.x);if(!(S.v49UnbreakableActive&&S.v49UnbreakableActive())){var v49hk=(S.passives&&S.passives.indexOf("hide")>=0)?.75:1;S.h.x=clamp(S.h.x+Math.cos(a)*24*v49hk,35,725);S.h.y=clamp(S.h.y+Math.sin(a)*24*v49hk,42,485);}S.shake=Math.max(S.shake,.18)}if(m.t<=0)e.v47.motion=null;return true}
 function v47PreAI(dt){
  for(var i=0;i<S.en.length;i++){
    var e=S.en[i];if(e.dead||!V47_NEW_TYPES[e.type])continue;v47InitEnemy(e);var v=e.v47,k;for(k in v.cd)v.cd[k]=Math.max(0,v.cd[k]-dt);v.powerT=Math.max(0,v.powerT-dt);
@@ -3533,7 +3535,7 @@ function v48BossExecute(e,kind){
  }
  e.winding=false;e.wind=0
 }
-function v48TickBossMotion(e,dt){var m=e.v48State.motion;if(!m)return false;m.t-=dt;e.x=clamp(e.x+m.vx*dt,42,718);e.y=clamp(e.y+m.vy*dt,48,478);if(!m.hit&&dist(e,S.h)<58&&S.h.inv<=0){hurtHero(m.damage,e);m.hit=true;var a=Math.atan2(S.h.y-e.y,S.h.x-e.x);S.h.x=clamp(S.h.x+Math.cos(a)*32,35,725);S.h.y=clamp(S.h.y+Math.sin(a)*32,42,485);S.shake=Math.max(S.shake,.3)}if(m.t<=0)e.v48State.motion=null;return true}
+function v48TickBossMotion(e,dt){var m=e.v48State.motion;if(!m)return false;m.t-=dt;e.x=clamp(e.x+m.vx*dt,42,718);e.y=clamp(e.y+m.vy*dt,48,478);if(!m.hit&&dist(e,S.h)<58&&S.h.inv<=0){hurtHero(m.damage,e);m.hit=true;var a=Math.atan2(S.h.y-e.y,S.h.x-e.x);if(!(S.v49UnbreakableActive&&S.v49UnbreakableActive())){var v49hk=(S.passives&&S.passives.indexOf("hide")>=0)?.75:1;S.h.x=clamp(S.h.x+Math.cos(a)*32*v49hk,35,725);S.h.y=clamp(S.h.y+Math.sin(a)*32*v49hk,42,485);}S.shake=Math.max(S.shake,.3)}if(m.t<=0)e.v48State.motion=null;return true}
 function v48UpdateBoss(e,dt){
  var st=e.v48State;if(!st)return true;e.atk=Math.max(0,(e.atk||0)-dt);
  if(e.phase===1&&e.hp/e.max<=(e.v48Boss==="widow"?.45:.50)){e.phase=2;e.dmg*=1.12;st.a=Math.min(st.a,1);st.b=Math.min(st.b,1.5);st.c=Math.min(st.c,2);if(!st.phaseSpawn){st.phaseSpawn=true;if(e.v48Boss==="cinderhorn")v48AddSpecialists(2,false);if(e.v48Boss==="widow")v48AddSpecialists(2,true)}v48AddFx("bossPhase",e.x,e.y,1);byId("status").innerHTML="PHASE II — the boss changes its attack pattern."}
@@ -3608,7 +3610,7 @@ damageEnemy=function(e,n,k,sx,sy){
 var _v48HurtHero=hurtHero;
 hurtHero=function(n,source){
  if(!S)return _v48HurtHero(n,source);v48Init();var raw=n||0;
- if(v48HasRelic("shatteredMirror")&&!S.v48MirrorUsed&&raw>=60&&source){S.v48MirrorUsed=true;v48SpawnMirror()}
+ /* v4.9: Shattered Mirror no longer triggers from taking a large hit. */
  _v48HurtHero(n,source);
  if(v48HasRelic("witchBottle")&&S.h.hp<=0){S.h.hp=1;S.h.inv=Math.max(S.h.inv||0,2);var ix=S.v48Relics.indexOf("witchBottle");if(ix>=0)S.v48Relics.splice(ix,1);if(S.v48ConsumedRelics.indexOf("witchBottle")<0)S.v48ConsumedRelics.push("witchBottle");v48AddFx("bottle",S.h.x,S.h.y,1);byId("status").innerHTML="WITCH BOTTLE SHATTERS — lethal damage stopped at 1 HP.";v48UpdateRunBar()}
 };
@@ -3732,12 +3734,194 @@ updateUI=function(){_v48UpdateUI();if(S){v48UpdateRunBar();v48SyncBossUI()}};
 
 var _v48Update=update;
 update=function(dt){
- if(!S)return _v48Update(dt);v48Init();var oldMove=S.mods.move,combo=S.h.combo,corner=S.passives.indexOf("cornered")>=0&&S.h.hp/S.h.max<.40;if(corner)S.mods.move*=1.12;_v48Update(dt);if(!S)return;S.mods.move=oldMove;if(corner&&S.h.combo!==combo)S.h.atk/=1.20;if(!S.paused){v48UpdateBossEffects(dt);v48UpdateRelics(dt);v48UpdateRadio(dt);for(var i=0;i<S.en.length;i++)if(S.en[i].v48RootT>0)S.en[i].v48RootT=Math.max(0,S.en[i].v48RootT-dt)}for(i=S.v48RelicFx.length-1;i>=0;i--){S.v48RelicFx[i].t-=dt;if(S.v48RelicFx[i].t<=0)S.v48RelicFx.splice(i,1)}
+ if(!S)return _v48Update(dt);v48Init();var oldMove=S.mods.move,combo=S.h.combo,corner=S.passives.indexOf("cornered")>=0&&S.h.hp/S.h.max<.40;if(corner)S.mods.move*=1.15;_v48Update(dt);if(!S)return;S.mods.move=oldMove;if(corner&&S.h.combo!==combo)S.h.atk/=1.25;if(!S.paused){v48UpdateBossEffects(dt);v48UpdateRelics(dt);v48UpdateRadio(dt);for(var i=0;i<S.en.length;i++)if(S.en[i].v48RootT>0)S.en[i].v48RootT=Math.max(0,S.en[i].v48RootT-dt)}for(i=S.v48RelicFx.length-1;i>=0;i--){S.v48RelicFx[i].t-=dt;if(S.v48RelicFx[i].t<=0)S.v48RelicFx.splice(i,1)}
 };
 
 /* Build summary documents the actual v4.8 rules. */
 var _v48RenderBuild=renderBuildSummary;
 renderBuildSummary=function(){_v48RenderBuild();if(!S)return;var b=byId("v3BuildBody");if(!b)return;b.innerHTML+='<h3>The Long Hunt v4.8</h3><div class="buildRow"><b>Core run:</b> 20 combat rooms. Bosses at 5, 10, 15, and 20. Rare secret/bonus fights can extend a run without advancing core-room scaling.</div><div class="buildRow"><b>Automatic level growth:</b> +12 Max HP and +2% Base Damage per level. No level-up healing or Armor.</div><div class="buildRow"><b>Enemy scaling:</b> +8.5% HP and +5.5% damage per core room. Enemy movement speed, attack speed, range, projectile speed, and telegraph timing still do not globally scale.</div><div class="buildRow"><b>Relics:</b> '+(S.v48Relics.length?S.v48Relics.map(function(id){var r=V48_RELIC_BY_ID[id];return '<br><b>'+v48RelicName(id)+'</b> — '+(r?r.text:'');}).join(''):'none yet')+'</div><div class="buildRow"><b>Run modifiers:</b> '+(S.v48Modifiers.length?S.v48Modifiers.map(function(id){var m=V48_MOD_BY_ID[id];return '<br><b>'+v48ModName(id)+'</b> — '+(m?m.text:'');}).join(''):'none')+'</div>'};
+
+/* Exposed for later content layers. */
+window.V48_RELIC_BY_ID=V48_RELIC_BY_ID;
+window.v48HasRelic=v48HasRelic;window.v48HasMod=v48HasMod;window.v48Init=v48Init;window.v48UpdateRunBar=v48UpdateRunBar;
+window.v48ShowRelicReward=v48ShowRelicReward;window.v48ShowEvolution=v48ShowEvolution;window.v48CoreClearedProgress=v48CoreClearedProgress;window.v48SpawnMirror=v48SpawnMirror;
+
+})();
+</script>
+
+
+<style id="v49Styles">
+.card.bossRelic{border-color:#f0c36b;background:linear-gradient(#60492d,#3b3124);box-shadow:inset 0 0 0 1px #ffd98233}
+#v49PassivePulse{position:absolute;left:50%;top:104px;transform:translateX(-50%);z-index:21;pointer-events:none;font-weight:1000;color:#d8f6b1;text-shadow:0 2px 5px #000;font-size:12px}
+</style>
+<script>
+/* ===== PRIMAL ARSENAL V4.9 — BIGFOOT LOADOUT + BOSS RELICS ===== */
+(function(){
+
+/* ---------- loadout rewrite ---------- */
+abilityChoices=[
+ ["slam","Earth Slam — 8s • 360° AoE + knockback"],
+ ["tree","Uproot — 7s • piercing tree line"],
+ ["honey","Honey Stash — 12s • timed shield + recovery boost"],
+ ["shroud","Bush Ambush — 11s • hide 1s, invulnerable, burst out"],
+ ["rage","Wild Frenzy — 13s • 6s attack-speed burst"],
+ ["wall","Boulder Wall — 12s • timed shield + knockback"],
+ ["charge","Primal Rush — 10s • decaying sprint + Rush Impact"],
+ ["beatdown","Savage Beatdown — 10s • focused 3-hit combo"],
+ ["boulder","Boulder Pitch — 9s • ranged artillery impact"]
+];
+passiveChoices=[
+ ["hide","Thick Hide — 10% less damage + knockback resistance"],
+ ["heavy","Heavyweight — stronger knockback + arena-edge impacts"],
+ ["strength","Ancient Strength — every 4th Basic becomes an Ancient Strike"],
+ ["trailForager","Trail Forager — extra Camp Recovery when hurt"],
+ ["predatorEye","Predator's Eye — +15% damage to controlled/exposed enemies"],
+ ["cornered","Cornered Beast — below 40% HP: faster Basics + movement"],
+ ["forestWrath","Forest's Wrath — periodic root eruption around Bigfoot"],
+ ["primalRhythm","Primal Rhythm — abilities empower the next Basic Attack"]
+];
+skillInfo.boulder={name:"Boulder Pitch",desc:"Lob a huge boulder into a distant area",cd:9};
+skillInfo.king={name:"King of the Mountain",desc:"Single-target mauling ultimate",cd:25};
+skillInfo.unbreakable={name:"Unbreakable",desc:"35% Max HP shield that retaliates as it breaks",cd:24};
+var V49_COST={boulder:25,king:55,unbreakable:50};
+
+function v49RewriteSetup(){
+ var ids=["ability1","ability2","ability3","ability4"];for(var i=0;i<ids.length;i++)rebuildSelect(ids[i],abilityChoices,{});syncAbilityChoices();
+ var p1=byId("passive1"),p2=byId("passive2");if(p1&&p2){p1.innerHTML="";p2.innerHTML="";for(i=0;i<passiveChoices.length;i++){var d=passiveChoices[i],o1=document.createElement("option"),o2=document.createElement("option");o1.value=o2.value=d[0];o1.textContent=o2.textContent=d[1];p1.appendChild(o1);p2.appendChild(o2)}p1.value="hide";p2.value="strength";syncPassiveChoices()}
+ var ult=byId("ult");if(ult){ult.innerHTML='<option value="roar">Primal Roar — room-wide fear + combat buff</option><option value="avalanche">Avalanche — falling boulder barrage</option><option value="king">King of the Mountain — maul one priority target</option><option value="unbreakable">Unbreakable — retaliating defensive shield</option>';ult.value="avalanche"}
+ var det=document.querySelectorAll('#setup details');for(i=0;i<det.length;i++){var sm=det[i].querySelector('summary');if(!sm)continue;if(sm.textContent.indexOf('Ability effects')>=0)det[i].innerHTML='<summary>Ability effects</summary><div><b>Earth Slam</b> — instant 360° damage around Bigfoot and heavy knockback.</div><div><b>Uproot</b> — throw a tree down the live aim line, piercing enemies.</div><div><b>Honey Stash</b> — timed shield, temporary armor, and stronger next Camp Recovery.</div><div><b>Bush Ambush</b> — hide briefly while invulnerable, then burst out for AoE damage and knockback.</div><div><b>Wild Frenzy</b> — attack much faster for 6 seconds.</div><div><b>Boulder Wall</b> — strong timed shield plus close-range knockback.</div><div><b>Primal Rush</b> — decaying movement burst; the first close Basic converts remaining speed into Rush Impact damage.</div><div><b>Savage Beatdown</b> — focused 3-hit combo ending in an interrupt and Cracked.</div><div><b>Boulder Pitch</b> — 9s cooldown, 25 Rage. Lob a huge boulder at the current target area for 150 Ability Damage in an 85px radius and strong knockback. PRIMED with 3+ enemies in the impact area or a ranged target at least 220px away; a centered PRIMED impact adds 60 flat damage and briefly stuns normal enemies.</div>';
+ if(sm.textContent.indexOf('Ultimate details')>=0)det[i].innerHTML='<summary>Ultimate details</summary><div><b>Primal Roar</b> — 50 Rage. Room-wide burst, fear, and an 8-second combat buff.</div><div><b>Avalanche</b> — 60 Rage. Telegraphed falling-boulder barrage across the battlefield.</div><div><b>King of the Mountain</b> — 55 Rage. Bigfoot mauls his current target. Normal enemies and Elites take 260 total damage before being hurled; thrown bodies damage enemies they collide with and explode on landing. Bosses instead take a four-hit 420-damage beatdown ending in a stagger.</div><div><b>Unbreakable</b> — 50 Rage. Gain a shield equal to 35% Max HP for 7s. While it exists, Bigfoot cannot be slowed or knocked back. Every 100 shield HP lost releases a 45-damage shockwave with strong knockback. Remaining shield disappears normally and never becomes healing.</div>';
+ if(sm.textContent.indexOf('Passive details')>=0)det[i].innerHTML='<summary>Passive details</summary><div><b>Thick Hide</b> — take 10% less damage from all sources and receive 25% less knockback.</div><div><b>Heavyweight</b> — deal 25% more knockback. Normal enemies slammed into the arena edge take 40 flat damage and are stunned for 0.6s.</div><div><b>Ancient Strength</b> — every 4th Basic Attack is an Ancient Strike: +75% damage and much stronger knockback.</div><div><b>Trail Forager</b> — if combat ends below 50% HP, the upcoming Camp Recovery restores an additional 5% Max HP.</div><div><b>Predator\'s Eye</b> — +15% damage against stunned, feared, rooted, slowed, Exposed, or Cracked enemies.</div><div><b>Cornered Beast</b> — below 40% HP, +25% Basic Attack Speed and +15% Movement Speed.</div><div><b>Forest\'s Wrath</b> — every 12s in combat, roots erupt around Bigfoot for 35 flat damage. Normal enemies are rooted 1.5s; Elites/Bosses are slowed 30% for 1.5s.</div><div><b>Primal Rhythm</b> — after casting a normal ability, your next Basic Attack within 4s deals +35% damage and +50% knockback.</div>'}
+}
+v49RewriteSetup();
+
+/* ---------- old passive cleanup + precise replacements ---------- */
+/* Cryptid Recovery, Wild Instinct, and Forest Blood remain inaccessible legacy ids only. */
+var _v49Camp=campRecovery;
+campRecovery=function(){
+ if(!S)return 0;
+ if(S.owned&&S.owned.goldenReserve&&S.h.shield>0){var extra=Math.min(S.h.max*.05,S.h.shield*.20);S.h.hp=Math.min(S.h.max,S.h.hp+extra);S.h.shield=0}
+ var pct=.05+(S.mods.campBonus||0)*.70;if(v48HasMod("rottenCamps"))pct-=.02;if(S.passives.indexOf("trailForager")>=0&&S.h.hp/S.h.max<.50)pct+=.05;
+ if(S.honeyBoost){pct+=(S.mods.honeyCamp||0)*.70;S.honeyBoost=false}
+ var before=S.h.hp;S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*Math.max(0,pct));return Math.round(S.h.hp-before)
+};
+
+/* ---------- Boulder Pitch ---------- */
+function v49Target(){return nearestTo(S.h)}
+function v49Ranged(e){return e&&(e.type==="archer"||e.type==="poison"||e.type==="mush"||e.type==="trapper"||e.type==="shaman"||e.type==="bomber"||e.type==="handler")}
+function v49BoulderPrime(){var t=v49Target();if(!t)return false;var need=S.owned&&S.owned.boulderBullseye?2:3,c=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(t,S.en[i])<=85)c++;return c>=need||(v49Ranged(t)&&dist(S.h,t)>=220)}
+var _v49Starting=startingCooldown;startingCooldown=function(id){if(id==="boulder")return 0;if(id==="king"||id==="unbreakable"){var b=skillInfo[id].cd*.5;if(S&&S.owned&&S.owned.v37UltCharge)b=skillInfo[id].cd*.25;return b}return _v49Starting(id)};window.startingCooldown=startingCooldown;
+
+function v49CastBoulder(){var t=v49Target();if(!t)return false;var cost=V49_COST.boulder;if((S.cds.boulder||0)>0||S.v43Rage<cost)return false;var prime=v49BoulderPrime(),cd=S.owned.boulderPitcher?7.5:9,flight=S.owned.boulderPitcher?.54:.72;S.cds.boulder=cd;S.v43Rage-=cost;if(prime&&S.owned.rageBattleRhythm&&window.v43GrantRage)window.v43GrantRage(Math.ceil(cost*.20),"prime refund");S.v43ReadyAge.boulder=0;S.v49Boulders.push({sx:S.h.x,sy:S.h.y,x:t.x,y:t.y,t:flight,max:flight,prime:prime,scale:1,bounce:false});S.v43Fx.push({kind:"primeCast",name:"Boulder Pitch",label:prime?"PERFECT TARGET!":"BOULDER PITCH!",x:S.h.x,y:S.h.y,t:.65,max:.65});return true}
+function v49BoulderImpact(b){var base=150*v37PowerMult(),primeBonus=b.prime?(S.owned.boulderBullseye?90:60):0,dmg=(base+primeBonus)*(b.scale||1),hit=[];for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e.dead||Math.hypot(e.x-b.x,e.y-b.y)>85)continue;damageEnemy(e,dmg,55,b.x,b.y);hit.push(e.uid);if(b.prime){e.stunT=Math.max(e.stunT||0,(e.type==="boss"||e.type==="miniboss")?.25:.7);v49Interrupt(e)}}
+ if(S.owned.boulderCrater)S.v49Craters.push({x:b.x,y:b.y,r:85,t:3});if(S.owned.boulderShatter){for(i=0;i<5;i++){var targets=S.en.filter(function(e){return !e.dead});if(!targets.length)break;var tt=targets[i%targets.length];S.v49Fragments.push({x:b.x,y:b.y,uid:tt.uid,t:1.2,speed:440,damage:25})}}
+ if(S.owned.boulderSkip&&!b.bounce){var cand=S.en.filter(function(e){return !e.dead&&hit.indexOf(e.uid)<0});if(cand.length){var nt=cand[0],best=1e9;for(i=0;i<cand.length;i++){var dd=Math.hypot(cand[i].x-b.x,cand[i].y-b.y);if(dd<best){best=dd;nt=cand[i]}}S.v49Boulders.push({sx:b.x,sy:b.y,x:nt.x,y:nt.y,t:.42,max:.42,prime:false,scale:.65,bounce:true})}}
+ S.v49Fx.push({kind:"boulder",x:b.x,y:b.y,t:.55,max:.55,r:85});S.shake=Math.max(S.shake,.35)
+}
+
+/* ---------- new Ultimates ---------- */
+function v49Interrupt(e){if(!e)return;e.winding=false;e.wind=0;e.chargeWind=0;e.chargeTime=0;if(e.v38&&e.v38.cast)e.v38.cast=null;if(e.v47&&e.v47.cast)e.v47.cast=null}
+function v49SpendUltimate(id){var cost=V49_COST[id];if((S.cds[id]||0)>0||S.v43Rage<cost)return false;S.cds[id]=skillInfo[id].cd;S.v43Rage-=cost;return true}
+function v49CastKing(){var t=v49Target();if(!t||!v49SpendUltimate("king"))return false;v49Interrupt(t);S.h.inv=Math.max(S.h.inv||0,1.25);S.v49King={uid:t.uid,timer:.08,hit:0,lastX:t.x,lastY:t.y,boss:t.type==="boss"};S.v49Fx.push({kind:"king",x:t.x,y:t.y,t:1.1,max:1.1});byId("status").innerHTML="KING OF THE MOUNTAIN — Bigfoot goes straight for "+(t.type==="boss"?"the boss.":"one target.");return true}
+function v49CastUnbreakable(){if(!v49SpendUltimate("unbreakable"))return false;var frac=S.owned.unbreakThicker?.45:.35,dur=S.owned.unbreakStand?9:7;S.h.shield+=S.h.max*frac;S.h.shieldT=dur;S.h.shieldSource="Unbreakable";S.v49UnbreakMeter=0;S.v49UnbreakT=dur;S.v49Fx.push({kind:"unbreakable",x:S.h.x,y:S.h.y,t:.9,max:.9});byId("status").innerHTML="UNBREAKABLE — stand your ground.";return true}
+S&&0;
+var _v49Cast=cast;
+cast=function(id){if(!S||S.paused)return;var normal=S.abilities&&S.abilities.indexOf(id)>=0,before=S.cds[id]||0,ok=false;if(id==="boulder")ok=v49CastBoulder();else if(id==="king")ok=v49CastKing();else if(id==="unbreakable")ok=v49CastUnbreakable();else{_v49Cast(id);ok=normal&&(S.cds[id]||0)>before}
+ if(normal&&ok&&S.passives.indexOf("primalRhythm")>=0){S.v49PrimalReady=true;S.v49PrimalRhythmT=4;S.v49Fx.push({kind:"rhythm",x:S.h.x,y:S.h.y,t:.5,max:.5})}
+ if((id==="roar"||id==="avalanche"||id==="king"||id==="unbreakable")&&((S.cds[id]||0)>before))v49OnUltimateCast();
+};
+
+/* ---------- Evolutions for Boulder + new Ultimates ---------- */
+upgrades.push(
+ {id:"boulderSkip",need:"boulder",tag:"BOULDER PITCH",title:"Skipping Stone",text:"After the first impact, the boulder launches toward another enemy cluster and crashes again for 65% damage."},
+ {id:"boulderCrater",need:"boulder",tag:"BOULDER PITCH",title:"Crater Maker",text:"Boulder Pitch leaves a 3s crater. Enemies inside have 35% reduced Movement Speed."},
+ {id:"boulderShatter",need:"boulder",tag:"BOULDER PITCH",title:"Shatterstone",text:"Impact releases 5 seeking stone fragments for 25 flat damage each."},
+ {id:"boulderPitcher",need:"boulder",tag:"BOULDER PITCH",title:"Pitcher's Arm",text:"Cooldown falls from 9s to 7.5s and the boulder reaches its target 25% faster."},
+ {id:"boulderBullseye",need:"boulder",tag:"BOULDER PITCH",title:"Bullseye",text:"Boulder Pitch PRIMES with 2 clustered enemies instead of 3 and the PRIMED flat bonus rises from +60 to +90."},
+ {id:"kingCollision",need:"king",tag:"KING OF THE MOUNTAIN",title:"Human Bowling",text:"Thrown enemies deal 120 flat collision damage instead of 80, and the landing blast radius is larger."},
+ {id:"kingBreaker",need:"king",tag:"KING OF THE MOUNTAIN",title:"Crown Breaker",text:"Boss beatdowns deal 25% more damage and the final stagger lasts 0.7s."},
+ {id:"kingFast",need:"king",tag:"KING OF THE MOUNTAIN",title:"Claim the Hill",text:"King of the Mountain cooldown falls from 25s to 20s."},
+ {id:"unbreakThicker",need:"unbreakable",tag:"UNBREAKABLE",title:"Thicker Than Trees",text:"Unbreakable shield rises from 35% to 45% Max HP."},
+ {id:"unbreakEcho",need:"unbreakable",tag:"UNBREAKABLE",title:"Hit Me Again",text:"Retaliation shockwaves trigger every 75 shield HP lost instead of every 100."},
+ {id:"unbreakStand",need:"unbreakable",tag:"UNBREAKABLE",title:"Last One Standing",text:"Unbreakable lasts 9s and each retaliation shockwave deals 60 flat damage instead of 45."}
+);
+var _v49Eligible=upgradeEligible;upgradeEligible=function(u){if(u&&(u.need==="king"||u.need==="unbreakable"))return !!S&&S.ult===u.need;return _v49Eligible(u)};
+
+/* ---------- passive runtime ---------- */
+function v49UnbreakableActive(){return !!(S&&S.h&&S.h.shield>0&&S.h.shieldSource==="Unbreakable"&&(S.v49UnbreakT||0)>0)}
+if(S)S.v49UnbreakableActive=v49UnbreakableActive;
+window.v49UnbreakableActive=v49UnbreakableActive;
+function v49ResetCombat(){if(!S)return;S.v49CombatLive=false;S.v49ForestT=12;S.v49PrimalReady=false;S.v49PrimalRhythmT=0;S.v49EdgeHitSerial=0;S.v49BridgebreakerUsed=false;S.v49AshExplosionUsed=false;S.v49WebEyeUsed=false;S.v49UnbreakMeter=0;S.v49UnbreakT=0;S.v49BasicCount=0;S.v49BossAbilityCount=0;S.v49Spider=null;S.v49RootTimer=12;}
+function v49Ensure(){if(!S)return;S.v49Boulders=S.v49Boulders||[];S.v49Fragments=S.v49Fragments||[];S.v49Craters=S.v49Craters||[];S.v49Fx=S.v49Fx||[];S.v49FirePools=S.v49FirePools||[];S.v49Embers=S.v49Embers||[];if(S.v49ForestT==null)S.v49ForestT=12;if(S.v49PrimalRhythmT==null)S.v49PrimalRhythmT=0;if(S.v49MirrorBasicCount==null)S.v49MirrorBasicCount=0;if(S.v49BossBasicCount==null)S.v49BossBasicCount=0;if(S.v49BossAbilityCount==null)S.v49BossAbilityCount=0;S.v49UnbreakableActive=v49UnbreakableActive}
+function v49ForestWrath(){S.v49Fx.push({kind:"roots",x:S.h.x,y:S.h.y,t:.7,max:.7,r:155});for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e.dead||dist(S.h,e)>155)continue;damageEnemy(e,35,8,S.h.x,S.h.y);if(isElite(e)){e.slowDebuff=Math.max(e.slowDebuff||0,1.5);e.slowPct=Math.max(e.slowPct||0,.30)}else{e.slowDebuff=Math.max(e.slowDebuff||0,1.5);e.slowPct=Math.max(e.slowPct||0,1);e.v48RootT=Math.max(e.v48RootT||0,1.5)}}}
+function v49RootNearest(damage,normalRoot,bossSlow){var t=v49Target();if(!t)return;damageEnemy(t,damage,8,t.x,t.y);t.slowDebuff=Math.max(t.slowDebuff||0,normalRoot);t.slowPct=Math.max(t.slowPct||0,isElite(t)?bossSlow:1);if(!isElite(t))t.v48RootT=Math.max(t.v48RootT||0,normalRoot);S.v49Fx.push({kind:"rootTarget",x:t.x,y:t.y,t:.6,max:.6,r:58})}
+function v49Shockwave(dmg){S.v49Fx.push({kind:"shieldWave",x:S.h.x,y:S.h.y,t:.48,max:.48,r:135});for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(S.h,S.en[i])<135)damageEnemy(S.en[i],dmg,42,S.h.x,S.h.y)}
+function v49EdgeCheck(dt){for(var i=0;i<S.en.length;i++){var e=S.en[i];e.v49EdgeCd=Math.max(0,(e.v49EdgeCd||0)-dt);if(e.dead||isElite(e)||e.v49EdgeCd>0)continue;var edge=e.x<=35.5||e.x>=724.5||e.y<=42.5||e.y>=484.5,spd=Math.hypot(e.kbx||0,e.kby||0);if(edge&&spd>32){e.v49EdgeCd=.55;if(S.passives.indexOf("heavy")>=0){damageEnemy(e,40,0,e.x,e.y);e.stunT=Math.max(e.stunT||0,.6);S.v49Fx.push({kind:"edge",x:e.x,y:e.y,t:.45,max:.45})}if(v48HasRelic("v49BridgeStone")&&!S.v49BridgebreakerUsed){S.v49BridgebreakerUsed=true;for(var j=0;j<S.en.length;j++)if(!S.en[j].dead&&S.en[j]!==e&&dist(e,S.en[j])<100)damageEnemy(S.en[j],90,18,e.x,e.y);S.v49Fx.push({kind:"bridge",x:e.x,y:e.y,t:.6,max:.6,r:100})}}}}
+
+/* Replace Shattered Mirror with a non-damage trigger. */
+if(V48_RELIC_BY_ID.shatteredMirror)V48_RELIC_BY_ID.shatteredMirror.text="Every 8th Basic Attack summons a spectral copy for 3s that repeats 3 Basic Attacks at 70% damage.";
+
+/* ---------- Boss-exclusive relics ---------- */
+var V49_BOSS_RELICS={
+ 5:[
+  {id:"v49RootSkull",title:"Root-Crowned Skull",text:"Every 12s in combat, roots erupt under the nearest enemy for 50 flat damage. Normal enemies are rooted 1.25s; Elites/Bosses are slowed 30% for 1.25s."},
+  {id:"v49BridgeStone",title:"Bridgebreaker Stone",text:"Once per combat, the first enemy knocked into an arena edge releases a 90-damage shockwave around itself."},
+  {id:"v49HollowAcorn",title:"Hollow Acorn",text:"Every 10th Basic Attack fires a living sapling at the nearest enemy for 70 flat damage and roots normal enemies for 1s."}
+ ],
+ 10:[
+  {id:"v49AshAntler",title:"Ashen Antler",text:"The first enemy killed each combat explodes for 90 flat damage to enemies within 85px."},
+  {id:"v49BurningHoof",title:"Burning Hoof",text:"Every 8th Basic Attack leaves a 3s fire pool beneath its target. Enemies inside take 20 flat damage each second."},
+  {id:"v49CinderBell",title:"Cinder Bell",text:"Casting an Ultimate calls down 3 ember strikes around your current target. Each impact deals 70 flat damage in a small area."}
+ ],
+ 15:[
+  {id:"v49WidowLantern",title:"Widow's Lantern",text:"Every 6 enemy kills summons a lantern spider for 8s. It attacks every 0.8s for 32 flat damage."},
+  {id:"v49GhostSilk",title:"Ghost Silk",text:"Every 4th normal ability cast summons a spectral copy that repeats 2 Basic Attacks at 75% damage."},
+  {id:"v49WebEye",title:"Webbed Eye",text:"The first Elite or Boss damaged each combat has Movement Speed reduced by 50% for 3s and its next attack delayed by 1s."}
+ ]
+};
+Object.keys(V49_BOSS_RELICS).forEach(function(k){V49_BOSS_RELICS[k].forEach(function(r){V48_RELIC_BY_ID[r.id]={id:r.id,tier:3,title:r.title,text:r.text,boss:+k}})});
+function v49ShowBossReward(room,heal){var pool=(V49_BOSS_RELICS[room]||[]).filter(function(r){return !v48HasRelic(r.id)}),cards=[];for(var i=0;i<pool.length;i++)(function(r){cards.push({cls:"bossRelic",tag:"BOSS RELIC · EXCLUSIVE",title:r.title,text:r.text,go:function(){S.v48Relics.push(r.id);v48UpdateRunBar();byId("status").innerHTML="BOSS RELIC ACQUIRED — "+r.title;if(room===5)S.v48ForceItemRoute=true;showPathChoice("Boss Relic acquired: <b>"+r.title+"</b>.")}})})(pool[i]);showDecision("BOSS TROPHY",(heal!=null?"Camp Recovery restored <b>"+heal+" HP</b>. ":"")+"Choose one relic unique to this boss.",cards,3)}
+
+/* Replace main-boss reward flow while preserving every other v4.8 reward route. */
+completeRoom=function(){if(!S||S.paused)return;v48Init();S.paused=true;if(S.v48SideActive){var side=S.v48SideActive,reward=side.reward;if(reward==="rareRelic")return v48ShowRelicReward(true,"side",null);if(reward==="relic")return v48ShowRelicReward(false,"side",null);return v48ShowEvolution(0,4,"side")}
+ var heal=campRecovery();v48CoreClearedProgress();if(S.room===20&&S.roomKind==="boss")return showVictory(heal);if((S.room===5||S.room===10||S.room===15)&&S.roomKind==="boss")return v49ShowBossReward(S.room,heal);var reward=S.v48CurrentReward||"evolution";if(reward==="item"){byId("status").innerHTML="ITEM HUNT CLEARED — Camp Recovery +"+heal+" HP.";return showItemHunt()}if(reward==="relic")return v48ShowRelicReward(false,"path",heal);if(reward==="rareRelic")return v48ShowRelicReward(true,"path",heal);return v48ShowEvolution(heal,S.v48EvolutionCount||3,"path")};
+
+/* ---------- runtime hooks ---------- */
+var _v49Damage=damageEnemy;
+damageEnemy=function(e,n,k,sx,sy){if(!e||e.dead)return;v49Ensure();var was=e.hp>0,isTargetElite=isElite(e),before=e.hp;_v49Damage(e,n,k,sx,sy);if(was&&isTargetElite&&v48HasRelic("v49WebEye")&&!S.v49WebEyeUsed){S.v49WebEyeUsed=true;e.slowDebuff=Math.max(e.slowDebuff||0,3);e.slowPct=Math.max(e.slowPct||0,.50);e.atk=(e.atk||0)+1;S.v49Fx.push({kind:"web",x:e.x,y:e.y,t:.7,max:.7})}
+ if(was&&e.dead){if(v48HasRelic("v49AshAntler")&&!S.v49AshExplosionUsed){S.v49AshExplosionUsed=true;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i]!==e&&dist(e,S.en[i])<85)_v49Damage(S.en[i],90,12,e.x,e.y);S.v49Fx.push({kind:"ash",x:e.x,y:e.y,t:.55,max:.55,r:85})}if(v48HasRelic("v49WidowLantern")){S.v49WidowKills=(S.v49WidowKills||0)+1;if(S.v49WidowKills%6===0){S.v49Spider={t:8,timer:.1};S.v49Fx.push({kind:"spider",x:e.x,y:e.y,t:.7,max:.7})}}}
+};
+var _v49Hurt=hurtHero;
+hurtHero=function(n,source){if(!S)return _v49Hurt(n,source);v49Ensure();var active=v49UnbreakableActive(),before=S.h.shield||0;_v49Hurt(n,source);if(active){var lost=Math.max(0,before-(S.h.shield||0));S.v49UnbreakMeter+=lost;var threshold=S.owned.unbreakEcho?75:100,dmg=S.owned.unbreakStand?60:45;while(S.v49UnbreakMeter>=threshold){S.v49UnbreakMeter-=threshold;v49Shockwave(dmg)}}};
+
+function v49OnUltimateCast(){if(!S||!v48HasRelic("v49CinderBell"))return;var t=v49Target();if(!t)return;for(var i=0;i<3;i++){var a=i/3*Math.PI*2+Math.random()*.3,r=30+i*18;S.v49Embers.push({x:t.x+Math.cos(a)*r,y:t.y+Math.sin(a)*r,t:.35+i*.22,max:.35+i*.22,damage:70,r:48})}}
+function v49OnBasic(){S.v49BossBasicCount=(S.v49BossBasicCount||0)+1;if(v48HasRelic("shatteredMirror")){S.v49MirrorBasicCount=(S.v49MirrorBasicCount||0)+1;if(S.v49MirrorBasicCount>=8){S.v49MirrorBasicCount=0;v48SpawnMirror()}}
+ if(v48HasRelic("v49HollowAcorn")&&S.v49BossBasicCount%10===0){var t=v49Target();if(t){damageEnemy(t,70,10,S.h.x,S.h.y);t.slowDebuff=Math.max(t.slowDebuff||0,1);t.slowPct=Math.max(t.slowPct||0,isElite(t)?.30:1);S.v49Fx.push({kind:"acorn",x:t.x,y:t.y,t:.5,max:.5})}}
+ if(v48HasRelic("v49BurningHoof")&&S.v49BossBasicCount%8===0){var q=v49Target();if(q)S.v49FirePools.push({x:q.x,y:q.y,r:70,t:3,tick:.05})}
+}
+function v49UpdateKing(dt){var k=S.v49King;if(!k)return;k.timer-=dt;if(k.timer>0)return;var t=null;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i].uid===k.uid){t=S.en[i];break}if(!t){S.v49King=null;return}k.lastX=t.x;k.lastY=t.y;k.hit++;var boss=t.type==="boss",per=boss?105:65;if(boss&&S.owned.kingBreaker)per*=1.25;damageEnemy(t,per,0,S.h.x,S.h.y);S.v49Fx.push({kind:"kingHit",x:t.x,y:t.y,t:.3,max:.3,n:k.hit});if(k.hit>=4){v49Interrupt(t);if(boss){t.stunT=Math.max(t.stunT||0,S.owned.kingBreaker?.7:.35)}else{var a=Math.atan2(t.y-S.h.y,t.x-S.h.x);t.v49Thrown={t:.55,vx:Math.cos(a)*460,vy:Math.sin(a)*460,hits:{},origSpd:t.spd};t.spd=0;t.atk=Math.max(t.atk||0,.8)}S.v49King=null}else k.timer=.25}
+function v49UpdateThrown(dt){for(var i=0;i<S.en.length;i++){var e=S.en[i],th=e.v49Thrown;if(!th)continue;th.t-=dt;e.x=clamp(e.x+th.vx*dt,30,730);e.y=clamp(e.y+th.vy*dt,35,490);for(var j=0;j<S.en.length;j++){var q=S.en[j];if(q===e||q.dead||th.hits[q.uid]||dist(e,q)>38)continue;th.hits[q.uid]=1;damageEnemy(q,S.owned.kingCollision?120:80,20,e.x,e.y)}if(th.t<=0){e.spd=th.origSpd||e.spd;e.v49Thrown=null;var rr=S.owned.kingCollision?125:95;for(j=0;j<S.en.length;j++){q=S.en[j];if(q!==e&&!q.dead&&dist(e,q)<rr)damageEnemy(q,120,28,e.x,e.y)}S.v49Fx.push({kind:"landing",x:e.x,y:e.y,t:.55,max:.55,r:rr})}}}
+function v49UpdateProjectiles(dt){for(var i=S.v49Boulders.length-1;i>=0;i--){var b=S.v49Boulders[i];b.t-=dt;if(b.t<=0){v49BoulderImpact(b);S.v49Boulders.splice(i,1)}}for(i=S.v49Fragments.length-1;i>=0;i--){var p=S.v49Fragments[i],t=null;for(var j=0;j<S.en.length;j++)if(!S.en[j].dead&&S.en[j].uid===p.uid){t=S.en[j];break}p.t-=dt;if(!t){S.v49Fragments.splice(i,1);continue}var dx=t.x-p.x,dy=t.y-p.y,z=Math.hypot(dx,dy)||1;p.x+=dx/z*p.speed*dt;p.y+=dy/z*p.speed*dt;if(z<20){damageEnemy(t,p.damage,6,p.x,p.y);p.t=0}if(p.t<=0)S.v49Fragments.splice(i,1)}for(i=S.v49Craters.length-1;i>=0;i--){var c=S.v49Craters[i];c.t-=dt;for(j=0;j<S.en.length;j++)if(!S.en[j].dead&&Math.hypot(S.en[j].x-c.x,S.en[j].y-c.y)<c.r){S.en[j].slowDebuff=Math.max(S.en[j].slowDebuff||0,.18);S.en[j].slowPct=Math.max(S.en[j].slowPct||0,.35)}if(c.t<=0)S.v49Craters.splice(i,1)}}
+function v49UpdateBossRelics(dt){if(v48HasRelic("v49RootSkull")){S.v49RootTimer-=dt;if(S.v49RootTimer<=0){S.v49RootTimer=12;v49RootNearest(50,1.25,.30)}}for(var i=S.v49FirePools.length-1;i>=0;i--){var f=S.v49FirePools[i];f.t-=dt;f.tick-=dt;if(f.tick<=0){f.tick=1;for(var j=0;j<S.en.length;j++)if(!S.en[j].dead&&Math.hypot(S.en[j].x-f.x,S.en[j].y-f.y)<f.r)damageEnemy(S.en[j],20,0,f.x,f.y)}if(f.t<=0)S.v49FirePools.splice(i,1)}if(S.v49Spider){S.v49Spider.t-=dt;S.v49Spider.timer-=dt;if(S.v49Spider.timer<=0){S.v49Spider.timer=.8;var t=v49Target();if(t)damageEnemy(t,32,4,S.h.x,S.h.y)}if(S.v49Spider.t<=0)S.v49Spider=null}for(i=S.v49Embers.length-1;i>=0;i--){var em=S.v49Embers[i];em.t-=dt;if(em.t<=0){for(j=0;j<S.en.length;j++)if(!S.en[j].dead&&Math.hypot(S.en[j].x-em.x,S.en[j].y-em.y)<em.r)damageEnemy(S.en[j],em.damage,18,em.x,em.y);S.v49Fx.push({kind:"ember",x:em.x,y:em.y,t:.4,max:.4,r:em.r});S.v49Embers.splice(i,1)}}}
+
+var _v49Update=update;
+update=function(dt){if(!S)return _v49Update(dt);v49Ensure();var comboBefore=S.h.combo||0,activeBefore=v49UnbreakableActive();if(activeBefore){S.v47HeroSlowT=0;S.v39SlowT=0}if(S.v49PrimalRhythmT>0){S.v49PrimalRhythmT=Math.max(0,S.v49PrimalRhythmT-dt);if(S.v49PrimalRhythmT<=0)S.v49PrimalReady=false}if(S.v49UnbreakT>0)S.v49UnbreakT=Math.max(0,S.v49UnbreakT-dt);_v49Update(dt);if(!S)return;v49Ensure();if(activeBefore||v49UnbreakableActive()){S.v47HeroSlowT=0;S.v39SlowT=0}if(!S.paused&&S.en.length){if(!S.v49CombatLive){S.v49CombatLive=true;S.v49ForestT=12;S.v49RootTimer=12;S.v49BridgebreakerUsed=false;S.v49AshExplosionUsed=false;S.v49WebEyeUsed=false}if(S.passives.indexOf("forestWrath")>=0){S.v49ForestT-=dt;if(S.v49ForestT<=0){S.v49ForestT=12;v49ForestWrath()}}v49UpdateKing(dt);v49UpdateThrown(dt);v49UpdateProjectiles(dt);v49UpdateBossRelics(dt);v49EdgeCheck(dt)}else S.v49CombatLive=false;
+ if((S.h.combo||0)!==comboBefore)v49OnBasic();
+ for(var i=S.v49Fx.length-1;i>=0;i--){S.v49Fx[i].t-=dt;if(S.v49Fx[i].t<=0)S.v49Fx.splice(i,1)}
+};
+
+/* Count normal ability casts for Ghost Silk without touching character-specific resources. */
+var _v49CastCount=cast;cast=function(id){if(!S||S.paused)return;var normal=S.abilities&&S.abilities.indexOf(id)>=0,before=S.cds[id]||0;_v49CastCount(id);if(normal&&(S.cds[id]||0)>before&&v48HasRelic("v49GhostSilk")){S.v49BossAbilityCount=(S.v49BossAbilityCount||0)+1;if(S.v49BossAbilityCount%4===0){S.v48Mirror={t:3,timer:.08,left:2};S.v49Fx.push({kind:"ghostSilk",x:S.h.x,y:S.h.y,t:.7,max:.7})}}};
+
+/* Claim the Hill modifies the actual ultimate cooldown after casting. */
+var _v49CastFast=cast;cast=function(id){var before=S&&(S.cds[id]||0);_v49CastFast(id);if(S&&id==="king"&&S.owned.kingFast&&(S.cds.king||0)>before)S.cds.king=20};
+
+/* ---------- visuals ---------- */
+var _v49Draw=draw;draw=function(){_v49Draw();if(!S)return;v49Ensure();var i,b,p,c,f,a,prog,arcY;for(i=0;i<S.v49Craters.length;i++){c=S.v49Craters[i];ctx.save();ctx.globalAlpha=.28;ctx.fillStyle="#554b3e";ctx.beginPath();ctx.ellipse(c.x,c.y,c.r,c.r*.55,0,0,Math.PI*2);ctx.fill();ctx.restore()}for(i=0;i<S.v49FirePools.length;i++){f=S.v49FirePools[i];ctx.save();ctx.globalAlpha=.36;ctx.fillStyle="#d95b32";ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.restore()}for(i=0;i<S.v49Boulders.length;i++){b=S.v49Boulders[i];prog=1-b.t/b.max;var bx=b.sx+(b.x-b.sx)*prog,by=b.sy+(b.y-b.sy)*prog;arcY=by-Math.sin(Math.PI*prog)*120;ctx.save();ctx.globalAlpha=.25;ctx.fillStyle="#1b1b16";ctx.beginPath();ctx.ellipse(bx,by,19,9,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.fillStyle="#77746b";ctx.beginPath();ctx.arc(bx,arcY,20,0,Math.PI*2);ctx.fill();ctx.strokeStyle=b.prime?"#ffd56b":"#a49b86";ctx.lineWidth=4;ctx.stroke();ctx.restore()}for(i=0;i<S.v49Fragments.length;i++){p=S.v49Fragments[i];ctx.fillStyle="#918a7b";ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill()}for(i=0;i<S.v49Embers.length;i++){f=S.v49Embers[i];ctx.strokeStyle="#ff9a55";ctx.lineWidth=4;ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.stroke()}for(i=0;i<S.v49Fx.length;i++){f=S.v49Fx[i];a=Math.max(0,f.t/(f.max||1));ctx.save();ctx.globalAlpha=a;if(f.kind==="roots"||f.kind==="rootTarget"){ctx.strokeStyle="#7fa750";ctx.lineWidth=8;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||70)*(1-a*.2),0,Math.PI*2);ctx.stroke()}else if(f.kind==="boulder"||f.kind==="landing"||f.kind==="bridge"){ctx.strokeStyle="#d4b16d";ctx.lineWidth=10;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||85)*(1-a*.25),0,Math.PI*2);ctx.stroke()}else if(f.kind==="edge"){ctx.fillStyle="#ffe09a";ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillText("WALL SLAM",f.x,f.y-34)}else if(f.kind==="rhythm"||f.kind==="rhythmHit"){ctx.strokeStyle="#b5ef8e";ctx.lineWidth=6;ctx.beginPath();ctx.arc(f.x,f.y,45+(1-a)*20,0,Math.PI*2);ctx.stroke()}else if(f.kind==="unbreakable"||f.kind==="shieldWave"){ctx.strokeStyle="#d9e8c2";ctx.lineWidth=9;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||60)+(1-a)*30,0,Math.PI*2);ctx.stroke()}else if(f.kind==="king"||f.kind==="kingHit"){ctx.strokeStyle="#f4c667";ctx.lineWidth=8;ctx.beginPath();ctx.arc(f.x,f.y,34+(1-a)*22,0,Math.PI*2);ctx.stroke()}else if(f.kind==="ash"||f.kind==="ember"){ctx.fillStyle="rgba(255,103,55,.35)";ctx.beginPath();ctx.arc(f.x,f.y,(f.r||70)*(1-a*.2),0,Math.PI*2);ctx.fill()}else if(f.kind==="web"){ctx.strokeStyle="#d3d1e7";ctx.lineWidth=4;for(var q=0;q<6;q++){var aa=q/6*Math.PI*2;ctx.beginPath();ctx.moveTo(f.x,f.y);ctx.lineTo(f.x+Math.cos(aa)*50,f.y+Math.sin(aa)*50);ctx.stroke()}}else if(f.kind==="acorn"||f.kind==="ghostSilk"||f.kind==="spider"){ctx.strokeStyle="#a7df9f";ctx.lineWidth=5;ctx.beginPath();ctx.arc(f.x,f.y,35+(1-a)*18,0,Math.PI*2);ctx.stroke()}ctx.restore()}}
+
+/* ---------- reset / summary ---------- */
+var _v49Start=startGame;startGame=function(){_v49Start();if(!S)return;v49Ensure();v49ResetCombat();S.v49Embers=[];S.v49WidowKills=0;v49RewriteSetup();buildSkills();updateUI()};
+var _v49Build=renderBuildSummary;renderBuildSummary=function(){_v49Build();if(!S)return;var b=byId("v3BuildBody");if(!b)return;var pn={hide:"Thick Hide",heavy:"Heavyweight",strength:"Ancient Strength",trailForager:"Trail Forager",predatorEye:"Predator's Eye",cornered:"Cornered Beast",forestWrath:"Forest's Wrath",primalRhythm:"Primal Rhythm"};b.innerHTML+='<h3>Primal Arsenal v4.9</h3><div class="buildRow"><b>Passives:</b> '+S.passives.map(function(x){return pn[x]||x}).join(' · ')+'</div><div class="buildRow"><b>Ability pool:</b> 9 abilities, choose 4. Boulder Pitch is the ranged artillery option.</div><div class="buildRow"><b>Ultimate pool:</b> Primal Roar · Avalanche · King of the Mountain · Unbreakable.</div><div class="buildRow"><b>Boss Relics:</b> Mossback, Cinderhorn, and The Lantern Widow each award one choice from their own exclusive relic pool.</div>'};
 
 })();
 </script>
