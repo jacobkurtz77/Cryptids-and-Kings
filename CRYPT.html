@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Collision Course v5.0</title>
+<title>Cryptids & Kings — Collision Course v5.0.1</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -3674,7 +3674,7 @@ function v48ShowRelicReward(rare,context,heal){var pool=v48RelicPool(rare),count
 function v48TakeRelic(r){if(!S||v48HasRelic(r.id))return;S.v48Relics.push(r.id);if(r.id==="strangeEgg"){S.v48EggProgress=0;S.v48EggHatched=false;S.v48EggPet=null}if(r.id==="tinyDoor")S.v48DoorProgress=0;if(r.id==="mothMap"){S.v48MapProgress=0;S.v48MapCharges=0}if(r.id==="mimicCoin")S.v48MimicCooldown=3;if(r.id==="stormBottle")S.v48StormCharge=0;if(r.id==="graveLantern"){S.v48LanternKills=0;S.v48LanternSouls=0}v48UpdateRunBar();byId("status").innerHTML="RELIC ACQUIRED — "+r.title;var c=S.v48RelicContext;S.v48RelicContext=null;if(c==="side")return v48FinishSide();showPathChoice("Relic acquired: <b>"+r.title+"</b>.")}
 
 /* ---------- side rooms ---------- */
-function v48StartSideCombat(type,title,reward){S.v48SideActive={type:type,title:title,reward:reward};S.v48SideCooldown=3;S.currentName=title;S.v48RouteDifficulty=type==="hidden"?2:3;if(type==="hidden"){S.v47ForcedEncounter=S.room>=12?"witchfire":"ritual";spawnCombat("elite");S.roomKind="side";updateRoomLabel();return}if(type==="foreman"){v48SpawnCustomBoss("foreman","DEADWOOD CAMP · THE FOREMAN","THE FOREMAN revs a ruined saw. This fight was not on the main trail.",.62);S.roomKind="side";return}if(type==="mimic"){v48SpawnCustomBoss("mimic","GILDED CACHE · THE MAW","The treasure chest opens its mouth. GILDED MAW was waiting.",.48);S.roomKind="side";return}}
+function v48StartSideCombat(type,title,reward){hideDecision();S.v48SideActive={type:type,title:title,reward:reward};S.v48SideCooldown=3;S.currentName=title;S.v48RouteDifficulty=type==="hidden"?2:3;if(type==="hidden"){S.v47ForcedEncounter=S.room>=12?"witchfire":"ritual";spawnCombat("elite");S.roomKind="side";updateRoomLabel();return}if(type==="foreman"){v48SpawnCustomBoss("foreman","DEADWOOD CAMP · THE FOREMAN","THE FOREMAN revs a ruined saw. This fight was not on the main trail.",.62);S.roomKind="side";return}if(type==="mimic"){v48SpawnCustomBoss("mimic","GILDED CACHE · THE MAW","The treasure chest opens its mouth. GILDED MAW was waiting.",.48);S.roomKind="side";return}}
 function v48FinishSide(){S.v48SideActive=null;S.v48RouteDifficulty=0;S.currentName="FOREST CROSSROADS";updateRoomLabel();showPathChoice("Bonus encounter cleared. The core hunt continues at Room "+(S.room+1)+".")}
 
 /* ---------- 20-room route system ---------- */
