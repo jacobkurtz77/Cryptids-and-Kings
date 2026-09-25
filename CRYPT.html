@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Cryptids & Kings — Primal Arsenal v4.9</title>
+<title>Cryptids & Kings — Collision Course v5.0</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#0e211b;color:#f6e7b8;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
@@ -223,7 +223,7 @@ body[data-screen="game"]{padding:6px}
 <section id="setup" class="panel">
 <button class="loadoutBack" type="button" onclick="openCharacterSelect()">← CHARACTERS</button>
 <h1>CRYPTIDS &amp; KINGS — BIGFOOT</h1>
-<div class="muted">Primal Arsenal v4.9: 20-room Long Hunt, rebuilt Bigfoot passives, a new ranged ability, four Ultimates, and exclusive boss relic rewards.</div>
+<div class="muted">Collision Course v5.0: Bigfoot knockback becomes a full damage build with collisions, aimed throws, advanced Evolutions, and visible Impact feedback.</div>
 
 <div class="section">BASIC ATTACK</div>
 <label class="caption">Choose 1</label>
@@ -3926,5 +3926,219 @@ var _v49Build=renderBuildSummary;renderBuildSummary=function(){_v49Build();if(!S
 })();
 </script>
 
+
+
+<style id="v50Styles">
+#v50ImpactLegend{font-size:11px;color:#d9c899;margin-top:4px;text-align:center}
+</style>
+<script>
+/* ===== COLLISION COURSE V5.0 — KNOCKBACK DAMAGE + ADVANCED EVOLUTIONS ===== */
+(function(){
+
+/* ---------- content cards ---------- */
+upgrades.push(
+ {id:"v50HomeRunSwing",need:"swipe",tag:"MIGHTY SWIPES",title:"Home Run Swing",text:"Every 3rd Mighty Swipe launches 40% farther. That launch deals 0.35 flat damage per pixel displaced, up to 60; with Heavyweight the cap becomes 90."},
+ {id:"v50HumanCannonball",tag:"KNOCKBACK",title:"Human Cannonball",text:"Normal enemies launched into another enemy damage both on collision. Collision damage rises with the distance already traveled."},
+ {id:"v50LineEmUp",requires:"v50HumanCannonball",tag:"KNOCKBACK",title:"Line 'Em Up",text:"Normal-enemy knockback may steer up to 45° toward a nearby enemy, prioritizing Bosses and Elites. Ordinary punches still preserve their original launch direction."},
+ {id:"v50ChainReaction",requires:"v50HumanCannonball",tag:"KNOCKBACK",title:"Chain Reaction",text:"When a launched normal enemy collides with another normal enemy, the second enemy is launched with 50% of the remaining force."},
+ {id:"v50CrashLanding",tag:"KNOCKBACK",title:"Crash Landing",text:"Any enemy displaced at least 100px by one knockback takes 30 additional flat damage when the launch ends."},
+ {id:"v50SpareBowlingBall",requires:"v50HumanCannonball",tag:"KNOCKBACK",title:"Spare Bowling Ball",text:"If a launched enemy kills the enemy it collides with, it keeps 50% of its remaining launch force instead of losing most of its momentum."},
+ {id:"v50Pileup",requires:"v50HumanCannonball",tag:"KNOCKBACK",title:"Pileup",text:"If one launched enemy collides with 2 different enemies during the same launch, the second collision creates a 40-damage AoE."},
+ {id:"v50GetOverHere",requires:"followThrough",need:"swipe",tag:"MIGHTY SWIPES",title:"Get Over Here",text:"After a 3rd-hit launch, Bigfoot gains a stronger 1.5s pursuit burst toward that enemy. Reaching melee range early makes the next Basic Attack come 25% sooner."},
+ {id:"v50Rockslide",requires:"slamWide",need:"slam",tag:"EARTH SLAM",title:"Rockslide",text:"An enemy launched at least 70px by Earth Slam sends a loose stone rolling onward for 35 flat damage to the first other enemy it hits."},
+ {id:"v50SeismicLaunch",requires:"slamWide",need:"slam",tag:"EARTH SLAM",title:"Seismic Launch",text:"With Heavyweight selected, an enemy sent at least 80px by Earth Slam creates a 35-damage impact burst where it lands."},
+ {id:"v50Pinball",need:"wall",tag:"BOULDER WALL",title:"Pinball",text:"Normal enemies knocked into the arena edge by Boulder Wall rebound once at 35% of the incoming force, often sending them back toward Bigfoot."},
+ {id:"v50WreckingBall",need:"charge",tag:"PRIMAL RUSH",title:"Wrecking Ball",text:"Rush Impact adds 0.25 flat damage for every pixel its target is displaced, up to +45. This is separate from Rush's speed-based Impact damage."},
+ {id:"v50BowlingStone",need:"boulder",tag:"BOULDER PITCH",title:"Bowling Stone",text:"Enemies near Boulder Pitch's impact are launched 35% farther. If Human Cannonball is active, those victims can become projectiles into nearby enemies."},
+ {id:"v50NoEscape",need:"beatdown",tag:"SAVAGE BEATDOWN",title:"No Escape",text:"After Savage Beatdown's final hit launches a normal enemy, Bigfoot immediately pursues that target for 1.5s instead of wasting the launch on chase time."},
+ {id:"v50Timber",needBasic:"limb",tag:"TREE LIMB",title:"Timber!",text:"A normal enemy displaced at least 60px by Tree Limb is knocked down for 1 second when it stops moving. Elites and Bosses receive a brief stagger instead."},
+ {id:"v50PerfectRhythm",tag:"PASSIVE SYNERGY",title:"Perfect Rhythm",text:"Requires Ancient Strength + Primal Rhythm. If Primal Rhythm empowers the same Basic Attack that becomes an Ancient Strike, the impact releases a 45-damage shockwave."},
+ {id:"v50PressureWave",need:"unbreakable",tag:"UNBREAKABLE",title:"Pressure Wave",text:"Requires Heavyweight. While Unbreakable is active, knockback-distance Impact damage is 25% stronger and its per-launch cap rises to 90."}
+);
+
+/* Existing Evolutions get richer behavior instead of duplicate cards. */
+for(var v50u=0;v50u<upgrades.length;v50u++){
+ var uu=upgrades[v50u];
+ if(uu.id==="followThrough")uu.text="After every 3rd Mighty Swipe launches an enemy, Bigfoot's next Basic Attack comes out 50% faster and he gains +35% pursuit speed toward that enemy for 1.5s.";
+ if(uu.id==="slamWide")uu.text="Earth Slam radius becomes much larger. Launched enemies carve a damaging crack along the ground they traveled; another enemy crossing that crack takes 25 flat damage once.";
+ if(uu.id==="kingCollision")uu.text="Thrown enemies deal 120 flat collision damage instead of 80 and the landing blast radius is larger. Bigfoot deliberately aims the throw at another enemy when possible.";
+}
+
+/* Conditional/advanced Evolution discovery. */
+var _v50Eligible=upgradeEligible;
+upgradeEligible=function(u){
+ if(!u||!S)return _v50Eligible(u);
+ if(S.owned&&S.owned[u.id])return false;
+ if(u.id==="v50HumanCannonball"||u.id==="v50CrashLanding"){
+   if(S.passives.indexOf("heavy")<0&&!S.owned.v50HomeRunSwing)return false;
+ }
+ if(u.id==="v50SeismicLaunch"&&S.passives.indexOf("heavy")<0)return false;
+ if(u.id==="v50PerfectRhythm"&&(S.passives.indexOf("strength")<0||S.passives.indexOf("primalRhythm")<0))return false;
+ if(u.id==="v50PressureWave"&&S.passives.indexOf("heavy")<0)return false;
+ return _v50Eligible(u);
+};
+
+/* ---------- setup / exact player-facing rules ---------- */
+function v50RewriteSetup(){
+ var ps=[byId("passive1"),byId("passive2")];
+ for(var z=0;z<ps.length;z++)if(ps[z])for(var i=0;i<ps[z].options.length;i++)if(ps[z].options[i].value==="heavy")ps[z].options[i].textContent="Heavyweight — stronger knockback + distance Impact damage";
+ var det=document.querySelectorAll('#setup details');
+ for(i=0;i<det.length;i++){
+   var sm=det[i].querySelector('summary');if(!sm)continue;
+   if(sm.textContent.indexOf('Passive details')>=0){
+     var rows=det[i].querySelectorAll('div');
+     for(var j=0;j<rows.length;j++)if(rows[j].textContent.indexOf('Heavyweight')===0)rows[j].innerHTML='<b>Heavyweight</b> — deal 25% more knockback. Knockback deals 0.5 flat Impact damage per pixel actually displaced, normally capped at 60 per launch. Arena-edge force converts into collision damage; normal enemies slammed into the edge are stunned for 0.6s.';
+   }
+ }
+}
+v50RewriteSetup();
+
+/* ---------- physics helpers ---------- */
+function v50Ensure(){
+ if(!S)return;
+ S.v50Fx=S.v50Fx||[];S.v50Texts=S.v50Texts||[];S.v50Cracks=S.v50Cracks||[];S.v50Rolling=S.v50Rolling||[];S.v50PairCd=S.v50PairCd||{};S.v50Frame=S.v50Frame||0;S.v50KnockSerial=S.v50KnockSerial||0;
+}
+function v50Elite(e){return !!(e&&(isElite(e)||e.eliteMod));}
+function v50AngleDiff(a,b){return Math.atan2(Math.sin(a-b),Math.cos(a-b));}
+function v50TargetForSteer(projectile,dx,dy,maxAngle,maxDist){
+ var base=Math.atan2(dy,dx),best=null,bestScore=-1e9;
+ for(var i=0;i<S.en.length;i++){
+   var q=S.en[i];if(q===projectile||q.dead)continue;var d=Math.hypot(q.x-projectile.x,q.y-projectile.y);if(d>maxDist)continue;
+   var a=Math.atan2(q.y-projectile.y,q.x-projectile.x),ad=Math.abs(v50AngleDiff(a,base));if(ad>maxAngle)continue;
+   var pri=q.type==="boss"?3:(v50Elite(q)?2:1),score=pri*1000-d-ad*120;
+   if(score>bestScore){bestScore=score;best=q}
+ }
+ return best;
+}
+function v50TagForKnock(e,k,sx,sy){
+ if(S.v50ActiveTag)return S.v50ActiveTag;
+ if(S.v41Beat&&S.v41Beat.hits===3)return "beatdownFinal";
+ if((S.v45RushT||0)>0&&!S.v45RushImpactDone)return "rushImpact";
+ if(S.v49Boulders)for(var i=0;i<S.v49Boulders.length;i++){var b=S.v49Boulders[i];if(Math.hypot((sx||0)-b.x,(sy||0)-b.y)<5)return "boulder"}
+ var heroSrc=S.h&&Math.hypot((sx==null?S.h.x:sx)-S.h.x,(sy==null?S.h.y:sy)-S.h.y)<8;
+ if(heroSrc&&S.h.swing>0){if(S.basic==="swipe")return S.h.combo%3===0?"swipeLaunch":"swipe";if(S.basic==="limb")return "limb"}
+ if(heroSrc&&window.v49UnbreakableActive&&window.v49UnbreakableActive()&&Math.abs(k-42)<4)return "unbreakWave";
+ return "generic";
+}
+function v50ImpactText(e,label,n){if(!S||!e)return;v50Ensure();S.v50Texts.push({x:e.x,y:e.y-28,label:label+(n!=null?" +"+Math.round(n):""),t:.8,max:.8});}
+function v50StartPursuit(e,strong){if(!e||e.dead)return;S.v50Pursuit={uid:e.uid,t:1.5,strong:!!strong,proc:false};}
+function v50FindUid(uid){for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i].uid===uid)return S.en[i];return null;}
+function v50SegmentDistance(px,py,x1,y1,x2,y2){var vx=x2-x1,vy=y2-y1,wx=px-x1,wy=py-y1,c=vx*vx+vy*vy;if(c<=.001)return Math.hypot(px-x1,py-y1);var t=Math.max(0,Math.min(1,(wx*vx+wy*vy)/c));return Math.hypot(px-(x1+vx*t),py-(y1+vy*t));}
+
+/* Replace the core knockback impulse, preserving the original force model while tracking each launch. */
+var _v50Knock=knockEnemy;
+knockEnemy=function(e,k,sx,sy){
+ if(!e||e.dead||!k)return;v50Ensure();sx=sx==null?S.h.x:sx;sy=sy==null?S.h.y:sy;
+ var dx=e.x-sx,dy=e.y-sy,z=Math.hypot(dx,dy)||1,tag=v50TagForKnock(e,k,sx,sy),normal=!v50Elite(e),heavy=S.passives.indexOf("heavy")>=0,m=heavy?1.25:1;
+ dx/=z;dy/=z;
+ if(tag==="swipeLaunch"&&S.owned.v50HomeRunSwing)m*=1.40;
+ if(tag==="boulder"&&S.owned.v50BowlingStone)m*=1.35;
+ if(tag==="unbreakWave"&&S.owned.v50PressureWave)m*=1.20;
+ if(normal&&S.owned.v50LineEmUp){var aim=v50TargetForSteer(e,dx,dy,Math.PI/4,280);if(aim){dx=aim.x-e.x;dy=aim.y-e.y;z=Math.hypot(dx,dy)||1;dx/=z;dy/=z;S.v50Fx.push({kind:"aim",x1:e.x,y1:e.y,x2:aim.x,y2:aim.y,t:.20,max:.20})}}
+ var addV=k*6*m;
+ if(e.v50KB&&e.v50KB.age>.04) v50FinalizeKB(e,"replaced");
+ e.kbx+=dx*addV;e.kby+=dy*addV;
+ var intended=addV/8;
+ if(e.v50KB&&e.v50KB.age<=.04){e.v50KB.intended+=intended;e.v50KB.launchVX=e.kbx;e.v50KB.launchVY=e.kby;e.v50KB.tag=tag||e.v50KB.tag;}
+ else e.v50KB={id:++S.v50KnockSerial,startX:e.x,startY:e.y,dist:0,intended:intended,age:0,tag:tag,hits:{},collisionCount:0,pileup:false,bounced:false,wall:false,bornFrame:S.v50Frame,launchVX:e.kbx,launchVY:e.kby,lastDirX:dx,lastDirY:dy};
+ if(tag==="swipeLaunch"&&S.owned.followThrough)v50StartPursuit(e,S.owned.v50GetOverHere);
+};
+
+function v50DamagePacket(e,n,label){if(!e||e.dead||n<=0)return;damageEnemy(e,n,0,e.x,e.y);v50ImpactText(e,label,n);}
+function v50SpawnCrack(kb,e){if(!S.owned.slamWide||kb.tag!=="slam"||kb.dist<15)return;S.v50Cracks.push({x1:kb.startX,y1:kb.startY,x2:e.x,y2:e.y,t:3,max:3,hits:{},owner:e.uid});}
+function v50SpawnRockslide(kb,e){if(!S.owned.v50Rockslide||kb.tag!=="slam"||kb.dist<70)return;var dx=e.x-kb.startX,dy=e.y-kb.startY,z=Math.hypot(dx,dy)||1;S.v50Rolling.push({x:e.x,y:e.y,vx:dx/z*310,vy:dy/z*310,t:.75,hits:{},owner:e.uid});}
+function v50FinalizeKB(e,reason){
+ var kb=e&&e.v50KB;if(!kb)return;if(e.dead){e.v50KB=null;return}kb.age=Math.max(kb.age,.001);
+ var heavy=S.passives.indexOf("heavy")>=0,cap=60,impact=0,unused=Math.max(0,kb.intended-kb.dist);
+ if(kb.tag==="swipeLaunch"&&S.owned.v50HomeRunSwing)cap=heavy?90:60;
+ if(S.owned.v50PressureWave&&window.v49UnbreakableActive&&window.v49UnbreakableActive()&&heavy)cap=90;
+ if(heavy){impact=kb.dist*.5+(kb.wall?unused*.35:0);if(v50Elite(e))impact+=Math.min(30,unused*.25);if(S.owned.v50PressureWave&&window.v49UnbreakableActive&&window.v49UnbreakableActive())impact*=1.25;impact=Math.min(cap,impact)}
+ else if(kb.tag==="swipeLaunch"&&S.owned.v50HomeRunSwing)impact=Math.min(60,kb.dist*.35+(kb.wall?unused*.25:0));
+ if(impact>=1)v50DamagePacket(e,impact,kb.wall?"WALL HIT":"IMPACT");
+ if(S.owned.v50WreckingBall&&kb.tag==="rushImpact"&&kb.dist>0)v50DamagePacket(e,Math.min(45,kb.dist*.25),"WRECKING BALL");
+ if(S.owned.v50CrashLanding&&kb.dist>=100)v50DamagePacket(e,30,"CRASH LANDING");
+ if(S.owned.v50Timber&&kb.tag==="limb"&&kb.dist>=60){e.stunT=Math.max(e.stunT||0,v50Elite(e)?.30:1);v50ImpactText(e,"TIMBER!",null)}
+ if(S.owned.v50SeismicLaunch&&kb.tag==="slam"&&kb.dist>=80&&S.passives.indexOf("heavy")>=0){for(var i=0;i<S.en.length;i++){var q=S.en[i];if(q!==e&&!q.dead&&dist(e,q)<75)damageEnemy(q,35,0,e.x,e.y)}S.v50Fx.push({kind:"burst",x:e.x,y:e.y,r:75,t:.45,max:.45})}
+ v50SpawnCrack(kb,e);v50SpawnRockslide(kb,e);
+ if(S.owned.v50NoEscape&&kb.tag==="beatdownFinal"&&!v50Elite(e))v50StartPursuit(e,false);
+ e.v50KB=null;
+}
+
+function v50Collision(e,kb,q){
+ if(!S.owned.v50HumanCannonball||v50Elite(e)||!q||q.dead||kb.hits[q.uid])return;
+ var pair=e.uid<q.uid?e.uid+":"+q.uid:q.uid+":"+e.uid;if((S.v50PairCd[pair]||0)>0)return;S.v50PairCd[pair]=.22;
+ kb.hits[q.uid]=1;kb.collisionCount++;
+ var cd=Math.min(45,Math.max(20,kb.dist*.40)),qWasAlive=!q.dead;
+ damageEnemy(q,cd,0,e.x,e.y);if(!e.dead)damageEnemy(e,cd*.65,0,q.x,q.y);v50ImpactText(q,"COLLISION",cd);S.v50Fx.push({kind:"collision",x:(e.x+q.x)/2,y:(e.y+q.y)/2,t:.40,max:.40});
+ var dirx=kb.lastDirX||1,diry=kb.lastDirY||0,remaining=Math.hypot(e.kbx||0,e.kby||0),chain=S.owned.v50ChainReaction&&!v50Elite(q);
+ if(chain){var kk=Math.min(70,remaining/6*.5);if(kk>2)knockEnemy(q,kk,e.x-dirx*8,e.y-diry*8)}
+ else if(!q.dead)knockEnemy(q,Math.min(24,Math.max(8,remaining/35)),e.x-dirx*5,e.y-diry*5);
+ var killed=qWasAlive&&q.dead,keep=(S.owned.v50SpareBowlingBall&&killed)?.50:.25;e.kbx*=keep;e.kby*=keep;
+ if(S.owned.v50Pileup&&kb.collisionCount>=2&&!kb.pileup){kb.pileup=true;for(var i=0;i<S.en.length;i++){var p=S.en[i];if(!p.dead&&p!==e&&dist(e,p)<70)damageEnemy(p,40,0,e.x,e.y)}S.v50Fx.push({kind:"burst",x:e.x,y:e.y,r:70,t:.45,max:.45});v50ImpactText(e,"PILEUP",40)}
+}
+
+function v50AimKingThrows(){
+ for(var i=0;i<S.en.length;i++){
+   var e=S.en[i],th=e.v49Thrown;if(!th||th.v50Aimed)continue;th.v50Aimed=true;
+   var best=null,bestScore=-1e9;for(var j=0;j<S.en.length;j++){var q=S.en[j];if(q===e||q.dead)continue;var d=dist(e,q),pri=q.type==="boss"?3:(v50Elite(q)?2:1),score=pri*1000-d;if(score>bestScore){bestScore=score;best=q}}
+   if(best){var sp=Math.hypot(th.vx,th.vy)||460,dx=best.x-e.x,dy=best.y-e.y,z=Math.hypot(dx,dy)||1;th.vx=dx/z*sp;th.vy=dy/z*sp;th.v50Target=best.uid;S.v50Fx.push({kind:"trueAim",x1:e.x,y1:e.y,x2:best.x,y2:best.y,t:.35,max:.35})}
+ }
+}
+
+function v50UpdatePursuit(dt){if(!S.v50Pursuit)return;var p=S.v50Pursuit,t=v50FindUid(p.uid);p.t-=dt;if(!t||p.t<=0){S.v50Pursuit=null;return}var d=dist(S.h,t);if(d>50){var bonus=(p.strong?48:42);moveUnit(S.h,t,bonus,dt,false)}else if(p.strong&&!p.proc){p.proc=true;S.h.atk=Math.max(0,S.h.atk*.75);v50ImpactText(S.h,"CAUGHT UP",null)}}
+function v50UpdateCracks(dt){for(var i=S.v50Cracks.length-1;i>=0;i--){var c=S.v50Cracks[i];c.t-=dt;for(var j=0;j<S.en.length;j++){var e=S.en[j];if(e.dead||e.uid===c.owner||c.hits[e.uid])continue;if(v50SegmentDistance(e.x,e.y,c.x1,c.y1,c.x2,c.y2)<18){c.hits[e.uid]=1;damageEnemy(e,25,0,e.x,e.y);v50ImpactText(e,"FAULT LINE",25)}}if(c.t<=0)S.v50Cracks.splice(i,1)}}
+function v50UpdateRolling(dt){for(var i=S.v50Rolling.length-1;i>=0;i--){var r=S.v50Rolling[i];r.t-=dt;r.x+=r.vx*dt;r.y+=r.vy*dt;for(var j=0;j<S.en.length;j++){var e=S.en[j];if(e.dead||e.uid===r.owner||r.hits[e.uid]||Math.hypot(e.x-r.x,e.y-r.y)>24)continue;r.hits[e.uid]=1;damageEnemy(e,35,8,r.x,r.y);v50ImpactText(e,"ROCKSLIDE",35);r.t=0;break}if(r.t<=0)S.v50Rolling.splice(i,1)}}
+
+/* Tag synchronous ability knockback so Evolutions know what caused the launch. */
+var _v50Cast=cast;
+cast=function(id){if(!S)return _v50Cast(id);var prev=S.v50ActiveTag;if(id==="slam"||id==="wall")S.v50ActiveTag=id;var r=_v50Cast(id);S.v50ActiveTag=prev;return r};
+
+/* ---------- outer simulation layer ---------- */
+var _v50Update=update;
+update=function(dt){
+ if(!S)return _v50Update(dt);v50Ensure();S.v50Frame++;var snaps={},comboBefore=S.h.combo||0,rhythmBefore=!!(S.v49PrimalReady&&S.v49PrimalRhythmT>0),rushBefore=!!S.v45RushImpactDone;
+ for(var i=0;i<S.en.length;i++){var e=S.en[i];if(!e.dead)snaps[e.uid]={x:e.x,y:e.y,kbx:e.kbx||0,kby:e.kby||0}}
+ _v50Update(dt);if(!S)return;v50Ensure();v50AimKingThrows();
+ for(i=0;i<S.en.length;i++){
+   e=S.en[i];var kb=e.v50KB;if(!kb||e.dead)continue;var s=snaps[e.uid],px,py,nx,ny,step=0,hitEdge=false;
+   if(s&&Math.hypot(s.kbx,s.kby)>.05){px=s.x;py=s.y;nx=clamp(px+s.kbx*dt,30,730);ny=clamp(py+s.kby*dt,35,490);step=Math.hypot(nx-px,ny-py);hitEdge=(nx<=30.001||nx>=729.999||ny<=35.001||ny>=489.999)}
+   else if(kb.bornFrame===S.v50Frame){px=kb.startX;py=kb.startY;nx=clamp(px+kb.launchVX*dt,30,730);ny=clamp(py+kb.launchVY*dt,35,490);step=Math.hypot(nx-px,ny-py);hitEdge=(nx<=30.001||nx>=729.999||ny<=35.001||ny>=489.999)}
+   kb.dist+=step;kb.age+=dt;if(step>1){var dx=e.x-kb.startX,dy=e.y-kb.startY,z=Math.hypot(dx,dy)||1;kb.lastDirX=dx/z;kb.lastDirY=dy/z;if(Math.random()<.30)S.v50Fx.push({kind:"dust",x:e.x,y:e.y,t:.25,max:.25})}
+   if(S.owned.v50HumanCannonball&&!v50Elite(e)&&Math.hypot(e.kbx||0,e.kby||0)>12){for(var j=0;j<S.en.length;j++){var q=S.en[j];if(q===e||q.dead||kb.hits[q.uid]||dist(e,q)>40)continue;v50Collision(e,kb,q);if(e.dead)break}}
+   if(e.dead){e.v50KB=null;continue}
+   if(hitEdge){kb.wall=true;
+     if(S.owned.v50Pinball&&kb.tag==="wall"&&!kb.bounced&&!v50Elite(e)){kb.bounced=true;var vx=s?s.kbx:kb.launchVX,vy=s?s.kby:kb.launchVY;e.kbx=-vx*.35;e.kby=-vy*.35;e.x=clamp(e.x,32,728);e.y=clamp(e.y,37,488);kb.intended+=Math.hypot(e.kbx,e.kby)/8;v50ImpactText(e,"PINBALL",null);S.v50Fx.push({kind:"bounce",x:e.x,y:e.y,t:.35,max:.35})}
+     else v50FinalizeKB(e,"wall");
+   }else if(Math.hypot(e.kbx||0,e.kby||0)<8||kb.age>1.35)v50FinalizeKB(e,"stop");
+ }
+ if(S.owned.v50PerfectRhythm&&rhythmBefore&&(S.h.combo||0)!==comboBefore&&S.h.combo%4===0&&S.passives.indexOf("strength")>=0&&S.passives.indexOf("primalRhythm")>=0){var t=nearestTo(S.h);if(t){for(i=0;i<S.en.length;i++)if(!S.en[i].dead&&dist(t,S.en[i])<75)damageEnemy(S.en[i],45,12,t.x,t.y);S.v50Fx.push({kind:"perfect",x:t.x,y:t.y,r:75,t:.5,max:.5});v50ImpactText(t,"PERFECT RHYTHM",45)}}
+ v50UpdatePursuit(dt);v50UpdateCracks(dt);v50UpdateRolling(dt);
+ for(var pk in S.v50PairCd)if(S.v50PairCd.hasOwnProperty(pk)){S.v50PairCd[pk]-=dt;if(S.v50PairCd[pk]<=0)delete S.v50PairCd[pk]}
+ for(i=S.v50Texts.length-1;i>=0;i--){S.v50Texts[i].t-=dt;S.v50Texts[i].y-=15*dt;if(S.v50Texts[i].t<=0)S.v50Texts.splice(i,1)}
+ for(i=S.v50Fx.length-1;i>=0;i--){S.v50Fx[i].t-=dt;if(S.v50Fx[i].t<=0)S.v50Fx.splice(i,1)}
+};
+
+/* ---------- visuals ---------- */
+var _v50Draw=draw;
+draw=function(){_v50Draw();if(!S)return;v50Ensure();var i,f,a;
+ for(i=0;i<S.v50Cracks.length;i++){var c=S.v50Cracks[i];ctx.save();ctx.globalAlpha=.20+.25*(c.t/c.max);ctx.strokeStyle="#3b2d23";ctx.lineWidth=5;ctx.setLineDash([10,7]);ctx.beginPath();ctx.moveTo(c.x1,c.y1);ctx.lineTo(c.x2,c.y2);ctx.stroke();ctx.setLineDash([]);ctx.restore()}
+ for(i=0;i<S.v50Rolling.length;i++){var r=S.v50Rolling[i];ctx.save();ctx.fillStyle="#8b8374";ctx.beginPath();ctx.arc(r.x,r.y,8,0,Math.PI*2);ctx.fill();ctx.restore()}
+ for(i=0;i<S.v50Fx.length;i++){f=S.v50Fx[i];a=Math.max(0,f.t/(f.max||1));ctx.save();ctx.globalAlpha=a;
+   if(f.kind==="aim"||f.kind==="trueAim"){ctx.strokeStyle=f.kind==="trueAim"?"#ffbc63":"#e68b55";ctx.lineWidth=f.kind==="trueAim"?4:2;ctx.setLineDash(f.kind==="trueAim"?[10,5]:[5,5]);ctx.beginPath();ctx.moveTo(f.x1,f.y1);ctx.lineTo(f.x2,f.y2);ctx.stroke();ctx.setLineDash([])}
+   else if(f.kind==="collision"||f.kind==="bounce"||f.kind==="burst"||f.kind==="perfect"){ctx.strokeStyle=f.kind==="perfect"?"#d6f39a":"#f0b45f";ctx.lineWidth=7;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||38)+(1-a)*20,0,Math.PI*2);ctx.stroke()}
+   else if(f.kind==="dust"){ctx.fillStyle="#d1bb8d";ctx.beginPath();ctx.arc(f.x,f.y,5+(1-a)*8,0,Math.PI*2);ctx.fill()}
+   ctx.restore();
+ }
+ for(i=0;i<S.v50Texts.length;i++){var t=S.v50Texts[i];ctx.save();ctx.globalAlpha=Math.max(0,t.t/t.max);ctx.font="900 12px system-ui";ctx.textAlign="center";ctx.fillStyle=t.label.indexOf("COLLISION")>=0?"#ffd07a":(t.label.indexOf("WALL")>=0?"#ffe39b":"#f5e8bf");ctx.strokeStyle="#17211b";ctx.lineWidth=4;ctx.strokeText(t.label,t.x,t.y);ctx.fillText(t.label,t.x,t.y);ctx.restore()}
+};
+
+/* ---------- reset + summary ---------- */
+var _v50Start=startGame;
+startGame=function(){_v50Start();if(!S)return;v50Ensure();S.v50Fx=[];S.v50Texts=[];S.v50Cracks=[];S.v50Rolling=[];S.v50PairCd={};S.v50Pursuit=null;v50RewriteSetup();updateUI()};
+var _v50Build=renderBuildSummary;
+renderBuildSummary=function(){_v50Build();if(!S)return;var b=byId("v3BuildBody");if(!b)return;b.innerHTML+='<h3>Collision Course v5.0</h3><div class="buildRow"><b>Heavyweight:</b> knockback distance becomes Impact damage: 0.5 flat damage per pixel actually displaced, normally capped at 60 per launch. Wall force can convert into collision damage.</div><div class="buildRow"><b>Advanced knockback Evolutions:</b> conditional Evolutions enter the reward pool only when the current build can actually support them.</div><div class="buildRow"><b>Aimed throws:</b> King of the Mountain deliberately aims a grabbed normal/Elite enemy at another target. Ordinary knockback only gains limited steering through Line \'Em Up.</div>'};
+
+})();
+</script>
 </body>
 </html>
