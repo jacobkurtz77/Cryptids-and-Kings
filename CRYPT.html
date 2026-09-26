@@ -319,7 +319,7 @@ body[data-screen="game"]{padding:6px}
 </details>
 </div>
 
-<div class="section">PASSIVES — PICK 2</div>
+<div class="section">PASSIVES — PICK 3 <span id="passiveCount">2/3 selected</span></div>
 <label class="caption">Passive 1</label>
 <select id="passive1" onchange="syncPassiveChoices()">
 <option value="recover" selected>Cryptid Recovery — Camp Recovery becomes 10%</option>
@@ -338,6 +338,8 @@ body[data-screen="game"]{padding:6px}
 <option value="strength" selected>Ancient Strength — every 3rd basic +60%</option>
 <option value="blood">Forest Blood — elites permanently add max HP</option>
 </select>
+<label class="caption">Passive 3</label>
+<select id="passive3" onchange="syncPassiveChoices()"></select>
 <div class="infoGrid">
 <details>
 <summary>Passive details</summary>
@@ -391,6 +393,9 @@ body[data-screen="game"]{padding:6px}
 
 <script>
 var S=null,running=false,last=0,raf=0;
+function ownsItem(id){return !!(S&&(S.item===id||(S.v51Items&&S.v51Items.indexOf(id)>=0)))}
+function v51CanOfferItem(next){if(!S)return false;S.v51Items=S.v51Items||[];return S.v51Items.length<2&&(S.v51Items.length===0?next>=6:next>=11)}
+function v51FullWave(){return !!(S&&!S.v48SideActive&&["relic","item","cursed"].indexOf(S.v48CurrentRoute)>=0)}
 var field=document.getElementById("field"),ctx=null;
 
 var abilityChoices=[
@@ -450,7 +455,7 @@ function syncAbilityChoices(){
  for(i=0;i<ids.length;i++){used={};for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;rebuildSelect(ids[i],abilityChoices,used)}
 }
 function syncPassiveChoices(){
- var ids=["passive1","passive2"],vals={},i,j,used;
+ var ids=["passive1","passive2","passive3"],vals={},i,j,used;
  for(i=0;i<ids.length;i++)vals[ids[i]]=byId(ids[i]).value;
  for(i=0;i<ids.length;i++){used={};for(j=0;j<ids.length;j++)if(i!==j)used[vals[ids[j]]]=true;rebuildSelect(ids[i],passiveChoices,used)}
 }
@@ -635,7 +640,7 @@ var upgrades=[
 ];
 function upgradeEligible(u){
  if(S.owned[u.id])return false;
- if(u.item&&S.item!==u.item)return false;
+ if(u.item&&!ownsItem(u.item))return false;
  if(u.need){
    if(u.need==="swipe"||u.need==="rock")return S.basic===u.need;
    if(u.need==="roar"||u.need==="avalanche")return S.ult===u.need;
@@ -645,7 +650,7 @@ function upgradeEligible(u){
 }
 function getUpgradeChoices(){
  var pool=[],itemPool=[],i,u;
- for(i=0;i<upgrades.length;i++){u=upgrades[i];if(upgradeEligible(u)){pool.push(u);if(u.item&&u.item===S.item)itemPool.push(u)}}
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(upgradeEligible(u)){pool.push(u);if(u.item&&ownsItem(u.item))itemPool.push(u)}}
  shuffle(pool);var out=[];
  if(S.item&&itemPool.length){shuffle(itemPool);out.push(itemPool[0])}
  for(i=0;i<pool.length&&out.length<3;i++){if(out.indexOf(pool[i])<0)out.push(pool[i])}
@@ -842,13 +847,13 @@ function updateHooks(e,dt){
  }
 }
 function throwAutoHooks(dt){
- if(S.item!=="fishing"||!S.hook)return;
+ if(!ownsItem("fishing")||!S.hook)return;
  S.hook.timer-=dt;if(S.hook.timer>0)return;S.hook.timer=S.hook.rate;
  var list=S.en.filter(function(e){return !e.dead}).sort(function(a,b){return dist(S.h,b)-dist(S.h,a)}),count=Math.min(S.hook.count,list.length);
  for(var i=0;i<count;i++){var t=list[i],a=Math.atan2(t.y-S.h.y,t.x-S.h.x);S.proj.push({type:"hook",x:S.h.x,y:S.h.y,vx:Math.cos(a)*390,vy:Math.sin(a)*390,t:1.7,target:t,hits:{},rot:a})}
 }
 function updateWolves(dt){
- if(S.item!=="bones")return;
+ if(!ownsItem("bones"))return;
  for(var i=0;i<S.wolves.length;i++){
    var w=S.wolves[i],t=nearestTo(w);w.atk=Math.max(0,w.atk-dt);w.anim=Math.max(0,w.anim-dt);
    if(!t){moveUnit(w,S.h,S.wolf.speed*.8,dt,false);continue}
@@ -1155,7 +1160,7 @@ upgrades.push(
 
 upgradeEligible=function(u){
  if(S.owned[u.id])return false;
- if(u.item&&S.item!==u.item)return false;
+ if(u.item&&!ownsItem(u.item))return false;
  if(u.requires){var r=Array.isArray(u.requires)?u.requires:[u.requires];for(var z=0;z<r.length;z++)if(!S.owned[r[z]])return false}
  if(u.need){if(u.need==="swipe"||u.need==="rock")return S.basic===u.need;if(u.need==="roar"||u.need==="avalanche")return S.ult===u.need;return S.abilities.indexOf(u.need)>=0}
  return true;
@@ -1168,7 +1173,7 @@ campRecovery=function(){
 };
 
 function triggerRing(){
- if(S.item!=="ring"||S.ringProc)return;
+ if(!ownsItem("ring")||S.ringProc)return;
  S.ringProc=true;S.h.shield+=S.ring.shield;S.h.roarDR=Math.max(S.h.roarDR,4);
  if(S.owned.steadyHands)S.cds={};
  if(S.owned.protectiveFury)S.h.rage=Math.max(S.h.rage,5);
@@ -1182,8 +1187,8 @@ hurtHero=function(n,source){
  if(n>0)h.hp-=n;
  if(source)S.fx.push({type:"hurt",x:h.x,y:h.y,n:Math.round(n),t:.35});S.shake=Math.max(S.shake,.12);
  if(S.passives.indexOf("instinct")>=0&&n>=h.max*.08)h.rage=Math.max(h.rage,2.5);
- if(S.item==="ring"&&!S.ringProc&&h.hp/h.max<=S.ring.threshold&&h.hp>0)triggerRing();
- if(h.hp<=0&&S.item==="ring"&&S.owned.neverLeave&&S.ringRevive){S.ringRevive=false;h.hp=1;v37GrantShield(360,6,"Coming Home");h.rage=Math.max(h.rage,6);S.fx.push({type:"ringResolve",x:h.x,y:h.y,t:1.4,max:1.4});byId("status").innerHTML="I'M COMING HOME — lethal damage refused."}
+ if(ownsItem("ring")&&!S.ringProc&&h.hp/h.max<=S.ring.threshold&&h.hp>0)triggerRing();
+ if(h.hp<=0&&ownsItem("ring")&&S.owned.neverLeave&&S.ringRevive){S.ringRevive=false;h.hp=1;v37GrantShield(360,6,"Coming Home");h.rage=Math.max(h.rage,6);S.fx.push({type:"ringResolve",x:h.x,y:h.y,t:1.4,max:1.4});byId("status").innerHTML="I'M COMING HOME — lethal damage refused."}
 };
 
 var _damageEnemy=damageEnemy;
@@ -1192,7 +1197,7 @@ damageEnemy=function(e,n,k,sx,sy){
  if(e.resist)n*=1-e.resist;
  if(e.hooks&&e.hooks.length&&S.owned.bloodTrail)n*=1.2;
  var wasElite=isElite(e),before=e.hp;_damageEnemy(e,n,k,sx,sy);
- if(before>0&&e.dead&&wasElite&&S.item==="bones"&&S.owned.scavengers)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.04);
+ if(before>0&&e.dead&&wasElite&&ownsItem("bones")&&S.owned.scavengers)S.h.hp=Math.min(S.h.max,S.h.hp+S.h.max*.04);
 };
 
 isElite=function(e){return !!(e&&(e.type==="brute"||e.type==="miniboss"||e.type==="boss"||e.eliteMod))};
@@ -1284,7 +1289,7 @@ showEvent=function(){
   {cls:"event",tag:"SAFE EXIT",title:"Leave It",text:"Nothing gained, nothing lost. Sometimes that is the right call.",go:function(){finishNonCombat("Bigfoot leaves the trap untouched.")}}
  ],2);
  else if(which===2)showDecision("WEIRD EVENT — INJURED WOLF","A wounded wolf watches Bigfoot without running.",[
-  {cls:"event",tag:"TRADEOFF",title:"Help the Wolf",text:"Lose 12% current HP worth of supplies and effort. If you have or later find the bones, the pack remembers.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.12);S.wolfFavor=true;if(S.item==="bones"&&S.wolf)S.wolf.damage*=1.12;finishNonCombat("The wolf disappears into the trees after Bigfoot helps it.")}},
+  {cls:"event",tag:"TRADEOFF",title:"Help the Wolf",text:"Lose 12% current HP worth of supplies and effort. If you have or later find the bones, the pack remembers.",go:function(){S.h.hp=Math.max(1,S.h.hp-S.h.max*.12);S.wolfFavor=true;if(ownsItem("bones")&&S.wolf)S.wolf.damage*=1.12;finishNonCombat("The wolf disappears into the trees after Bigfoot helps it.")}},
   {cls:"event",tag:"WILDERNESS",title:"Keep Moving",text:"No reward. Preserve your health and continue.",go:function(){finishNonCombat("Bigfoot lets nature take its course.")}}
  ],2);
  else if(which===3)showDecision("WEIRD EVENT — CURSED STUMP","Black sap runs upward along a dead tree.",[
@@ -1319,7 +1324,7 @@ chooseItem=function(item){
 };
 
 updateHooks=function(e,dt){if(!e.hooks.length)return;for(var i=e.hooks.length-1;i>=0;i--){var h=e.hooks[i];h.t-=dt;h.tick-=dt;if(h.tick<=0){h.tick=S.hook.tickRate||.6;damageEnemy(e,S.hook.damage,0,e.x,e.y);S.fx.push({type:"hooktick",x:e.x,y:e.y,t:.25})}if(h.t<=0)e.hooks.splice(i,1)}};
-updateWolves=function(dt){if(S.item!=="bones"||!S.wolf)return;S.wolf.howlTimer-=dt;if(S.owned.packHowl&&S.wolf.howlTimer<=0){S.wolf.howlTimer=7;for(var z=0;z<S.en.length;z++)if(dist(S.h,S.en[z])<170)S.en[z].fear=Math.max(S.en[z].fear,1.4);S.fx.push({type:"packHowl",x:S.h.x,y:S.h.y,t:.8,max:.8})}for(var i=0;i<S.wolves.length;i++){var w=S.wolves[i],t=nearestTo(w);w.atk=Math.max(0,w.atk-dt);w.anim=Math.max(0,w.anim-dt);if(!t){moveUnit(w,S.h,S.wolf.speed*.8,dt,false);continue}w.face=Math.atan2(t.y-w.y,t.x-w.x);if(dist(w,t)>38*S.wolf.size)moveUnit(w,t,S.wolf.speed,dt,false);else if(w.atk<=0){damageEnemy(t,S.wolf.damage,14,w.x,w.y);w.atk=.75;w.anim=.22;S.fx.push({type:"wolfbite",x:t.x,y:t.y,t:.25})}}};
+updateWolves=function(dt){if(!ownsItem("bones")||!S.wolf)return;S.wolf.howlTimer-=dt;if(S.owned.packHowl&&S.wolf.howlTimer<=0){S.wolf.howlTimer=7;for(var z=0;z<S.en.length;z++)if(dist(S.h,S.en[z])<170)S.en[z].fear=Math.max(S.en[z].fear,1.4);S.fx.push({type:"packHowl",x:S.h.x,y:S.h.y,t:.8,max:.8})}for(var i=0;i<S.wolves.length;i++){var w=S.wolves[i],t=nearestTo(w);w.atk=Math.max(0,w.atk-dt);w.anim=Math.max(0,w.anim-dt);if(!t){moveUnit(w,S.h,S.wolf.speed*.8,dt,false);continue}w.face=Math.atan2(t.y-w.y,t.x-w.x);if(dist(w,t)>38*S.wolf.size)moveUnit(w,t,S.wolf.speed,dt,false);else if(w.atk<=0){damageEnemy(t,S.wolf.damage,14,w.x,w.y);w.atk=.75;w.anim=.22;S.fx.push({type:"wolfbite",x:t.x,y:t.y,t:.25})}}};
 
 var oldApplyUpgrade=applyUpgrade;
 applyUpgrade=function(id){
@@ -1362,7 +1367,7 @@ updateBossSpecial=function(e,dt){
  return false;
 };
 
-function launchBaseball(){if(S.item!=="baseball"||!S.ball||!S.en.length)return;var t=nearestTo(S.h);if(!t)return;var a=Math.atan2(t.y-S.h.y,t.x-S.h.x);S.proj.push({type:"baseball",x:S.h.x,y:S.h.y,vx:Math.cos(a)*S.ball.speed,vy:Math.sin(a)*S.ball.speed,t:2,hits:{},v2Hits:{},rot:a,bounces:S.ball.bounces,damage:S.h.dmg*S.mods.basic*S.ball.damage,homeRun:S.ball.homeRun})}
+function launchBaseball(){if(!ownsItem("baseball")||!S.ball||!S.en.length)return;var t=nearestTo(S.h);if(!t)return;var a=Math.atan2(t.y-S.h.y,t.x-S.h.x);S.proj.push({type:"baseball",x:S.h.x,y:S.h.y,vx:Math.cos(a)*S.ball.speed,vy:Math.sin(a)*S.ball.speed,t:2,hits:{},v2Hits:{},rot:a,bounces:S.ball.bounces,damage:S.h.dmg*S.mods.basic*S.ball.damage,homeRun:S.ball.homeRun})}
 function processBaseballs(){for(var i=0;i<S.proj.length;i++){var p=S.proj[i];if(p.type!=="baseball"||p.t<=0)continue;p.v2Hits=p.v2Hits||{};for(var j=0;j<S.en.length;j++){var e=S.en[j],key=e.uid+"";if(!e.dead&&!p.v2Hits[key]&&dist(p,e)<22){p.v2Hits[key]=1;damageEnemy(e,p.damage,58,p.x,p.y);S.fx.push({type:"baseballHit",x:e.x,y:e.y,t:.35,max:.35});if(S.owned.dadStrength)S.h.rage=Math.max(S.h.rage,2.2);if(p.bounces>0){p.bounces--;var nt=null,bd=1e9;for(var q=0;q<S.en.length;q++){var o=S.en[q],kk=o.uid+"",dd=dist(e,o);if(!o.dead&&!p.v2Hits[kk]&&o!==e&&dd<bd){bd=dd;nt=o}}if(nt){var a=Math.atan2(nt.y-p.y,nt.x-p.x);p.vx=Math.cos(a)*S.ball.speed;p.vy=Math.sin(a)*S.ball.speed;p.rot=a}else p.t=0}else{if(p.homeRun){for(q=0;q<S.en.length;q++)if(S.en[q]!==e&&!S.en[q].dead&&dist(e,S.en[q])<95)damageEnemy(S.en[q],p.damage*.55,72,e.x,e.y);S.fx.push({type:"homeRun",x:e.x,y:e.y,t:.55,max:.55});S.shake=.3}p.t=0}break}}}S.proj=S.proj.filter(function(pp){return pp.t>0})}
 
 update=function(dt){
@@ -1373,9 +1378,9 @@ update=function(dt){
  _update(dt);
  if(!S||S.paused)return;
  if(S.h.combo!==beforeCombo&&S.owned.mountainBreaker&&S.basic==="swipe"&&S.h.combo%3===0){for(var mb=0;mb<S.en.length;mb++)if(dist(S.h,S.en[mb])<135)damageEnemy(S.en[mb],S.h.dmg*.70,45,S.h.x,S.h.y);S.fx.push({type:"ring",x:S.h.x,y:S.h.y,r:135,t:.45,max:.45})}
- if(S.item==="baseball"&&S.h.combo!==beforeCombo&&S.h.combo%S.ball.rate===0)launchBaseball();
+ if(ownsItem("baseball")&&S.h.combo!==beforeCombo&&S.h.combo%S.ball.rate===0)launchBaseball();
  processBaseballs();
- if(S.item==="ring"&&!S.ringProc&&S.h.hp/S.h.max<=S.ring.threshold&&S.h.hp>0)triggerRing();
+ if(ownsItem("ring")&&!S.ringProc&&S.h.hp/S.h.max<=S.ring.threshold&&S.h.hp>0)triggerRing();
 };
 
 function drawSpear(e){var swing=e.winding?(1-e.wind/e.windMax):e.attackAnim>0?1:0;ctx.save();ctx.translate(e.x,e.y);ctx.rotate(enemyAngle(e));if(e.flash>0)ctx.globalAlpha=.45;ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,12,25,14,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#5d8746";ctx.beginPath();ctx.arc(0,-5,18,0,Math.PI*2);ctx.fill();ctx.fillStyle="#466836";ctx.beginPath();ctx.moveTo(-12,-8);ctx.lineTo(-30,-19);ctx.lineTo(-15,3);ctx.moveTo(12,-8);ctx.lineTo(30,-19);ctx.lineTo(15,3);ctx.fill();ctx.save();ctx.translate(15,1);ctx.rotate(-.25+.48*swing);ctx.strokeStyle="#745033";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,23);ctx.lineTo(0,-46);ctx.stroke();ctx.fillStyle="#c9c6b9";ctx.beginPath();ctx.moveTo(0,-58);ctx.lineTo(-6,-44);ctx.lineTo(6,-44);ctx.closePath();ctx.fill();ctx.restore();ctx.restore()}
@@ -1555,9 +1560,9 @@ showItemHunt=function(){
   {item:"camera",title:"Trail Camera",text:"A stolen trail camera periodically flashes nearby enemies, stunning and Exposing them. It can evolve into a blunt weapon too."},
   {item:"chainsaw",title:"Logger's Chainsaw",text:"Every 13s, Bigfoot enters 5s of Chainsaw Mode: his normal selected basic attacks roughly 5x faster and Bigfoot gains +20% Movement Speed while the saw is running."}
  ];
- shuffle(all);all=all.slice(0,3);var cards=[];
- for(var i=0;i<all.length;i++)(function(o){cards.push({cls:"item",tag:"UNIQUE ITEM",title:o.title,text:o.text,go:function(){chooseItem(o.item)}})})(all[i]);
- showDecision("BIGFOOT ITEM HUNT","Three of Bigfoot's six personal items have been found this run. Choose one. You will get a full mechanical explanation before continuing.",cards,3);
+ all=all.filter(function(o){return !ownsItem(o.item)});shuffle(all);all=all.slice(0,3);var cards=[];
+ for(var i=0;i<all.length;i++)(function(o){cards.push({cls:"item",tag:"SIGNATURE ITEM",title:o.title,text:o.text,go:function(){chooseItem(o.item)}})})(all[i]);
+ showDecision(S.v51Items&&S.v51Items.length?"LEGENDARY CACHE — SECOND SIGNATURE ITEM":"BIGFOOT ITEM HUNT","Choose one of the remaining Signature Items. You can own at most two.",cards,Math.min(3,cards.length));
 };
 
 function itemTutorialData(item){
@@ -1592,7 +1597,7 @@ function v3UpgradeLabel(u){if(V3_CAPSTONE[u.id])return"CAPSTONE";if(V3_GENERIC[u
 
 getUpgradeChoices=function(){
  var itemPool=[],uniquePool=[],genericPool=[],i,u,out=[];
- for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;if(V3_GENERIC[u.id])genericPool.push(u);else if(u.item&&u.item===S.item)itemPool.push(u);else uniquePool.push(u)}
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;if(V3_GENERIC[u.id])genericPool.push(u);else if(u.item&&ownsItem(u.item))itemPool.push(u);else uniquePool.push(u)}
  shuffle(itemPool);shuffle(uniquePool);shuffle(genericPool);
  if(S.item&&itemPool.length&&Math.random()<.82)out.push(itemPool.shift());
  while(out.length<3&&uniquePool.length)out.push(uniquePool.shift());
@@ -1636,10 +1641,10 @@ function renderBuildSummary(){if(!S)return;var b=byId("v3BuildBody"),html="";htm
 /* room reset for item companions / periodic systems */
 function resetV3RoomSystems(){
  if(!S)return;S.v3Boulders=[];S.v3Rubble=[];S.v3Fx=S.v3Fx||[];S.sonBalls=[];S.lastShield=S.h.shield;S.wallRetaliateT=0;S.lastDropCd=0;
- if(S.item==="ring"&&S.mrs){S.mrs.x=720;S.mrs.y=465;S.mrs.ready=S.mrs.joinDelay;S.mrs.joined=S.mrs.joinDelay<=0;S.mrs.purseTimer=2.2;S.mrs.lunchTimer=5;S.mrs.cheerTimer=6;S.mrs.guardTimer=7;S.mrs.damageBuffT=0;S.mrs.atk=0;S.mrs.rage=0;S.mrs.slamTimer=4.5}
- if(S.item==="baseball"&&S.son){S.son.timer=2.4;S.sonBalls=[]}
- if(S.item==="camera"&&S.camera){S.camera.timer=2.5;S.camera.flashT=0;S.camera.bashTimer=2.8;S.camera.throwTimer=5;S.camera.counterCd=0}
- if(S.item==="chainsaw"&&S.chainsaw){S.chainsaw.active=0;S.chainsaw.timer=S.chainsaw.cycle}
+ if(ownsItem("ring")&&S.mrs){S.mrs.x=720;S.mrs.y=465;S.mrs.ready=S.mrs.joinDelay;S.mrs.joined=S.mrs.joinDelay<=0;S.mrs.purseTimer=2.2;S.mrs.lunchTimer=5;S.mrs.cheerTimer=6;S.mrs.guardTimer=7;S.mrs.damageBuffT=0;S.mrs.atk=0;S.mrs.rage=0;S.mrs.slamTimer=4.5}
+ if(ownsItem("baseball")&&S.son){S.son.timer=2.4;S.sonBalls=[]}
+ if(ownsItem("camera")&&S.camera){S.camera.timer=2.5;S.camera.flashT=0;S.camera.bashTimer=2.8;S.camera.throwTimer=5;S.camera.counterCd=0}
+ if(ownsItem("chainsaw")&&S.chainsaw){S.chainsaw.active=0;S.chainsaw.timer=S.chainsaw.cycle}
 }
 spawnCombat=function(kind){_v2SpawnCombat(kind);resetV3RoomSystems()};
 enterFixedBoss=function(){_v2EnterBoss();resetV3RoomSystems()};
@@ -1663,9 +1668,9 @@ cast=function(id){
  }
  if(id==="roar"){
   if(S.owned.battleCry){var names=S.abilities;for(i=0;i<names.length;i++)S.cds[names[i]]=Math.max(0,(S.cds[names[i]]||0)-2)}
-  if(S.item==="bones"&&S.owned.roarWithPack)S.wolfRally=6;
+  if(ownsItem("bones")&&S.owned.roarWithPack)S.wolfRally=6;
  }
- if(id==="tree"&&S.item==="chainsaw"&&S.chainsaw.active>0&&S.owned.chainLogging){var t=nearestTo(S.h);if(t){a=Math.atan2(t.y-S.h.y,t.x-S.h.x)-.14;S.proj.push({type:"tree",x:S.h.x,y:S.h.y,vx:Math.cos(a)*500,vy:Math.sin(a)*500,t:1.65,hits:{},rot:a});for(i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<100)damageEnemy(S.en[i],38,16,S.h.x,S.h.y)}}
+ if(id==="tree"&&ownsItem("chainsaw")&&S.chainsaw.active>0&&S.owned.chainLogging){var t=nearestTo(S.h);if(t){a=Math.atan2(t.y-S.h.y,t.x-S.h.x)-.14;S.proj.push({type:"tree",x:S.h.x,y:S.h.y,vx:Math.cos(a)*500,vy:Math.sin(a)*500,t:1.65,hits:{},rot:a});for(i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<100)damageEnemy(S.en[i],38,16,S.h.x,S.h.y)}}
 };
 
 function launchAvalanche(){
@@ -1688,7 +1693,7 @@ damageEnemy=function(e,n,k,sx,sy){
  _v2DamageEnemy(e,n,k,sx,sy);
  if(wasAlive&&e.dead){
   if(S.h.rage>0&&S.owned.chainFury)S.h.rage=Math.min(S.h.rage+.55,S.mods.rageDur+4);
-  if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0){if(S.owned.chainCool)S.chainsaw.timer=Math.max(1,S.chainsaw.timer-.6);if(S.owned.chainChipper&&!S.chainsaw.killGuard){S.chainsaw.killGuard=true;for(var i=0;i<S.en.length;i++)if(S.en[i]!==e&&!S.en[i].dead&&dist(e,S.en[i])<85)_v2DamageEnemy(S.en[i],55,25,e.x,e.y);S.chainsaw.killGuard=false;v3Fx("debris",e.x,e.y,.45)}}
+  if(ownsItem("chainsaw")&&S.chainsaw&&S.chainsaw.active>0){if(S.owned.chainCool)S.chainsaw.timer=Math.max(1,S.chainsaw.timer-.6);if(S.owned.chainChipper&&!S.chainsaw.killGuard){S.chainsaw.killGuard=true;for(var i=0;i<S.en.length;i++)if(S.en[i]!==e&&!S.en[i].dead&&dist(e,S.en[i])<85)_v2DamageEnemy(S.en[i],55,25,e.x,e.y);S.chainsaw.killGuard=false;v3Fx("debris",e.x,e.y,.45)}}
  }
 };
 
@@ -1701,8 +1706,8 @@ hurtHero=function(n,source){
  if(S.owned.stickyCoat&&oldShield>0&&source){source.slowDebuff=Math.max(source.slowDebuff||0,1.8);source.slowPct=Math.max(source.slowPct||0,.35)}
  if(S.owned.lastDrop&&oldShield>0&&S.h.shield<=0&&S.lastDropCd<=0){S.h.rage=Math.max(S.h.rage,3);S.lastDropCd=6;v3Fx("lastDrop",S.h.x,S.h.y,.65)}
  if(S.wallRetaliateT>0&&S.owned.stoneRetaliation&&oldShield>0&&S.h.shield<=0){for(var i=0;i<S.en.length;i++)if(dist(S.h,S.en[i])<125)damageEnemy(S.en[i],90*v37PowerMult(),95,S.h.x,S.h.y);S.wallRetaliateT=0;v3Fx("wallBreak",S.h.x,S.h.y,.6)}
- if(S.item==="ring"&&S.mrs&&taken>=25&&S.owned.mrsHusband)S.mrs.rage=4;
- if(S.item==="camera"&&S.camera&&taken>=25&&S.owned.camNoPictures&&S.camera.counterCd<=0&&source){S.camera.counterCd=5;cameraFlashAt(source.x,source.y,90,.65,.08,2.5,true);byId("status").innerHTML="NO PICTURES! — counter-flash."}
+ if(ownsItem("ring")&&S.mrs&&taken>=25&&S.owned.mrsHusband)S.mrs.rage=4;
+ if(ownsItem("camera")&&S.camera&&taken>=25&&S.owned.camNoPictures&&S.camera.counterCd<=0&&source){S.camera.counterCd=5;cameraFlashAt(source.x,source.y,90,.65,.08,2.5,true);byId("status").innerHTML="NO PICTURES! — counter-flash."}
 };
 
 campRecovery=function(){
@@ -1713,12 +1718,12 @@ campRecovery=function(){
 function v3Fx(type,x,y,t,extra){if(!S.v3Fx)S.v3Fx=[];var o={type:type,x:x,y:y,t:t,max:t};if(extra)for(var k in extra)o[k]=extra[k];S.v3Fx.push(o)}
 
 /* Fishing control */
-function fishingPostUpdate(dt){if(S.item!=="fishing"||!S.hook)return;for(var i=0;i<S.en.length;i++){var e=S.en[i];if(!e.hooks||!e.hooks.length)continue;if(S.fishingPull>0){var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1,pull=(e.type==="boss"||e.type==="miniboss"||e.eliteMod)?Math.min(16,S.fishingPull*.34):S.fishingPull;e.x=clamp(e.x+dx/z*pull*dt,30,730);e.y=clamp(e.y+dy/z*pull*dt,35,490)}}}
+function fishingPostUpdate(dt){if(!ownsItem("fishing")||!S.hook)return;for(var i=0;i<S.en.length;i++){var e=S.en[i];if(!e.hooks||!e.hooks.length)continue;if(S.fishingPull>0){var dx=S.h.x-e.x,dy=S.h.y-e.y,z=Math.sqrt(dx*dx+dy*dy)||1,pull=(e.type==="boss"||e.type==="miniboss"||e.eliteMod)?Math.min(16,S.fishingPull*.34):S.fishingPull;e.x=clamp(e.x+dx/z*pull*dt,30,730);e.y=clamp(e.y+dy/z*pull*dt,35,490)}}}
 
 /* son / baseball */
 function throwFromSon(){if(!S.son||!S.en.length)return;S.sonBalls.push({x:S.son.x-8,y:S.son.y-20,speed:285,t:3});v3Fx("sonThrow",S.son.x,S.son.y,.35)}
 function launchSonBaseball(){if(!S.en.length)return;S.son.count++;var t=nearestTo(S.h);if(!t)return;var a=Math.atan2(t.y-S.h.y,t.x-S.h.x),dmg=S.h.dmg*S.mods.basic*S.ball.damage,bounces=S.ball.bounces;if(S.owned.sonDadStrength&&S.son.count%3===0){dmg*=1.8;bounces++}S.proj.push({type:"baseball",x:S.h.x,y:S.h.y,vx:Math.cos(a)*S.ball.speed,vy:Math.sin(a)*S.ball.speed,t:2,hits:{},v2Hits:{},rot:a,bounces:bounces,damage:dmg,homeRun:S.ball.homeRun});if(S.owned.sonProudDad)S.h.rage=Math.max(S.h.rage,2.5);if(S.owned.sonRageCatch&&window.v43GrantRage)window.v43GrantRage(6,"catch");if(S.owned.sonPerfectCatch){for(var i=0;i<S.abilities.length;i++)S.cds[S.abilities[i]]=Math.max(0,(S.cds[S.abilities[i]]||0)-1.25)}v3Fx("catch",S.h.x,S.h.y,.45)}
-function updateSon(dt){if(S.item!=="baseball"||!S.son)return;S.son.timer-=dt;if(S.son.timer<=0&&S.en.length){S.son.timer=S.son.throwRate;throwFromSon()}for(var i=S.sonBalls.length-1;i>=0;i--){var b=S.sonBalls[i],dx=S.h.x-b.x,dy=S.h.y-b.y,z=Math.sqrt(dx*dx+dy*dy)||1;b.x+=dx/z*b.speed*dt;b.y+=dy/z*b.speed*dt;b.t-=dt;if(z<18){S.sonBalls.splice(i,1);launchSonBaseball()}else if(b.t<=0)S.sonBalls.splice(i,1)}}
+function updateSon(dt){if(!ownsItem("baseball")||!S.son)return;S.son.timer-=dt;if(S.son.timer<=0&&S.en.length){S.son.timer=S.son.throwRate;throwFromSon()}for(var i=S.sonBalls.length-1;i>=0;i--){var b=S.sonBalls[i],dx=S.h.x-b.x,dy=S.h.y-b.y,z=Math.sqrt(dx*dx+dy*dy)||1;b.x+=dx/z*b.speed*dt;b.y+=dy/z*b.speed*dt;b.t-=dt;if(z<18){S.sonBalls.splice(i,1);launchSonBaseball()}else if(b.t<=0)S.sonBalls.splice(i,1)}}
 
 /* Mrs Bigfoot — every support effect has its own timer. */
 function mrsSupportRate(base){return S.owned.mrsPrepared?base*.8:base}
@@ -1740,7 +1745,7 @@ function mrsGuardAssist(){
  v3Fx("watchOut",S.h.x,S.h.y,.7);byId("status").innerHTML="Mrs. Bigfoot: WATCH OUT!";
 }
 function updateMrs(dt){
- if(S.item!=="ring"||!S.mrs)return;var m=S.mrs;
+ if(!ownsItem("ring")||!S.mrs)return;var m=S.mrs;
  m.rage=Math.max(0,m.rage-dt);m.damageBuffT=Math.max(0,(m.damageBuffT||0)-dt);
  m.purseTimer-=dt;if(m.purseTimer<=0&&S.en.length){m.purseTimer=mrsSupportRate(6);mrsPurseThrow()}
  if(S.owned.mrsLunch){m.lunchTimer-=dt;if(m.lunchTimer<=0){m.lunchTimer=mrsSupportRate(10);mrsLunchAssist()}}
@@ -1756,13 +1761,13 @@ function updateMrs(dt){
 function cameraFlashAt(x,y,radius,stun,vuln,expose,forced){for(var i=0;i<S.en.length;i++){var e=S.en[i];if(dist({x:x,y:y},e)<=radius){e.exposedT=Math.max(e.exposedT||0,expose);e.exposedPct=Math.max(e.exposedPct||0,vuln);var sd=(e.type==="boss"||e.type==="miniboss"||e.eliteMod)?stun*.28:stun;e.stunT=Math.max(e.stunT||0,sd);e.winding=false;e.atk=Math.max(e.atk,sd+.1)}}if(S.camera){S.camera.flashT=.22;S.camera.flashCount++;if(S.owned.camProof&&S.camera.flashCount%4===0){for(i=0;i<S.en.length;i++)if(dist({x:x,y:y},S.en[i])<=radius){damageEnemy(S.en[i],120,75,x,y);S.en[i].stunT=Math.max(S.en[i].stunT||0,(S.en[i].type==="boss"||S.en[i].type==="miniboss")? .35:1.4)}v3Fx("proof",x,y,.7)}}v3Fx(forced?"counterFlash":"cameraFlash",x,y,.35,{r:radius})}
 function cameraBash(){var c=S.camera,center=S.h,hit=0;for(var i=0;i<S.en.length;i++){var e=S.en[i];if(dist(center,e)<c.bashRadius){var dmg=c.bashDamage;if(S.owned.camFlashSmash&&e.stunT>0)dmg*=1.6;damageEnemy(e,dmg,75,center.x,center.y);hit++}}if(hit)v3Fx("cameraBash",center.x,center.y,.38,{r:c.bashRadius})}
 function throwCamera(){var t=nearestTo(S.h);if(!t)return;damageEnemy(t,150,85,S.h.x,S.h.y);v3Fx("cameraThrow",t.x,t.y,.5)}
-function updateCamera(dt){if(S.item!=="camera"||!S.camera)return;var c=S.camera;c.x=S.h.x+38;c.y=S.h.y+27;c.timer-=dt;c.flashT=Math.max(0,c.flashT-dt);c.counterCd=Math.max(0,c.counterCd-dt);if(c.timer<=0&&S.en.length){c.timer=c.rate;cameraFlashAt(c.x,c.y,c.radius,c.stun,c.vuln,c.expose,false)}if(S.owned.camBash){c.bashTimer-=dt;if(c.bashTimer<=0&&S.en.length){c.bashTimer=c.bashRate;cameraBash()}}if(S.owned.camThrow){c.throwTimer-=dt;if(c.throwTimer<=0&&S.en.length){c.throwTimer=10;throwCamera()}}}
+function updateCamera(dt){if(!ownsItem("camera")||!S.camera)return;var c=S.camera;c.x=S.h.x+38;c.y=S.h.y+27;c.timer-=dt;c.flashT=Math.max(0,c.flashT-dt);c.counterCd=Math.max(0,c.counterCd-dt);if(c.timer<=0&&S.en.length){c.timer=c.rate;cameraFlashAt(c.x,c.y,c.radius,c.stun,c.vuln,c.expose,false)}if(S.owned.camBash){c.bashTimer-=dt;if(c.bashTimer<=0&&S.en.length){c.bashTimer=c.bashRate;cameraBash()}}if(S.owned.camThrow){c.throwTimer-=dt;if(c.throwTimer<=0&&S.en.length){c.throwTimer=10;throwCamera()}}}
 
 /* chainsaw */
 function chainDamageMult(){if(!S.chainsaw||S.chainsaw.active<=0)return 1;var m=S.chainsaw.damage;if(S.owned.chainThrottle){var elapsed=S.chainsaw.duration-S.chainsaw.active;m*=1+clamp(elapsed/S.chainsaw.duration,0,1)*.35}if(S.owned.chainRedline&&S.chainsaw.active<=2)m*=1.35;return m}
-function updateChainsawTimers(dt){if(S.item!=="chainsaw"||!S.chainsaw)return;var c=S.chainsaw;c.timer-=dt;if(c.active>0){c.active=Math.max(0,c.active-dt);if(c.active===0)v3Fx("chainsawStop",S.h.x,S.h.y,.4)}if(c.timer<=0){c.timer=c.cycle;c.active=c.duration;S.h.atk=0;v3Fx("chainsawStart",S.h.x,S.h.y,1);byId("status").innerHTML="CHAINSAW MODE — basics attacking at hyper speed."}}
+function updateChainsawTimers(dt){if(!ownsItem("chainsaw")||!S.chainsaw)return;var c=S.chainsaw;c.timer-=dt;if(c.active>0){c.active=Math.max(0,c.active-dt);if(c.active===0)v3Fx("chainsawStop",S.h.x,S.h.y,.4)}if(c.timer<=0){c.timer=c.cycle;c.active=c.duration;S.h.atk=0;v3Fx("chainsawStart",S.h.x,S.h.y,1);byId("status").innerHTML="CHAINSAW MODE — basics attacking at hyper speed."}}
 
-function applyPreEnemyControl(dt){for(var i=0;i<S.en.length;i++){var e=S.en[i];e._v3spd=e.spd;e._v3atk=e.atk;e.exposedT=Math.max(0,(e.exposedT||0)-dt);e.stunT=Math.max(0,(e.stunT||0)-dt);e.slowDebuff=Math.max(0,(e.slowDebuff||0)-dt);var slow=0;if(S.item==="fishing"&&S.fishingSlow>0&&e.hooks&&e.hooks.length)slow=Math.max(slow,S.fishingSlow);if(e.slowDebuff>0)slow=Math.max(slow,e.slowPct||.25);if(S.item==="chainsaw"&&S.owned.chainDust&&S.chainsaw.active>0&&dist(S.h,e)<115)slow=Math.max(slow,.30);if(S.v3Rubble)for(var r=0;r<S.v3Rubble.length;r++)if(dist(S.v3Rubble[r],e)<S.v3Rubble[r].r)slow=Math.max(slow,.30);if(e.stunT>0){e.spd=0;e.atk=Math.max(e.atk,.15);e.winding=false}else e.spd*=1-slow}}
+function applyPreEnemyControl(dt){for(var i=0;i<S.en.length;i++){var e=S.en[i];e._v3spd=e.spd;e._v3atk=e.atk;e.exposedT=Math.max(0,(e.exposedT||0)-dt);e.stunT=Math.max(0,(e.stunT||0)-dt);e.slowDebuff=Math.max(0,(e.slowDebuff||0)-dt);var slow=0;if(ownsItem("fishing")&&S.fishingSlow>0&&e.hooks&&e.hooks.length)slow=Math.max(slow,S.fishingSlow);if(e.slowDebuff>0)slow=Math.max(slow,e.slowPct||.25);if(ownsItem("chainsaw")&&S.owned.chainDust&&S.chainsaw.active>0&&dist(S.h,e)<115)slow=Math.max(slow,.30);if(S.v3Rubble)for(var r=0;r<S.v3Rubble.length;r++)if(dist(S.v3Rubble[r],e)<S.v3Rubble[r].r)slow=Math.max(slow,.30);if(e.stunT>0){e.spd=0;e.atk=Math.max(e.atk,.15);e.winding=false}else e.spd*=1-slow}}
 function restoreEnemyControl(){for(var i=0;i<S.en.length;i++){var e=S.en[i];if(e._v3spd!=null)e.spd=e._v3spd;delete e._v3spd;delete e._v3atk}}
 
 /* update wrapper */
@@ -1771,8 +1776,8 @@ update=function(dt){
  if(S.lastDropCd>0)S.lastDropCd=Math.max(0,S.lastDropCd-dt);if(S.wallRetaliateT>0)S.wallRetaliateT=Math.max(0,S.wallRetaliateT-dt);if(S.wolfRally>0)S.wolfRally=Math.max(0,S.wolfRally-dt);
  updateChainsawTimers(dt);applyPreEnemyControl(dt);
  var savedBasic=S.mods.basic,comboBefore=S.h.combo,bushBefore=S.h.bushT||0,bx=S.h.x,by=S.h.y;
- if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0)S.mods.basic*=chainDamageMult();
- if(S.item==="ring"&&S.mrs&&S.mrs.damageBuffT>0)S.mods.basic*=1.25;
+ if(ownsItem("chainsaw")&&S.chainsaw&&S.chainsaw.active>0)S.mods.basic*=chainDamageMult();
+ if(ownsItem("ring")&&S.mrs&&S.mrs.damageBuffT>0)S.mods.basic*=1.25;
  if(bushBefore>0)S.h.atk=Math.max(S.h.atk,bushBefore+.15);
  _v2Update(dt);
  S.mods.basic=savedBasic;restoreEnemyControl();if(!S||S.paused)return;
@@ -1783,21 +1788,21 @@ update=function(dt){
  if(comboChanged&&S.basic==="rock"&&S.owned.heavyArc){for(var pi=S.proj.length-1;pi>=0;pi--){var pp=S.proj[pi];if(pp.type==="rock"&&!pp.v3Heavy){pp.v3Heavy=true;pp.vx*=.85;pp.vy*=.85;pp.mult=(pp.mult||1)*1.35}}}
  if(comboChanged&&S.basic==="rock"&&S.owned.scatterShot&&S.h.combo%3===0){var aa=S.h.aim;for(var si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.16)*348.5,vy:Math.sin(aa+si*.16)*348.5,t:1.45,hits:{},rot:aa+si*.16,bounce:0,mult:S.mods.basic*.55*1.35,v3Heavy:true})}
  if(comboChanged&&S.owned.ragingSwings&&S.basic==="swipe"&&S.h.rage>0){for(var ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<80)knockEnemy(S.en[ri],20,S.h.x,S.h.y)}
- if(comboChanged&&S.item==="chainsaw"&&S.chainsaw.active>0){var baseDelay=S.h.rage>0? .35:.72,rate=S.owned.chainRedline&&S.chainsaw.active<=2?7:S.chainsaw.rateMult;S.h.atk=Math.min(S.h.atk,baseDelay/rate);if(S.owned.chainWide){if(S.basic!=="rock"){for(ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<92)damageEnemy(S.en[ri],S.h.dmg*.30,12,S.h.x,S.h.y)}else{aa=S.h.aim;for(si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.12)*425,vy:Math.sin(aa+si*.12)*425,t:1.4,hits:{},rot:aa+si*.12,bounce:0,mult:S.mods.basic*.45})}}}
+ if(comboChanged&&ownsItem("chainsaw")&&S.chainsaw.active>0){var baseDelay=S.h.rage>0? .35:.72,rate=S.owned.chainRedline&&S.chainsaw.active<=2?7:S.chainsaw.rateMult;S.h.atk=Math.min(S.h.atk,baseDelay/rate);if(S.owned.chainWide){if(S.basic!=="rock"){for(ri=0;ri<S.en.length;ri++)if(dist(S.h,S.en[ri])<92)damageEnemy(S.en[ri],S.h.dmg*.30,12,S.h.x,S.h.y)}else{aa=S.h.aim;for(si=-1;si<=1;si+=2)S.proj.push({type:"rock",x:S.h.x,y:S.h.y,vx:Math.cos(aa+si*.12)*425,vy:Math.sin(aa+si*.12)*425,t:1.4,hits:{},rot:aa+si*.12,bounce:0,mult:S.mods.basic*.45})}}}
  if(S.owned.rootDrag){for(pi=0;pi<S.proj.length;pi++)if(S.proj[pi].type==="tree")for(ri=0;ri<S.en.length;ri++)if(dist(S.proj[pi],S.en[ri])<S.mods.treeW+24){S.en[ri].slowDebuff=Math.max(S.en[ri].slowDebuff||0,2);S.en[ri].slowPct=Math.max(S.en[ri].slowPct||0,.30)}}
  fishingPostUpdate(dt);updateSon(dt);updateMrs(dt);updateCamera(dt);updateAvalanche(dt);
- if(S.item==="bones"&&S.wolfRally>0&&S.wolf)S.wolf.damage*=1.0001; /* rally damage is applied in wolf wrapper below */
+ if(ownsItem("bones")&&S.wolfRally>0&&S.wolf)S.wolf.damage*=1.0001; /* rally damage is applied in wolf wrapper below */
  if(S.v3Fx)for(var fi=S.v3Fx.length-1;fi>=0;fi--){S.v3Fx[fi].t-=dt;if(S.v3Fx[fi].t<=0)S.v3Fx.splice(fi,1)}
 };
 
 /* Wolf extra behavior without replacing the v2 pack engine. */
 var _v2UpdateWolves=updateWolves;
-updateWolves=function(dt){if(S.item!=="bones"||!S.wolf)return;var baseD=S.wolf.damage,baseS=S.wolf.speed;if(S.wolfRally>0)S.wolf.damage*=1.5;if(S.owned.packDiscipline&&S.wolves.length){var close=false;for(var q=0;q<S.wolves.length;q++)if(dist(S.wolves[q],S.h)<130){close=true;break}if(close)S.wolf.speed*=1.08}_v2UpdateWolves(dt);S.wolf.damage=baseD;S.wolf.speed=baseS};
+updateWolves=function(dt){if(!ownsItem("bones")||!S.wolf)return;var baseD=S.wolf.damage,baseS=S.wolf.speed;if(S.wolfRally>0)S.wolf.damage*=1.5;if(S.owned.packDiscipline&&S.wolves.length){var close=false;for(var q=0;q<S.wolves.length;q++)if(dist(S.wolves[q],S.h)<130){close=true;break}if(close)S.wolf.speed*=1.08}_v2UpdateWolves(dt);S.wolf.damage=baseD;S.wolf.speed=baseS};
 
 /* draw V3 mechanics */
-function drawSon(){if(S.item!=="baseball"||!S.son)return;var s=S.son;ctx.save();ctx.translate(s.x,s.y);ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,12,18,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#68422a";ctx.beginPath();ctx.arc(0,0,15,0,Math.PI*2);ctx.fill();ctx.fillStyle="#96603f";ctx.beginPath();ctx.arc(0,-9,11,0,Math.PI*2);ctx.fill();ctx.fillStyle="#f4efe1";ctx.beginPath();ctx.arc(17,-14,5,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ffe08a";ctx.font="bold 10px system-ui";ctx.textAlign="center";ctx.fillText("SON",0,30);ctx.restore();for(var i=0;i<S.sonBalls.length;i++){var b=S.sonBalls[i];ctx.fillStyle="#f4efe1";ctx.beginPath();ctx.arc(b.x,b.y,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c44f48";ctx.lineWidth=1;ctx.beginPath();ctx.arc(b.x-1,b.y,4,-1.2,1.2);ctx.stroke()}}
+function drawSon(){if(!ownsItem("baseball")||!S.son)return;var s=S.son;ctx.save();ctx.translate(s.x,s.y);ctx.fillStyle="#1c281e88";ctx.beginPath();ctx.ellipse(0,12,18,9,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#68422a";ctx.beginPath();ctx.arc(0,0,15,0,Math.PI*2);ctx.fill();ctx.fillStyle="#96603f";ctx.beginPath();ctx.arc(0,-9,11,0,Math.PI*2);ctx.fill();ctx.fillStyle="#f4efe1";ctx.beginPath();ctx.arc(17,-14,5,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ffe08a";ctx.font="bold 10px system-ui";ctx.textAlign="center";ctx.fillText("SON",0,30);ctx.restore();for(var i=0;i<S.sonBalls.length;i++){var b=S.sonBalls[i];ctx.fillStyle="#f4efe1";ctx.beginPath();ctx.arc(b.x,b.y,7,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#c44f48";ctx.lineWidth=1;ctx.beginPath();ctx.arc(b.x-1,b.y,4,-1.2,1.2);ctx.stroke()}}
 function drawMrs(){
- if(S.item!=="ring"||!S.mrs)return;var m=S.mrs,sw=m.atk>0?Math.sin(Math.min(1,m.atk/.35)*Math.PI):0;
+ if(!ownsItem("ring")||!S.mrs)return;var m=S.mrs,sw=m.atk>0?Math.sin(Math.min(1,m.atk/.35)*Math.PI):0;
  ctx.save();ctx.translate(m.x,m.y);ctx.rotate((m.joined?m.face:-Math.PI/2)+Math.PI/2);ctx.scale(.82,.82);
  ctx.fillStyle="#1b261d88";ctx.beginPath();ctx.ellipse(0,16,43,27,0,0,Math.PI*2);ctx.fill();
  ctx.strokeStyle="#56341f";ctx.lineWidth=18;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(-23,5);ctx.lineTo(-40-18*sw,-23+10*sw);ctx.moveTo(23,5);ctx.lineTo(40+18*sw,-23+10*sw);ctx.stroke();
@@ -1807,9 +1812,9 @@ function drawMrs(){
  if(!m.joined){ctx.rotate(-((m.joined?m.face:-Math.PI/2)+Math.PI/2));ctx.fillStyle="#d9d5c8";ctx.fillRect(-37,-7,14,19);ctx.strokeStyle="#bba960";ctx.lineWidth=2;ctx.strokeRect(-37,-7,14,19);ctx.fillStyle="#d36c72";ctx.fillRect(27,-11,4,15);ctx.fillStyle="#ffe08a";ctx.font="bold 11px system-ui";ctx.textAlign="center";ctx.fillText("MAKEUP "+Math.max(0,m.ready).toFixed(1)+"s",0,48)}
  ctx.restore();
 }
-function drawCamera(){if(S.item!=="camera"||!S.camera)return;var c=S.camera;ctx.save();ctx.translate(c.x,c.y);ctx.fillStyle="#2b3028";ctx.fillRect(-13,-9,26,18);ctx.fillStyle="#7e876e";ctx.fillRect(-7,-5,10,8);ctx.fillStyle="#c7d5c8";ctx.beginPath();ctx.arc(8,-2,4,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#4b4434";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-8,9);ctx.lineTo(-15,25);ctx.moveTo(0,9);ctx.lineTo(0,27);ctx.moveTo(8,9);ctx.lineTo(15,25);ctx.stroke();if(c.flashT>0){ctx.fillStyle="rgba(255,255,230,"+(c.flashT/.22*.45)+")";ctx.beginPath();ctx.arc(0,0,c.radius,0,Math.PI*2);ctx.fill()}ctx.restore()}
-function drawFishingGear(){if(S.item!=="fishing")return;ctx.save();ctx.translate(S.h.x-30,S.h.y+24);ctx.strokeStyle="#d7d3c5";ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,8,.2,Math.PI*1.6);ctx.stroke();ctx.strokeStyle="#9d875c";ctx.beginPath();ctx.arc(-8,0,10,0,Math.PI*2);ctx.stroke();ctx.restore()}
-function drawChainsaw(){if(S.item!=="chainsaw"||!S.chainsaw)return;ctx.save();ctx.translate(S.h.x,S.h.y);ctx.rotate(S.h.aim);if(S.chainsaw.active>0){ctx.fillStyle="#b46f2f";ctx.fillRect(22,-9,52,18);ctx.fillStyle="#6e7470";ctx.fillRect(63,-6,45,12);ctx.strokeStyle="#d2d0c3";ctx.lineWidth=3;ctx.strokeRect(63,-8,48,16);ctx.fillStyle="#ffcc58";ctx.font="bold 12px system-ui";ctx.fillText("REV",36,-14)}else{ctx.fillStyle="#735137";ctx.fillRect(-15,26,36,9)}ctx.restore()}
+function drawCamera(){if(!ownsItem("camera")||!S.camera)return;var c=S.camera;ctx.save();ctx.translate(c.x,c.y);ctx.fillStyle="#2b3028";ctx.fillRect(-13,-9,26,18);ctx.fillStyle="#7e876e";ctx.fillRect(-7,-5,10,8);ctx.fillStyle="#c7d5c8";ctx.beginPath();ctx.arc(8,-2,4,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#4b4434";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-8,9);ctx.lineTo(-15,25);ctx.moveTo(0,9);ctx.lineTo(0,27);ctx.moveTo(8,9);ctx.lineTo(15,25);ctx.stroke();if(c.flashT>0){ctx.fillStyle="rgba(255,255,230,"+(c.flashT/.22*.45)+")";ctx.beginPath();ctx.arc(0,0,c.radius,0,Math.PI*2);ctx.fill()}ctx.restore()}
+function drawFishingGear(){if(!ownsItem("fishing"))return;ctx.save();ctx.translate(S.h.x-30,S.h.y+24);ctx.strokeStyle="#d7d3c5";ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,8,.2,Math.PI*1.6);ctx.stroke();ctx.strokeStyle="#9d875c";ctx.beginPath();ctx.arc(-8,0,10,0,Math.PI*2);ctx.stroke();ctx.restore()}
+function drawChainsaw(){if(!ownsItem("chainsaw")||!S.chainsaw)return;ctx.save();ctx.translate(S.h.x,S.h.y);ctx.rotate(S.h.aim);if(S.chainsaw.active>0){ctx.fillStyle="#b46f2f";ctx.fillRect(22,-9,52,18);ctx.fillStyle="#6e7470";ctx.fillRect(63,-6,45,12);ctx.strokeStyle="#d2d0c3";ctx.lineWidth=3;ctx.strokeRect(63,-8,48,16);ctx.fillStyle="#ffcc58";ctx.font="bold 12px system-ui";ctx.fillText("REV",36,-14)}else{ctx.fillStyle="#735137";ctx.fillRect(-15,26,36,9)}ctx.restore()}
 function drawBush(){if(!S.h.bushT||S.h.bushT<=0)return;ctx.save();ctx.translate(S.h.x,S.h.y);for(var i=0;i<9;i++){var a=i/9*Math.PI*2,r=23+(i%3)*8;ctx.fillStyle=i%2?"#326c39":"#467d42";ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r,18,0,Math.PI*2);ctx.fill()}ctx.restore()}
 function drawAvalanche(){if(S.v3Rubble)for(var i=0;i<S.v3Rubble.length;i++){var r=S.v3Rubble[i];ctx.fillStyle="rgba(86,82,72,.45)";for(var q=0;q<5;q++){var a=q/5*Math.PI*2;ctx.beginPath();ctx.arc(r.x+Math.cos(a)*r.r*.45,r.y+Math.sin(a)*r.r*.45,9,0,Math.PI*2);ctx.fill()}}if(!S.v3Boulders)return;for(i=0;i<S.v3Boulders.length;i++){var b=S.v3Boulders[i];if(b.done)continue;var pulse=.5+.5*Math.sin(performance.now()/90);ctx.strokeStyle="rgba(255,91,55,"+(.55+.35*pulse)+")";ctx.lineWidth=b.big?9:6;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.stroke();ctx.fillStyle="rgba(255,100,60,.09)";ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.fillStyle="#ffe2a0";ctx.font="bold 12px system-ui";ctx.textAlign="center";ctx.fillText(b.t>0?b.t.toFixed(1):"!",b.x,b.y+4)}}
 function drawV3Fx(){if(!S.v3Fx)return;for(var i=0;i<S.v3Fx.length;i++){var f=S.v3Fx[i],a=Math.max(0,Math.min(1,f.t/f.max));ctx.save();ctx.globalAlpha=a;if(f.type==="cameraFlash"||f.type==="counterFlash"){ctx.strokeStyle="#fff7cf";ctx.lineWidth=10;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||170)*(1-a*.35),0,Math.PI*2);ctx.stroke()}if(f.type==="proof"){ctx.fillStyle="rgba(255,255,235,.5)";ctx.beginPath();ctx.arc(f.x,f.y,190*(1-a*.2),0,Math.PI*2);ctx.fill()}if(f.type==="cameraBash"){ctx.strokeStyle="#d8d2b8";ctx.lineWidth=10;ctx.beginPath();ctx.arc(f.x,f.y,f.r,-1.1,1.1);ctx.stroke()}if(f.type==="cameraThrow"){ctx.fillStyle="#d8d2b8";ctx.font="bold 17px system-ui";ctx.fillText("CAMERA!",f.x-32,f.y-34)}if(f.type==="bushBurst"){ctx.strokeStyle="#79b85f";ctx.lineWidth=12;ctx.beginPath();ctx.arc(f.x,f.y,f.r*(1-a*.35),0,Math.PI*2);ctx.stroke()}if(f.type==="chainsawStart"){ctx.fillStyle="#ffcc58";ctx.font="bold 22px system-ui";ctx.textAlign="center";ctx.fillText("RRRRRRAAAAH!",f.x,f.y-58)}if(f.type==="makeupDone"){ctx.fillStyle="#ffcfda";ctx.font="bold 18px system-ui";ctx.textAlign="center";ctx.fillText("MAKEUP'S DONE!",f.x,f.y-45)}if(f.type==="lunch"){ctx.fillStyle="#ffdd77";ctx.font="bold 15px system-ui";ctx.fillText("+"+f.n+" LUNCH",f.x-35,f.y-38)}if(f.type==="cheer"){ctx.fillStyle="#ffd76a";ctx.font="bold 18px system-ui";ctx.fillText("GET HIM!",f.x-35,f.y-45)}if(f.type==="watchOut"){ctx.fillStyle="#aee5ff";ctx.font="bold 16px system-ui";ctx.fillText("WATCH OUT!",f.x-40,f.y-42)}if(f.type==="purse"){ctx.fillStyle="#cc7f91";ctx.fillRect(f.x-13,f.y-10,26,20)}if(f.type==="mrsSlam"){ctx.strokeStyle="#d7a86b";ctx.lineWidth=9;ctx.beginPath();ctx.arc(f.x,f.y,95*(1-a),0,Math.PI*2);ctx.stroke()}if(f.type==="catch"){ctx.fillStyle="#fff0b1";ctx.font="bold 16px system-ui";ctx.textAlign="center";ctx.fillText("CATCH!",f.x,f.y-43)}if(f.type==="debris"){ctx.strokeStyle="#a87542";ctx.lineWidth=7;ctx.beginPath();ctx.arc(f.x,f.y,85*(1-a),0,Math.PI*2);ctx.stroke()}if(f.type==="boulderImpact"){ctx.strokeStyle="#817b6c";ctx.lineWidth=12;ctx.beginPath();ctx.arc(f.x,f.y,(f.r||55)*(1-a*.3),0,Math.PI*2);ctx.stroke()}if(f.type==="lastDrop"){ctx.fillStyle="#f3c857";ctx.font="bold 17px system-ui";ctx.fillText("LAST DROP!",f.x-42,f.y-44)}if(f.type==="wallBreak"){ctx.strokeStyle="#aaa89b";ctx.lineWidth=11;ctx.beginPath();ctx.arc(f.x,f.y,125*(1-a),0,Math.PI*2);ctx.stroke()}ctx.restore()}}
@@ -1817,7 +1822,7 @@ function drawV3Fx(){if(!S.v3Fx)return;for(var i=0;i<S.v3Fx.length;i++){var f=S.v
 draw=function(){_v2Draw();if(!S)return;drawAvalanche();drawFishingGear();drawSon();drawMrs();drawCamera();drawChainsaw();drawBush();drawV3Fx()};
 
 /* update skill / build UI */
-updateUI=function(){_v2UpdateUI();if(S&&S.item==="chainsaw"&&S.chainsaw){var badge=byId("itemBadge");if(S.chainsaw.active>0)badge.innerHTML="LOGGER'S CHAINSAW · ACTIVE "+S.chainsaw.active.toFixed(1)+"s";else badge.innerHTML="LOGGER'S CHAINSAW · REV IN "+Math.max(0,S.chainsaw.timer).toFixed(1)+"s"}if(S&&S.item==="ring"&&S.mrs&&!S.mrs.joined)byId("itemBadge").innerHTML="WEDDING RING · MRS. BIGFOOT IN "+Math.max(0,S.mrs.ready).toFixed(1)+"s"};
+updateUI=function(){_v2UpdateUI();if(S&&ownsItem("chainsaw")&&S.chainsaw){var badge=byId("itemBadge");if(S.chainsaw.active>0)badge.innerHTML="LOGGER'S CHAINSAW · ACTIVE "+S.chainsaw.active.toFixed(1)+"s";else badge.innerHTML="LOGGER'S CHAINSAW · REV IN "+Math.max(0,S.chainsaw.timer).toFixed(1)+"s"}if(S&&ownsItem("ring")&&S.mrs&&!S.mrs.joined)byId("itemBadge").innerHTML="WEDDING RING · MRS. BIGFOOT IN "+Math.max(0,S.mrs.ready).toFixed(1)+"s"};
 
 startGame=function(){_v2StartGame();if(!S)return;S.v3Boulders=[];S.v3Rubble=[];S.v3Fx=[];S.sonBalls=[];S.lastDropCd=0;S.wallRetaliateT=0;S.wolfRally=0;S.h.bushT=0;ensureBuildUI()};
 
@@ -1962,7 +1967,7 @@ upgrades.push(
 var STAT_IDS={heart:1,power:1,armor:1,quick:1,v37PowerStat:1,v37FocusStat:1};
 
 /* Upgrade chooser keeps flat stats uncommon. */
-getUpgradeChoices=function(){var itemPool=[],uniquePool=[],statPool=[],out=[],i,u;for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;if(STAT_IDS[u.id])statPool.push(u);else if(u.item&&u.item===S.item)itemPool.push(u);else uniquePool.push(u)}shuffle(itemPool);shuffle(uniquePool);shuffle(statPool);if(S.item&&itemPool.length&&Math.random()<.82)out.push(itemPool.shift());while(out.length<3&&uniquePool.length)out.push(uniquePool.shift());if(statPool.length&&Math.random()<.20){if(out.length>=3)out[2]=statPool.shift();else out.push(statPool.shift())}while(out.length<3&&itemPool.length)out.push(itemPool.shift());while(out.length<3&&statPool.length)out.push(statPool.shift());return out};
+getUpgradeChoices=function(){var itemPool=[],uniquePool=[],statPool=[],out=[],i,u;for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;if(STAT_IDS[u.id])statPool.push(u);else if(u.item&&ownsItem(u.item))itemPool.push(u);else uniquePool.push(u)}shuffle(itemPool);shuffle(uniquePool);shuffle(statPool);if(S.item&&itemPool.length&&Math.random()<.82)out.push(itemPool.shift());while(out.length<3&&uniquePool.length)out.push(uniquePool.shift());if(statPool.length&&Math.random()<.20){if(out.length>=3)out[2]=statPool.shift();else out.push(statPool.shift())}while(out.length<3&&itemPool.length)out.push(itemPool.shift());while(out.length<3&&statPool.length)out.push(statPool.shift());return out};
 function v37CardClass(u){if(STAT_IDS[u.id])return"statboost";if(u.item)return"itemEvolution";if(u.requires)return"advanced";return""}
 function v37CardTag(u){if(STAT_IDS[u.id])return"STAT BOOST";if(u.item)return"ITEM EVOLUTION";if(u.need==="swipe"||u.need==="rock")return"BASIC EVOLUTION";return u.tag||"EVOLUTION"}
 showUpgrade=function(heal){var choices=getUpgradeChoices(),cards=[];for(var i=0;i<choices.length;i++)(function(up){cards.push({cls:v37CardClass(up),tag:v37CardTag(up),title:up.title,text:up.text,go:function(){applyUpgrade(up.id)}})})(choices[i]);showDecision("ROOM CLEARED","Camp Recovery restored <b>"+heal+" HP</b>. Choose one Evolution.",cards,3)};
@@ -1977,7 +1982,7 @@ damageEnemy=function(e,n,k,sx,sy){var wasAlive=e&&!e.dead&&e.hp>0,wasElite=wasAl
 /* Cooldowns have a fresh Starting Cooldown every room. Holding skills between rooms is never required. */
 function startingCooldown(id){var base={slam:0,tree:0,honey:2,shroud:1,rage:3,wall:2,roar:12,avalanche:13}[id]||0;if(id===S.ult&&S.owned.v37UltCharge)base=skillInfo[id].cd*.25;if(id==="rage"&&S.owned.v37RageReady)base=0;if(id!==S.ult&&S.owned.v37BattleReady)base=Math.max(0,base-1.5);return base}
 window.startingCooldown=startingCooldown;
-function resetRoomCombatState(){if(!S)return;ensureStats();S.h.shield=0;S.h.shieldT=0;S.h.shieldSource="";S.h.rage=0;S.h.inv=0;S.h.roarDR=0;S.h.armorTemp=0;S.h.armorTempT=0;S.h.bonusNext=false;S.h.bushT=0;S.v37FirstAbility=false;S.cds={};for(var i=0;i<S.abilities.length;i++)S.cds[S.abilities[i]]=startingCooldown(S.abilities[i]);S.cds[S.ult]=startingCooldown(S.ult);if(S.item==="fishing"&&S.hook)S.hook.timer=.6;if(S.item==="chainsaw"&&S.chainsaw){S.chainsaw.active=0;S.chainsaw.timer=S.chainsaw.cycle}if(S.item==="camera"&&S.camera)S.camera.timer=2.8;if(S.item==="baseball"&&S.son)S.son.timer=2.5;}
+function resetRoomCombatState(){if(!S)return;ensureStats();S.h.shield=0;S.h.shieldT=0;S.h.shieldSource="";S.h.rage=0;S.h.inv=0;S.h.roarDR=0;S.h.armorTemp=0;S.h.armorTempT=0;S.h.bonusNext=false;S.h.bushT=0;S.v37FirstAbility=false;S.cds={};for(var i=0;i<S.abilities.length;i++)S.cds[S.abilities[i]]=startingCooldown(S.abilities[i]);S.cds[S.ult]=startingCooldown(S.ult);if(ownsItem("fishing")&&S.hook)S.hook.timer=.6;if(ownsItem("chainsaw")&&S.chainsaw){S.chainsaw.active=0;S.chainsaw.timer=S.chainsaw.cycle}if(ownsItem("camera")&&S.camera)S.camera.timer=2.8;if(ownsItem("baseball")&&S.son)S.son.timer=2.5;}
 spawnCombat=function(kind){_v37Spawn(kind);resetRoomCombatState();S.v37Reinforced=false;S.v37WaveKind=kind};
 enterFixedBoss=function(){_v37Boss();resetRoomCombatState();S.v37Reinforced=true;S.v37WaveKind="boss"};
 
@@ -1986,7 +1991,7 @@ cast=function(id){if(!S)return;ensureStats();var before=(S.cds[id]||0);S.v37Dama
 
 /* Slightly longer rooms use a second enemy push instead of only inflating HP. */
 function aliveCount(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead)n++;return n}
-function spawnReinforcement(){if(!S||S.v37Reinforced||S.roomKind==="boss")return;S.v37Reinforced=true;var count=S.roomKind==="elite"?2:3;for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.2,.2),r=rnd(220,290),type;if(S.roomKind==="elite")type=i===0?"brute":(S.room>6?"spear":"gob");else type=(S.room>7&&i===0)?"shield":(i===1?"archer":"gob");addEnemy(type,380+Math.cos(a)*r,270+Math.sin(a)*r)}byId("status").innerHTML="More enemies crash into the clearing!"}
+function spawnReinforcement(){if(!S||S.v37Reinforced||S.roomKind==="boss")return;S.v37Reinforced=true;var count=v51FullWave()?3:(S.roomKind==="elite"?2:3);for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.2,.2),r=rnd(220,290),type;if(S.roomKind==="elite")type=i===0?"brute":(S.room>6?"spear":"gob");else type=(S.room>7&&i===0)?"shield":(i===1?"archer":"gob");addEnemy(type,380+Math.cos(a)*r,270+Math.sin(a)*r)}byId("status").innerHTML="More enemies crash into the clearing!"}
 update=function(dt){if(!S)return _v37Update(dt);ensureStats();if(!S.paused&&!S.v37Reinforced&&aliveCount()<=3&&aliveCount()>0)spawnReinforcement();var might=1+S.stats.might*.05,oldBasic=S.mods.basic,combo=S.h.combo;S.mods.basic*=might;_v37Update(dt);S.mods.basic=oldBasic;if(!S||S.paused)return;if(S.h.combo!==combo&&S.stats.haste>0)S.h.atk/=1+S.stats.haste*.03;if(S.stats.focus>0){var extra=dt*(S.stats.focus*.03);for(var k in S.cds)if(S.cds.hasOwnProperty(k))S.cds[k]=Math.max(0,S.cds[k]-extra)}if(S.h.shield>0){if((S.h.shieldT||0)<=0)S.h.shieldT=6;S.h.shieldT-=dt;if(S.h.shieldT<=0){S.h.shield=0;S.h.shieldT=0;S.h.shieldSource=""}}else S.h.shieldT=0;};
 
 /* Elite rewards are permanent trophies, not disposable healing/shields. */
@@ -2367,7 +2372,7 @@ function v39SetEncounter(kind,hadDebt){
 spawnCombat=function(kind){var hadDebt=!!(S&&S.ambushDebt);_v39Spawn(kind);if(!S)return;v39Ensure();S.v39BossZones=[];S.v39Bursts=[];if(kind==="combat"||kind==="elite"||kind==="ambush")v39SetEncounter(kind,hadDebt)};
 
 function v39ThemedReinforcement(){
- if(!S||!S.v39Encounter||S.v39Reinforced||S.roomKind==="boss")return;S.v39Reinforced=true;var p=S.v39Encounter.reinforce,count=S.roomKind==="elite"?2:3;for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.22,.22);v39Outer(pickOne(p),a,rnd(235,290))}byId("status").innerHTML="<b>"+S.v39Encounter.name+"</b> — reinforcements join the same formation.";
+ if(!S||!S.v39Encounter||S.v39Reinforced||S.roomKind==="boss")return;S.v39Reinforced=true;var p=S.v39Encounter.reinforce,count=v51FullWave()?3:(S.roomKind==="elite"?2:3);for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.22,.22);v39Outer(pickOne(p),a,rnd(235,290))}byId("status").innerHTML="<b>"+S.v39Encounter.name+"</b> — reinforcements join the same formation.";
 }
 function v39Alive(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead)n++;return n}
 
@@ -2405,9 +2410,9 @@ function v39CastLabel(kind){return({aimedShot:"AIM",archerDash:"EVADE",spearLung
 function v39DrawReadability(){
  if(!S)return;var i,e,c,p,label;for(i=0;i<S.en.length;i++){e=S.en[i];if(e.dead)continue;c=e.v38&&e.v38.cast;if(c){p=clamp(1-c.t/c.max,0,1);ctx.save();ctx.strokeStyle="rgba(255,222,148,.95)";ctx.lineWidth=4;ctx.beginPath();ctx.arc(e.x,e.y,38*(e.scale||1),-Math.PI/2,-Math.PI/2+Math.PI*2*p);ctx.stroke();label=v39CastLabel(c.kind);ctx.fillStyle="#fff0bd";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText(label,e.x,e.y-39*(e.scale||1));ctx.restore()}
    if(e.exposedT>0){ctx.save();ctx.strokeStyle="rgba(255,232,112,.9)";ctx.lineWidth=3;ctx.setLineDash([5,4]);ctx.beginPath();ctx.arc(e.x,e.y,35*(e.scale||1),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#ffe56f";ctx.font="900 8px system-ui";ctx.textAlign="center";ctx.fillText("EXPOSED",e.x,e.y+43*(e.scale||1));ctx.restore()}
-   if(e.hooks&&e.hooks.length&&S.item==="fishing"&&S.fishingSlow>0){ctx.save();ctx.strokeStyle="rgba(120,205,235,.85)";ctx.lineWidth=3;ctx.beginPath();ctx.arc(e.x,e.y,29*(e.scale||1),.2,2.6);ctx.stroke();ctx.restore()}
+   if(e.hooks&&e.hooks.length&&ownsItem("fishing")&&S.fishingSlow>0){ctx.save();ctx.strokeStyle="rgba(120,205,235,.85)";ctx.lineWidth=3;ctx.beginPath();ctx.arc(e.x,e.y,29*(e.scale||1),.2,2.6);ctx.stroke();ctx.restore()}
  }
- if(S.item==="ring"&&S.mrs&&S.mrs.damageBuffT>0){ctx.save();ctx.strokeStyle="rgba(255,213,105,.8)";ctx.lineWidth=6;ctx.globalAlpha=.55+.25*Math.sin(Date.now()/90);ctx.beginPath();ctx.arc(S.h.x,S.h.y,39,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffe18a";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("HONEY!",S.h.x,S.h.y-45);ctx.restore()}
+ if(ownsItem("ring")&&S.mrs&&S.mrs.damageBuffT>0){ctx.save();ctx.strokeStyle="rgba(255,213,105,.8)";ctx.lineWidth=6;ctx.globalAlpha=.55+.25*Math.sin(Date.now()/90);ctx.beginPath();ctx.arc(S.h.x,S.h.y,39,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#ffe18a";ctx.font="900 9px system-ui";ctx.textAlign="center";ctx.fillText("HONEY!",S.h.x,S.h.y-45);ctx.restore()}
 }
 function v39DrawBossZones(){for(var i=0;i<S.v39BossZones.length;i++){var z=S.v39BossZones[i],p=z.t>0?clamp(1-z.t/z.max,0,1):1;ctx.save();ctx.fillStyle=z.kind==="royal"?"rgba(217,63,47,"+(.10+.20*p)+")":"rgba(108,141,60,"+(.11+.20*p)+")";ctx.strokeStyle=z.kind==="royal"?"rgba(255,196,110,.95)":"rgba(190,225,110,.95)";ctx.lineWidth=5;ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.strokeStyle="rgba(255,244,201,.75)";ctx.lineWidth=3;ctx.beginPath();ctx.arc(z.x,z.y,Math.max(4,z.r*(1-p)),0,Math.PI*2);ctx.stroke();ctx.restore()}
  for(i=0;i<S.v39Bursts.length;i++){var h=S.v39Bursts[i],q=h.max?clamp(1-h.t/h.max,0,1):1;ctx.save();ctx.strokeStyle=h.kind==="bloom"?"rgba(166,220,103,.9)":"rgba(255,139,76,.9)";ctx.lineWidth=6;ctx.beginPath();ctx.arc(h.x,h.y,h.r*q,0,Math.PI*2);ctx.stroke();ctx.restore()}}
@@ -2737,7 +2742,7 @@ hurtHero=function(n,source){
  /* Primal Rush mitigation is 15%, or 22% with Thick Skull, for the full Rush. */
  if(S.v45RushT>0)n=raw*((S.owned&&S.owned.chargeRunDown)?0.78:0.85);
  S.v45RawIncoming=raw;_v43Hurt(n,source);S.v45RawIncoming=null;
- if(S.item==="ring"&&S.mrs&&S.owned.mrsHusband&&!S.mrs.husbandTriggered&&S.h.hp/S.h.max<.50){S.mrs.husbandTriggered=true;S.mrs.furyReady=true;S.mrs.purseTimer=Math.min(S.mrs.purseTimer||9,.12)}
+ if(ownsItem("ring")&&S.mrs&&S.owned.mrsHusband&&!S.mrs.husbandTriggered&&S.h.hp/S.h.max<.50){S.mrs.husbandTriggered=true;S.mrs.furyReady=true;S.mrs.purseTimer=Math.min(S.mrs.purseTimer||9,.12)}
 };
 
 /* Date Night Mark: Mrs. creates a vulnerability window instead of becoming another melee pet. */
@@ -2796,7 +2801,7 @@ function mrsLunchAssist(){if(!S.mrs)return;var heal=S.h.max*.04,old=S.h.hp;S.h.h
 function mrsCheerAssist(){if(!S.mrs)return;var extra=S.owned.mrsBetterHalf?1:0;S.mrs.damageBuffT=Math.max(S.mrs.damageBuffT,4+extra);S.mrs.attackBuffT=Math.max(S.mrs.attackBuffT||0,4+extra);v3Fx("cheer",S.h.x,S.h.y,.7);if(S.owned.mrsPowerCouple)v43AddRage(6,"support")}
 function mrsGuardAssist(){if(!S.mrs)return;var extra=S.owned.mrsBetterHalf?1:0;S.h.roarDR=Math.max(S.h.roarDR,3+extra);v3Fx("watchOut",S.h.x,S.h.y,.7);if(S.owned.mrsPowerCouple)v43AddRage(6,"support")}
 updateMrs=function(dt){
- if(S.item!=="ring"||!S.mrs)return;var m=S.mrs;m.damageBuffT=Math.max(0,(m.damageBuffT||0)-dt);m.attackBuffT=Math.max(0,(m.attackBuffT||0)-dt);
+ if(!ownsItem("ring")||!S.mrs)return;var m=S.mrs;m.damageBuffT=Math.max(0,(m.damageBuffT||0)-dt);m.attackBuffT=Math.max(0,(m.attackBuffT||0)-dt);
  m.purseTimer-=dt;if(m.purseTimer<=0&&S.en.length){m.purseTimer=mrsSupportRate(4.2);mrsPurseThrow()}
  if(!m.joined){m.ready-=dt;if(m.ready<=0){m.joined=true;m.ready=0;m.lunchTimer=1.8;m.cheerTimer=1.2;m.guardTimer=2.5;v3Fx("makeupDone",m.x,m.y,1);byId("status").innerHTML="I'M READY! — Mrs. Bigfoot's full sideline support is active."}else return}
  if(S.owned.mrsLunch){m.lunchTimer-=dt;if(m.lunchTimer<=0){m.lunchTimer=mrsSupportRate(8);mrsLunchAssist()}}
@@ -2841,7 +2846,7 @@ update=function(dt){
  }
  if(!S.paused){
   if(S.v45RagePulse>0)S.v45RagePulse=Math.max(0,S.v45RagePulse-dt);
-  if(S.h.combo!==combo){var gain=S.basic==="limb"?8:6;if(S.owned&&S.owned.rageShortFuse)gain+=2;if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0)gain=Math.max(3,Math.round(gain*.55));v43AddRage(gain,"basic");if(S.item==="ring"&&S.mrs&&S.mrs.attackBuffT>0)S.h.atk/=1.25}
+  if(S.h.combo!==combo){var gain=S.basic==="limb"?8:6;if(S.owned&&S.owned.rageShortFuse)gain+=2;if(ownsItem("chainsaw")&&S.chainsaw&&S.chainsaw.active>0)gain=Math.max(3,Math.round(gain*.55));v43AddRage(gain,"basic");if(ownsItem("ring")&&S.mrs&&S.mrs.attackBuffT>0)S.h.atk/=1.25}
   for(var a=0;a<S.abilities.length;a++){var id=S.abilities[a];if((S.cds[id]||0)<=0)S.v43ReadyAge[id]=(S.v43ReadyAge[id]||0)+dt;else S.v43ReadyAge[id]=0}
  }
  /* Detect new tree impacts and make the Splintering Impact Evolution actually throw visible damaging shards. */
@@ -2861,7 +2866,7 @@ update=function(dt){
 /* Draw new shards, Prime cues, Rage feedback, Mrs. sideline-only art and opposite-side bow. */
 drawProjectile=function(p){if(p.type!=="woodShard")return _v43DrawProjectile(p);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot||0);ctx.fillStyle="#c98743";ctx.beginPath();ctx.moveTo(-11,-3);ctx.lineTo(10,0);ctx.lineTo(-8,4);ctx.closePath();ctx.fill();ctx.restore()};
 drawMrs=function(){
- if(S.item!=="ring"||!S.mrs)return;var m=S.mrs;ctx.save();ctx.translate(m.x,m.y);ctx.scale(.82,.82);
+ if(!ownsItem("ring")||!S.mrs)return;var m=S.mrs;ctx.save();ctx.translate(m.x,m.y);ctx.scale(.82,.82);
  ctx.fillStyle="#1b261d88";ctx.beginPath();ctx.ellipse(0,16,43,27,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#56341f";ctx.lineWidth=18;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(-23,5);ctx.lineTo(-40,-23);ctx.moveTo(23,5);ctx.lineTo(40,-23);ctx.stroke();ctx.fillStyle="#4f301f";for(var i=0;i<16;i++){var a=i/16*Math.PI*2,r=32+(i%3)*4;ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r+4,10,0,Math.PI*2);ctx.fill()}ctx.fillStyle="#72462d";ctx.beginPath();ctx.arc(0,-4,30,0,Math.PI*2);ctx.fill();ctx.fillStyle="#aa714a";ctx.beginPath();ctx.ellipse(0,-10,19,16,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#261914";ctx.beginPath();ctx.arc(-7,-14,2.5,0,Math.PI*2);ctx.arc(7,-14,2.5,0,Math.PI*2);ctx.fill();
  /* Bow intentionally moved to the opposite/right side of her head. */ ctx.fillStyle="#f08ab0";ctx.beginPath();ctx.ellipse(13,-35,10,7,-.45,0,Math.PI*2);ctx.ellipse(31,-35,10,7,.45,0,Math.PI*2);ctx.fill();ctx.fillStyle="#d95f91";ctx.beginPath();ctx.arc(22,-35,5,0,Math.PI*2);ctx.fill();
  if(!m.joined){ctx.fillStyle="#d9d5c8";ctx.fillRect(-37,-7,14,19);ctx.strokeStyle="#bba960";ctx.lineWidth=2;ctx.strokeRect(-37,-7,14,19);ctx.fillStyle="#d36c72";ctx.fillRect(27,-11,4,15);ctx.fillStyle="#ffe08a";ctx.font="bold 11px system-ui";ctx.textAlign="center";ctx.fillText("MAKEUP "+Math.max(0,m.ready).toFixed(1)+"s",0,48)}else{ctx.fillStyle="#ffcfda";ctx.font="900 10px system-ui";ctx.textAlign="center";ctx.fillText("MRS. BIGFOOT",0,46)}ctx.restore();
@@ -2883,12 +2888,12 @@ buildSkills=function(){
 updateUI=function(){
  _v43UpdateUI();if(!S)return;v43Ensure();v43EnsureUI();var rt=byId("v43RageText"),rf=byId("v43RageFill"),rw=byId("v43RageWrap");if(rt)rt.innerHTML=Math.round(S.v43Rage);if(rf)rf.style.width=clamp(S.v43Rage,0,100)+"%";if(rw)rw.className=(S.v45RagePulse||0)>0?"ragePulse":"";
  var labels=document.querySelectorAll(".skill");S.v45PrimeLive=S.v45PrimeLive||{};S.v45PrimePopUntil=S.v45PrimePopUntil||{};for(var i=0;i<labels.length;i++){var id=labels[i].getAttribute("data-skill"),cd=S.cds[id]||0,isUlt=id===S.ult,prime=!isUlt&&v43Prime(id),cost=v43Cost(id),starved=cd<=0&&cost>0&&S.v43Rage<cost;if(prime&&!S.v45PrimeLive[id])S.v45PrimePopUntil[id]=Date.now()+340;S.v45PrimeLive[id]=prime;var popping=(S.v45PrimePopUntil[id]||0)>Date.now();labels[i].className="skill "+(cd>0?"cooling":(prime?"primed":"ready"))+(starved?" starved":"")+(isUlt?" ultimate":"")+(popping?" primePop":"");var c=labels[i].querySelector(".cd");if(c)c.innerHTML=cd>0?cd.toFixed(1)+"s":(starved?(cost+" RAGE NEEDED"):(prime?"PRIMED":"READY"));var sm=labels[i].querySelector("small");if(sm)sm.innerHTML=skillInfo[id].desc+(isUlt?" · Ultimate":"")+(prime?" · <b>"+v43PrimeShort(id)+"</b>":"")+(cost?" · <span class='rageCost'>"+cost+" Rage</span>":"")}
- if(S.item==="ring"&&S.mrs){var badge=byId("itemBadge");if(!S.mrs.joined)badge.innerHTML="WEDDING RING · MAKEUP "+Math.max(0,S.mrs.ready).toFixed(1)+"s";else badge.innerHTML="WEDDING RING · SIDELINE SUPPORT"}
+ if(ownsItem("ring")&&S.mrs){var badge=byId("itemBadge");if(!S.mrs.joined)badge.innerHTML="WEDDING RING · MAKEUP "+Math.max(0,S.mrs.ready).toFixed(1)+"s";else badge.innerHTML="WEDDING RING · SIDELINE SUPPORT"}
 };
 
 function v43ResetCombat(){
  if(!S)return;v43Ensure();S.v43Rage=20;S.v43ReadyAge={};S.v43BushDodged=false;S.v43BushPrimeCast=false;S.v43MrsThrows=[];S.v43PrimeTrees=[];S.v45RushT=0;S.v45RushPrime=false;S.v45RushSpeedSpent=false;S.v45RushImpactDone=false;S.v45RushTargetUid=0;S.v45RushShoved={};S.v45RagePulse=0;S.v45PrimeLive={};S.v45PrimePopUntil={};
- if(S.item==="ring"&&S.mrs){var m=S.mrs;m.x=720;m.y=455;m.ready=m.joinDelay;m.joined=m.joinDelay<=0;m.purseTimer=.8;m.lunchTimer=1.8;m.cheerTimer=1.2;m.guardTimer=2.5;m.damageBuffT=0;m.attackBuffT=0;m.furyReady=false;m.husbandTriggered=false;m.tossCount=0}
+ if(ownsItem("ring")&&S.mrs){var m=S.mrs;m.x=720;m.y=455;m.ready=m.joinDelay;m.joined=m.joinDelay<=0;m.purseTimer=.8;m.lunchTimer=1.8;m.cheerTimer=1.2;m.guardTimer=2.5;m.damageBuffT=0;m.attackBuffT=0;m.furyReady=false;m.husbandTriggered=false;m.tossCount=0}
 }
 spawnCombat=function(kind){_v43Spawn(kind);v43ResetCombat()};
 enterFixedBoss=function(){_v43Boss();v43ResetCombat()};
@@ -3071,7 +3076,7 @@ function v47EliteTraits(){var c=S.en.filter(function(e){return !e.dead&&e.type!=
 function v47DebtPatrol(){var arr=S.room>=6?["runner","trapper","berserker"]:["spear","runner","gob"];for(var i=0;i<arr.length;i++){var a=i/arr.length*Math.PI*2+.3;v47Outer(arr[i],a,145)}}
 function v47SetEncounter(id,kind,hadDebt){var m=V47_ENCOUNTERS[id];S.en=[];S.v39Encounter={id:id,name:m.name,desc:m.desc,reinforce:m.wave.slice()};S.v47EncounterMeta=m;S.v47WaveDone=false;S.v39Reinforced=true;S.v37Reinforced=true;v47SpawnTemplate(id,kind);if(kind==="elite")v47EliteTraits();if(hadDebt)v47DebtPatrol();S.v39AmbushBonusPending=kind==="ambush";S.v47RecentEncounters=S.v47RecentEncounters||[];S.v47RecentEncounters.push(id);if(S.v47RecentEncounters.length>3)S.v47RecentEncounters.shift();byId("status").innerHTML="<b>"+m.name+"</b> — "+m.desc}
 spawnCombat=function(kind){var forced=S&&S.v47ForcedEncounter,hadDebt=!!(S&&S.ambushDebt);_v47SpawnBase(kind);if(!S||!(kind==="combat"||kind==="elite"||kind==="ambush"))return;var id=forced&&V47_ENCOUNTERS[forced]?forced:v47PickEncounter(kind,[],S.room);S.v47ForcedEncounter=null;v47SetEncounter(id,kind,hadDebt)};
-function v47SpawnWave(){var m=S.v47EncounterMeta;if(!m||S.v47WaveDone||S.roomKind==="boss")return;S.v47WaveDone=true;var count=S.roomKind==="elite"?2:Math.min(4,m.wave.length);for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.18,.18);v47Outer(m.wave[i%m.wave.length],a,rnd(230,290))}byId("status").innerHTML="<b>"+m.name+"</b> — second wave enters the clearing."}
+function v47SpawnWave(){var m=S.v47EncounterMeta;if(!m||S.v47WaveDone||S.roomKind==="boss")return;S.v47WaveDone=true;var count=v51FullWave()?Math.min(4,m.wave.length):(S.roomKind==="elite"?2:Math.min(4,m.wave.length));for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.18,.18);v47Outer(m.wave[i%m.wave.length],a,rnd(230,290))}byId("status").innerHTML="<b>"+m.name+"</b> — second wave enters the clearing."}
 roomNames.combat.push("CEDAR SWITCHBACK","OWL CREEK","BOULDER FERN RUN","RAVEN TRAIL","SUNKEN PINE ROAD","FOGROOT PASS","BROKEN LOG WAY","OLD FIREBREAK");
 roomNames.elite.push("WARDRUM RIDGE","BLACK IRON CAMP","BONEFLAG CLEARING","POWDER POST","RITUAL ENCAMPMENT","CRUSHER'S CUT");
 roomNames.ambush.push("SNARE HOLLOW","KNIFE BRUSH","HOUND RUN","POWDER TRAP","BLOODFERN CHOKE");
@@ -3142,7 +3147,7 @@ upgrades.push(
 var _v47GetUpgradeBase=getUpgradeChoices;
 getUpgradeChoices=function(){
  var pool=[],itemPool=[],fresh=[],i,u,recent=(S&&S.v47RecentUpgradeOffers)||[];
- for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;pool.push(u);if(u.item&&u.item===S.item)itemPool.push(u);if(recent.indexOf(u.id)<0)fresh.push(u)}
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;pool.push(u);if(u.item&&ownsItem(u.item))itemPool.push(u);if(recent.indexOf(u.id)<0)fresh.push(u)}
  var source=fresh.length>=3?fresh:pool;shuffle(source);shuffle(itemPool);var out=[];
  if(S.item&&itemPool.length){var freshItem=itemPool.filter(function(x){return recent.indexOf(x.id)<0});out.push((freshItem.length?freshItem:itemPool)[0])}
  for(i=0;i<source.length&&out.length<3;i++)if(out.indexOf(source[i])<0)out.push(source[i]);
@@ -3231,7 +3236,7 @@ damageEnemy=function(e,n,k,sx,sy){
  _v47DamageRuntime(e,n,k,sx,sy);
  if(wasAlive&&e.dead){
    if(S.owned&&S.owned.v47BloodBoiler)window.v43GrantRage(wasElite?5:2,"kill");
-   if(S.item==="bones"&&S.owned&&S.owned.v47PackFury&&wasElite)window.v43GrantRage(8,"pack fury");
+   if(ownsItem("bones")&&S.owned&&S.owned.v47PackFury&&wasElite)window.v43GrantRage(8,"pack fury");
    if(S.trophies&&S.trophies.indexOf("v47PowderFlask")>=0&&!S.v47FirstKillRage){S.v47FirstKillRage=true;window.v43GrantRage(6,"powder flask")}
    if(e.v47Trait==="VOLATILE"){S.v47Bombs.push({x:e.x,y:e.y,r:72,t:.72,max:.72,damage:24+S.room*2.2,source:null,done:false,trait:true});S.v47Fx.push({kind:"volatile",x:e.x,y:e.y,t:.7,max:.7})}
  }
@@ -3280,7 +3285,7 @@ function v47BasicEvolutionProc(comboBefore,projBefore){
  if(S.basic==="limb"&&t&&dist(S.h,t)<150&&S.owned.v47LimbBackswing&&S.h.combo%3===0)damageEnemy(t,55,18,S.h.x,S.h.y);
  if(S.basic==="limb"&&t&&dist(S.h,t)<150&&S.owned.v47LimbSap){t.slowDebuff=Math.max(t.slowDebuff||0,1.8);t.slowPct=Math.max(t.slowPct||0,.25)}
  if(S.h.rage>0&&S.owned.v47FrenzyFuel)window.v43GrantRage(2,"frenzy basic");
- if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0&&S.owned.v47ChainFuel)window.v43GrantRage(1,"chainsaw basic");
+ if(ownsItem("chainsaw")&&S.chainsaw&&S.chainsaw.active>0&&S.owned.v47ChainFuel)window.v43GrantRage(1,"chainsaw basic");
 }
 function v47CountHooked(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&S.en[i].hooks&&S.en[i].hooks.length)n++;return n}
 function v47CountRecentExposed(){var n=0;for(var i=0;i<S.en.length;i++)if(!S.en[i].dead&&(S.en[i].exposedT||0)>0)n++;return n}
@@ -3294,10 +3299,10 @@ update=function(dt){
  v47UpdateShots(dt);v47UpdateZones(dt);v47UpdateHeroShots(dt);v47TickBleeds(dt);v47BloodwoodScan();v47PreAI(dt);
  var oldMove=S.mods.move,oldBasic=S.mods.basic,comboBefore=S.h.combo,projBefore=S.proj.length,beatBefore=S.v41Beat?S.v41Beat.hits:-1,rushBefore=!!S.v45RushImpactDone,mrsBefore=(S.mrs&&S.mrs.tossCount)||0,flashBefore=(S.camera&&S.camera.flashCount)||0;
  if(S.v47HeroSlowT>0)S.mods.move*=.72;
- if(S.item==="ring"&&S.mrs&&S.owned.v47RingTempo){var mt=["purseTimer","lunchTimer","cheerTimer","guardTimer"];for(var mi=0;mi<mt.length;mi++)if(typeof S.mrs[mt[mi]]==="number"&&S.mrs[mt[mi]]>0)S.mrs[mt[mi]]-=dt*.1765}
- if(S.item==="chainsaw"&&S.chainsaw&&S.chainsaw.active>0){S.mods.move*=S.owned.v47ChainPursuit?1.30:1.20;var elapsed=S.chainsaw.duration-S.chainsaw.active;if(S.owned.v47ChainHot&&elapsed<2)S.mods.basic*=1.25}
+ if(ownsItem("ring")&&S.mrs&&S.owned.v47RingTempo){var mt=["purseTimer","lunchTimer","cheerTimer","guardTimer"];for(var mi=0;mi<mt.length;mi++)if(typeof S.mrs[mt[mi]]==="number"&&S.mrs[mt[mi]]>0)S.mrs[mt[mi]]-=dt*.1765}
+ if(ownsItem("chainsaw")&&S.chainsaw&&S.chainsaw.active>0){S.mods.move*=S.owned.v47ChainPursuit?1.30:1.20;var elapsed=S.chainsaw.duration-S.chainsaw.active;if(S.owned.v47ChainHot&&elapsed<2)S.mods.basic*=1.25}
  /* Reel Pressure uses the existing temporary slow system, not permanent enemy speed scaling. */
- if(S.item==="fishing"&&S.owned.v47ReelIn)for(var ri=0;ri<S.en.length;ri++)if(S.en[ri].hooks&&S.en[ri].hooks.length){S.en[ri].slowDebuff=Math.max(S.en[ri].slowDebuff||0,.18);S.en[ri].slowPct=Math.max(S.en[ri].slowPct||0,.18)}
+ if(ownsItem("fishing")&&S.owned.v47ReelIn)for(var ri=0;ri<S.en.length;ri++)if(S.en[ri].hooks&&S.en[ri].hooks.length){S.en[ri].slowDebuff=Math.max(S.en[ri].slowDebuff||0,.18);S.en[ri].slowPct=Math.max(S.en[ri].slowPct||0,.18)}
  _v47UpdateRuntime(dt);
  S.mods.move=oldMove;S.mods.basic=oldBasic;v47RestoreTemps();if(!S)return;
  v47BasicEvolutionProc(comboBefore,projBefore);
@@ -3306,12 +3311,12 @@ update=function(dt){
  /* Rush Impact splash is independent flat damage and never scales from Basic Attack Power. */
  if(S.owned.v47RushShock&&!rushBefore&&S.v45RushImpactDone){var rf=v47FindLatestFx("rushHit");if(rf){var primary=null,best=1e9;for(var rx=0;rx<S.en.length;rx++){var re=S.en[rx],rd=Math.hypot(re.x-rf.x,re.y-rf.y);if(!re.dead&&rd<best){best=rd;primary=re}}for(rx=0;rx<S.en.length;rx++){re=S.en[rx];if(re.dead||re===primary||Math.hypot(re.x-rf.x,re.y-rf.y)>90)continue;damageEnemy(re,60,18,rf.x,rf.y)}S.v47Fx.push({kind:"impactWave",x:rf.x,y:rf.y,t:.45,max:.45})}}
   /* Purse Toss Rage: count launches, not projectile hit events. */
- if(S.item==="ring"&&S.owned.v47PurseRage&&S.mrs){var mrsAfter=S.mrs.tossCount||0;if(mrsAfter>mrsBefore)window.v43GrantRage((mrsAfter-mrsBefore)*2,"purse")}
+ if(ownsItem("ring")&&S.owned.v47PurseRage&&S.mrs){var mrsAfter=S.mrs.tossCount||0;if(mrsAfter>mrsBefore)window.v43GrantRage((mrsAfter-mrsBefore)*2,"purse")}
  /* Fishing Rage is deliberately capped per combat. */
- if(S.item==="fishing"&&S.owned.v47HookRage&&S.v47HookRageBudget<8&&v47CountHooked()>0){S.v47HookRageTick+=dt;while(S.v47HookRageTick>=1&&S.v47HookRageBudget<8){S.v47HookRageTick-=1;S.v47HookRageBudget++;window.v43GrantRage(1,"hook tension")}}
+ if(ownsItem("fishing")&&S.owned.v47HookRage&&S.v47HookRageBudget<8&&v47CountHooked()>0){S.v47HookRageTick+=dt;while(S.v47HookRageTick>=1&&S.v47HookRageBudget<8){S.v47HookRageTick-=1;S.v47HookRageBudget++;window.v43GrantRage(1,"hook tension")}}
  else if(v47CountHooked()===0)S.v47HookRageTick=0;
  /* Camera Rage fires once for each actual flash event that catches a crowd. */
- if(S.item==="camera"&&S.owned.v47FlashRage&&S.camera&&(S.camera.flashCount||0)>flashBefore&&v47CountRecentExposed()>=3)window.v43GrantRage(5,"camera crowd");
+ if(ownsItem("camera")&&S.owned.v47FlashRage&&S.camera&&(S.camera.flashCount||0)>flashBefore&&v47CountRecentExposed()>=3)window.v43GrantRage(5,"camera crowd");
  /* Echoing Roar and Avalanche rubble are delayed battlefield effects. */
  if(S.v47RoarEchoT>0){S.v47RoarEchoT=Math.max(0,S.v47RoarEchoT-dt);if(S.v47RoarEchoT===0){for(var ei=0;ei<S.en.length;ei++){var ee=S.en[ei];if(!ee.dead&&!isElite(ee)&&dist(S.h,ee)<260)ee.fear=Math.max(ee.fear||0,1)}S.v47Fx.push({kind:"roarEcho",x:S.h.x,y:S.h.y,t:.65,max:.65})}}
  if(S.v47AvalancheSlowPending){var avActive=!!(S.v3Boulders&&S.v3Boulders.length);if(S.v47AvalancheWasActive&&!avActive){S.v47AvalancheSlowPending=false;for(ei=0;ei<S.en.length;ei++)if(!S.en[ei].dead){S.en[ei].slowDebuff=Math.max(S.en[ei].slowDebuff||0,3);S.en[ei].slowPct=Math.max(S.en[ei].slowPct||0,.25)}S.v47Fx.push({kind:"rubbleSlow",x:S.h.x,y:S.h.y,t:.65,max:.65})}S.v47AvalancheWasActive=avActive||S.v47AvalancheWasActive}
@@ -3497,7 +3502,9 @@ spawnCombat=function(kind){
    var extra=0,traits=0;
    if(!S.v48SideActive){if(S.room>=11)extra++;if(S.room>=16)extra++;if(v48HasMod("predatorNight"))extra++;if(v48HasMod("hauntedForest")&&S.room%3===0)v48AddSpecialists(2,true);if(v48HasMod("bloodMoon"))traits++}
    if(S.v48RouteDifficulty>=1)extra++;if(S.v48RouteDifficulty>=2){extra++;traits++}if(S.v48RouteDifficulty>=3)traits++;
-   if(extra)v48AddSpecialists(extra,false);if(traits)v48AddTraits(traits)
+   if(!S.v48SideActive){if(S.v48CurrentRoute==="relic"){extra+=2;traits++}if(S.v48CurrentRoute==="item"){extra+=3+(S.v51Items&&S.v51Items.length?2:0);traits+=1+(S.v51Items&&S.v51Items.length?1:0)}if(S.v48CurrentRoute==="cursed")extra+=1}
+   if(extra)v48AddSpecialists(extra,false);if(traits)v48AddTraits(traits);
+   if(!S.v48SideActive&&S.v48CurrentRoute==="item"){var guardian=v47Outer("crusher",Math.PI*1.5,148);guardian.v51Guardian=true;v47ApplyTrait(guardian,"JUGGERNAUT");guardian.hp*=S.v51Items&&S.v51Items.length?1.5:1.25;guardian.max=guardian.hp}
  }
  v48UpdateRunBar()
 };
@@ -3593,7 +3600,7 @@ function v48UpdateRelics(dt){
 var _v48SpawnWave=v47SpawnWave;
 v47SpawnWave=function(){
  if(!S||!v48HasRelic("oldRadio"))return _v48SpawnWave();
- if(S.v47WaveDone||S.v48RadioPending)return;var m=S.v47EncounterMeta;if(!m||S.roomKind==="boss")return;var count=S.roomKind==="elite"?2:Math.min(4,m.wave.length),spawns=[];for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.18,.18),r=rnd(230,290);spawns.push({type:m.wave[i%m.wave.length],x:380+Math.cos(a)*r,y:270+Math.sin(a)*r})}S.v48RadioPending={t:1.5,meta:m,spawns:spawns};S.v47WaveDone=true;byId("status").innerHTML="OLD RADIO — reinforcements marked for 1.5s.";v48AddFx("radio",S.h.x,S.h.y,1.2)
+ if(S.v47WaveDone||S.v48RadioPending)return;var m=S.v47EncounterMeta;if(!m||S.roomKind==="boss")return;var count=v51FullWave()?Math.min(4,m.wave.length):(S.roomKind==="elite"?2:Math.min(4,m.wave.length)),spawns=[];for(var i=0;i<count;i++){var a=i/count*Math.PI*2+rnd(-.18,.18),r=rnd(230,290);spawns.push({type:m.wave[i%m.wave.length],x:380+Math.cos(a)*r,y:270+Math.sin(a)*r})}S.v48RadioPending={t:1.5,meta:m,spawns:spawns};S.v47WaveDone=true;byId("status").innerHTML="OLD RADIO — reinforcements marked for 1.5s.";v48AddFx("radio",S.h.x,S.h.y,1.2)
 };
 function v48UpdateRadio(dt){if(!S.v48RadioPending)return;S.v48RadioPending.t-=dt;if(S.v48RadioPending.t>0)return;var sp=S.v48RadioPending.spawns||[];for(var i=0;i<sp.length;i++){var e=v47Add(sp[i].type,sp[i].x,sp[i].y);e.slowDebuff=Math.max(e.slowDebuff||0,2);e.slowPct=Math.max(e.slowPct||0,.35)}S.v48RadioPending=null;byId("status").innerHTML="OLD RADIO — warned reinforcements enter slowed."}
 
@@ -3647,7 +3654,7 @@ draw=function(){_v48Draw();if(S){v48DrawRelicRuntime();v48SyncBossUI()}};
 /* ---------- reward flow ---------- */
 function v48UpgradeChoices(n){
  var pool=[],itemPool=[],fresh=[],recent=(S.v47RecentUpgradeOffers||[]),i,u,out=[];
- for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;pool.push(u);if(u.item&&u.item===S.item)itemPool.push(u);if(recent.indexOf(u.id)<0)fresh.push(u)}
+ for(i=0;i<upgrades.length;i++){u=upgrades[i];if(!upgradeEligible(u))continue;pool.push(u);if(u.item&&ownsItem(u.item))itemPool.push(u);if(recent.indexOf(u.id)<0)fresh.push(u)}
  var source=fresh.length>=n?fresh.slice():pool.slice();shuffle(source);shuffle(itemPool);
  if(S.item&&itemPool.length&&Math.random()<.75)out.push(itemPool[0]);
  for(i=0;i<source.length&&out.length<n;i++)if(out.indexOf(source[i])<0)out.push(source[i]);
@@ -3686,13 +3693,13 @@ function v48CoreClearedProgress(){
 function v48RouteMeta(type,next,used){
  var kind="combat",reward="evolution",difficulty=0,tag="STANDARD",cls="",desc="Standard combat. Reward: Evolution — choose 1 of 3.",choices=3,mod=null;
  if(type==="dangerous"){kind=Math.random()<.5?"ambush":"elite";reward="evolution";difficulty=1;tag="DANGEROUS";cls="event";choices=4;desc="High danger: extra specialist pressure. Reward: Evolution — choose 1 of 4."}
- if(type==="relic"){kind="elite";reward="relic";difficulty=2;tag="RELIC HUNT";cls="relic";desc="Very high danger: extra specialists + Elite mutation. Reward: Universal Relic."}
- if(type==="item"){kind="elite";reward="item";difficulty=2;tag="ITEM HUNT";cls="item";desc="Very high danger: guarded cache. Reward: choose 1 of 3 Signature Items."}
- if(type==="cursed"){kind=Math.random()<.5?"elite":"ambush";reward="rareRelic";difficulty=3;tag="CURSED TRAIL";cls="cursed";var mods=v48AvailableModifiers();mod=mods.length?pickOne(mods):null;if(!mod)return v48RouteMeta("relic",next,used);desc="Severe danger. Apply <b>"+mod.title+"</b>: "+mod.text+" Reward: Rare Relic."}
+ if(type==="relic"){kind="elite";reward="relic";difficulty=2;tag="RELIC HUNT";cls="relic";desc="Very high danger: +2 specialists, extra mutation and full reinforcements. Reward: Universal Relic."}
+ if(type==="item"){kind="elite";reward="item";difficulty=S.v51Items&&S.v51Items.length?3:2;tag=difficulty===3?"LEGENDARY CACHE · SECOND SIGNATURE ITEM":"ITEM HUNT";cls="item";desc="Guarded elite cache: extra specialists, mutation and full reinforcements. Reward: choose 1 of 3 Signature Items."}
+ if(type==="cursed"){kind=Math.random()<.5?"elite":"ambush";reward="rareRelic";difficulty=3;tag="CURSED TRAIL";cls="cursed";var mods=v48AvailableModifiers();mod=mods.length?pickOne(mods):null;if(!mod)return v48RouteMeta("relic",next,used);desc="Severe danger with full reinforcements. Apply <b>"+mod.title+"</b>: "+mod.text+" Reward: Rare Relic."}
  var id=v47PickEncounter(kind,used,next),m=V47_ENCOUNTERS[id],loc=pickOne(roomNames[kind]||roomNames.combat);return{type:type,kind:kind,reward:reward,difficulty:difficulty,choices:choices,tag:tag,cls:cls,id:id,name:loc,title:m.name,text:m.desc+'<span class="v48RouteLine"><span class="v48Danger">Danger: '+(difficulty===0?'Standard':difficulty===1?'High':difficulty===2?'Very High':'Severe')+'</span> · <span class="v48Reward">'+desc+'</span></span>',modifier:mod}
 }
 function v48ChooseRoute(r,next){if(r.modifier)v48ApplyModifier(r.modifier.id);S.v48CurrentRoute=r.type;S.v48CurrentReward=r.reward;S.v48EvolutionCount=r.choices;S.v48RouteDifficulty=r.difficulty;S.v47ForcedEncounter=r.id;if(r.type==="item")S.v48ForceItemRoute=false;S.v48RecentRoutes.push(r.type);S.v48RecentRoutes=S.v48RecentRoutes.slice(-4);S.room=next;enterRoom({kind:r.kind,name:r.name})}
-function v48MainRouteTypes(next,count){count=count||3;var types=["standard","dangerous"],special=[],mods=v48AvailableModifiers(),haunted=v48HasMod("hauntedForest");if(next>=3&&Math.random()<(haunted?.80:.48))special.push("relic");if(!S.item&&next>=6&&(S.v48ForceItemRoute||Math.random()<.32))special.push("item");if(next>=7&&mods.length&&Math.random()<.34)special.push("cursed");shuffle(special);if(haunted&&special.indexOf("relic")>=0){special=special.filter(function(t){return t!=="relic"});special.unshift("relic")}for(var i=0;i<special.length&&types.length<count;i++)if(types.indexOf(special[i])<0)types.push(special[i]);if(S.v48ForceItemRoute&&!S.item&&types.indexOf("item")<0){if(types.length>=count)types[types.length-1]="item";else types.push("item")}if(count>3&&types.length<count){var extra=[];if(next>=3)extra.push("relic");if(!S.item&&next>=6)extra.push("item");if(next>=7&&mods.length)extra.push("cursed");shuffle(extra);for(i=0;i<extra.length&&types.length<count;i++)if(types.indexOf(extra[i])<0)types.push(extra[i])}return types.slice(0,count)}
+function v48MainRouteTypes(next,count){count=count||3;var types=["standard","dangerous"],special=[],mods=v48AvailableModifiers(),haunted=v48HasMod("hauntedForest");if(next>=3&&Math.random()<(haunted?.80:.48))special.push("relic");if(v51CanOfferItem(next)&&(S.v48ForceItemRoute||Math.random()<(S.v51Items.length?.14:.32)))special.push("item");if(next>=7&&mods.length&&Math.random()<.34)special.push("cursed");shuffle(special);if(haunted&&special.indexOf("relic")>=0){special=special.filter(function(t){return t!=="relic"});special.unshift("relic")}for(var i=0;i<special.length&&types.length<count;i++)if(types.indexOf(special[i])<0)types.push(special[i]);if(S.v48ForceItemRoute&&v51CanOfferItem(next)&&types.indexOf("item")<0){if(types.length>=count)types[types.length-1]="item";else types.push("item")}if(count>3&&types.length<count){var extra=[];if(next>=3)extra.push("relic");if(v51CanOfferItem(next))extra.push("item");if(next>=7&&mods.length)extra.push("cursed");shuffle(extra);for(i=0;i<extra.length&&types.length<count;i++)if(types.indexOf(extra[i])<0)types.push(extra[i])}return types.slice(0,count)}
 function v48BossGate(next,extra){var data={5:["TROLL BRIDGE — MOSSBACK","A two-phase forest brute blocks the bridge."],10:["ASHEN GROVE — CINDERHORN","The ash-stag waits beyond a burned stand of cedar."],15:["LANTERN MARSH — THE LANTERN WIDOW","Green lantern light hangs over a web-choked marsh."],20:["GRUMBLEGUT'S HOLLOW","The Goblin King waits at the end of the 20-room hunt."]}[next];showDecision(next===20?"THE FINAL HOLLOW":"BOSS TERRITORY",extra||"The main trail narrows.",[{cls:"elite",tag:next===20?"FINAL BOSS":"BOSS ROOM",title:data[0],text:data[1],go:function(){S.room=next;S.v48CurrentRoute="boss";S.v48CurrentReward="boss";S.v48RouteDifficulty=0;hideDecision();enterFixedBoss();updateRoomLabel();updateUI()}}],1)}
 function v48SideCards(){var cards=[];if(S.v48SideCooldown>0)return cards;if(v48HasRelic("tinyDoor")&&S.v48DoorProgress>=4){cards.push({cls:"secret",tag:"SECRET SIDE ROOM · +1 FIGHT",title:"The Tiny Wooden Door Opens",text:"Enter a Hidden Clearing without advancing the 20-room core path. Reward: Relic.",go:function(){S.v48DoorProgress=0;v48StartSideCombat("hidden","HIDDEN CLEARING · TINY DOOR","relic")}})}
  if(v48HasRelic("mimicCoin")&&S.v48MimicCooldown<=0&&Math.random()<.18){cards.push({cls:"secret",tag:"MIMIC COIN · +1 FIGHT",title:"Gilded Cache",text:"A suspicious treasure cache has appeared off the trail. Bonus boss: Gilded Maw. Reward: Rare Relic.",go:function(){S.v48MimicCooldown=3;v48StartSideCombat("mimic","GILDED CACHE · THE MAW","rareRelic")}})}
@@ -3787,7 +3794,7 @@ var V49_COST={boulder:25,king:55,unbreakable:50};
 
 function v49RewriteSetup(){
  var ids=["ability1","ability2","ability3","ability4"];for(var i=0;i<ids.length;i++)rebuildSelect(ids[i],abilityChoices,{});syncAbilityChoices();
- var p1=byId("passive1"),p2=byId("passive2");if(p1&&p2){p1.innerHTML="";p2.innerHTML="";for(i=0;i<passiveChoices.length;i++){var d=passiveChoices[i],o1=document.createElement("option"),o2=document.createElement("option");o1.value=o2.value=d[0];o1.textContent=o2.textContent=d[1];p1.appendChild(o1);p2.appendChild(o2)}p1.value="hide";p2.value="strength";syncPassiveChoices()}
+ var ps=[byId("passive1"),byId("passive2"),byId("passive3")];if(ps.every(Boolean)){for(var z=0;z<ps.length;z++){ps[z].innerHTML="";for(i=0;i<passiveChoices.length;i++){var d=passiveChoices[i],o=document.createElement("option");o.value=d[0];o.textContent=d[1];ps[z].appendChild(o)}}ps[0].value="hide";ps[1].value="strength";ps[2].value="heavy";syncPassiveChoices()}
  var ult=byId("ult");if(ult){ult.innerHTML='<option value="roar">Primal Roar — room-wide fear + combat buff</option><option value="avalanche">Avalanche — falling boulder barrage</option><option value="king">King of the Mountain — maul one priority target</option><option value="unbreakable">Unbreakable — retaliating defensive shield</option>';ult.value="avalanche"}
  var det=document.querySelectorAll('#setup details');for(i=0;i<det.length;i++){var sm=det[i].querySelector('summary');if(!sm)continue;if(sm.textContent.indexOf('Ability effects')>=0)det[i].innerHTML='<summary>Ability effects</summary><div><b>Earth Slam</b> — instant 360° damage around Bigfoot and heavy knockback.</div><div><b>Uproot</b> — throw a tree down the live aim line, piercing enemies.</div><div><b>Honey Stash</b> — timed shield, temporary armor, and stronger next Camp Recovery.</div><div><b>Bush Ambush</b> — hide briefly while invulnerable, then burst out for AoE damage and knockback.</div><div><b>Wild Frenzy</b> — attack much faster for 6 seconds.</div><div><b>Boulder Wall</b> — strong timed shield plus close-range knockback.</div><div><b>Primal Rush</b> — decaying movement burst; the first close Basic converts remaining speed into Rush Impact damage.</div><div><b>Savage Beatdown</b> — focused 3-hit combo ending in an interrupt and Cracked.</div><div><b>Boulder Pitch</b> — 9s cooldown, 25 Rage. Lob a huge boulder at the current target area for 150 Ability Damage in an 85px radius and strong knockback. PRIMED with 3+ enemies in the impact area or a ranged target at least 220px away; a centered PRIMED impact adds 60 flat damage and briefly stuns normal enemies.</div>';
  if(sm.textContent.indexOf('Ultimate details')>=0)det[i].innerHTML='<summary>Ultimate details</summary><div><b>Primal Roar</b> — 50 Rage. Room-wide burst, fear, and an 8-second combat buff.</div><div><b>Avalanche</b> — 60 Rage. Telegraphed falling-boulder barrage across the battlefield.</div><div><b>King of the Mountain</b> — 55 Rage. Bigfoot mauls his current target. Normal enemies and Elites take 260 total damage before being hurled; thrown bodies damage enemies they collide with and explode on landing. Bosses instead take a four-hit 420-damage beatdown ending in a stagger.</div><div><b>Unbreakable</b> — 50 Rage. Gain a shield equal to 35% Max HP for 7s. While it exists, Bigfoot cannot be slowed or knocked back. Every 100 shield HP lost releases a 45-damage shockwave with strong knockback. Remaining shield disappears normally and never becomes healing.</div>';
@@ -3980,7 +3987,7 @@ upgradeEligible=function(u){
 
 /* ---------- setup / exact player-facing rules ---------- */
 function v50RewriteSetup(){
- var ps=[byId("passive1"),byId("passive2")];
+ var ps=[byId("passive1"),byId("passive2"),byId("passive3")];
  for(var z=0;z<ps.length;z++)if(ps[z])for(var i=0;i<ps[z].options.length;i++)if(ps[z].options[i].value==="heavy")ps[z].options[i].textContent="Heavyweight — stronger knockback + distance Impact damage";
  var det=document.querySelectorAll('#setup details');
  for(i=0;i<det.length;i++){
@@ -4138,6 +4145,37 @@ startGame=function(){_v50Start();if(!S)return;v50Ensure();S.v50Fx=[];S.v50Texts=
 var _v50Build=renderBuildSummary;
 renderBuildSummary=function(){_v50Build();if(!S)return;var b=byId("v3BuildBody");if(!b)return;b.innerHTML+='<h3>Collision Course v5.0</h3><div class="buildRow"><b>Heavyweight:</b> knockback distance becomes Impact damage: 0.5 flat damage per pixel actually displaced, normally capped at 60 per launch. Wall force can convert into collision damage.</div><div class="buildRow"><b>Advanced knockback Evolutions:</b> conditional Evolutions enter the reward pool only when the current build can actually support them.</div><div class="buildRow"><b>Aimed throws:</b> King of the Mountain deliberately aims a grabbed normal/Elite enemy at another target. Ordinary knockback only gains limited steering through Line \'Em Up.</div>'};
 
+})();
+</script>
+<script>
+/* Collision Course v5.1: three passives, two items and meaningful premium danger. */
+(function(){
+ var itemNames={fishing:"Fishing Gear",bones:"Skeletal Remains",ring:"Wedding Ring",baseball:"Baseball & Glove",camera:"Trail Camera",chainsaw:"Logger's Chainsaw"};
+ var oldSync=syncPassiveChoices;
+ syncPassiveChoices=function(){oldSync();var ids=["passive1","passive2","passive3"],values=ids.map(function(x){return byId(x).value}),count=(new Set(values)).size;var label=byId("passiveCount");if(label)label.textContent=count+"/3 selected"};
+ readLoadout=function(){var a=["ability1","ability2","ability3","ability4"].map(function(id){return byId(id).value}),p=["passive1","passive2","passive3"].map(function(id){return byId(id).value});if(new Set(a).size!==4){byId("msg").textContent="Choose 4 different abilities.";return null}if(new Set(p).size!==3){byId("msg").textContent="Choose 3 different passives.";return null}return{basic:byId("basic").value,abilities:a,ult:byId("ult").value,passives:p}};
+ var oldStart=startGame;startGame=function(){oldStart();if(S)S.v51Items=[]};
+ var oldChoose=chooseItem;
+ chooseItem=function(item){if(!S)return;S.v51Items=S.v51Items||[];if(S.v51Items.length>=2||ownsItem(item))return;var first=S.item;oldChoose(item);S.v51Items.push(item);if(first)S.item=first;if(S.mrs&&S.son){S.son.x=625;S.son.y=465}v51RefreshItems()};
+ function v51RefreshItems(){if(!S||!S.v51Items||!S.v51Items.length)return;var badge=byId("itemBadge");if(!badge)return;var names=S.v51Items.map(function(id){return itemNames[id]||id});badge.style.display="block";badge.textContent=names.join(" + ").toUpperCase()+" · "+S.v51Items.length+"/2 SIGNATURE ITEMS"}
+ var oldUI=updateUI;updateUI=function(){oldUI();v51RefreshItems()};
+ var oldSummary=renderBuildSummary;renderBuildSummary=function(){oldSummary();if(!S)return;var b=byId("v3BuildBody");if(b)b.innerHTML+='<div class="buildRow"><b>Signature Items:</b> '+((S.v51Items||[]).map(function(id){return itemNames[id]||id}).join(" · ")||"None yet")+' (max 2)</div>'};
+ var pairs=[
+  {id:"v51HuntingParty",pair:["bones","ring"],tag:"WOLVES + WEDDING RING",title:"Hunting Party",text:"Every 9 seconds Mrs. Bigfoot tosses food to the wolves, readying their bites and speeding their attacks for 3 seconds."},
+  {id:"v51LittleLeague",pair:["baseball","ring"],tag:"BASEBALL + WEDDING RING",title:"Little League",text:"Each catch makes Mrs. Bigfoot cheer; Bigfoot's Basic Attack recovers faster for 3 seconds."},
+  {id:"v51LoggingCrew",pair:["chainsaw","bones"],tag:"CHAINSAW + WOLVES",title:"Logging Crew",text:"While Chainsaw Mode runs, wolf bites deal 25% more damage."},
+  {id:"v51CaughtCamera",pair:["camera","bones"],tag:"CAMERA + WOLVES",title:"Caught on Camera",text:"Wolf bites deal 35% more damage to enemies Exposed by the camera."}
+ ];for(var pi=0;pi<pairs.length;pi++)upgrades.push(pairs[pi]);
+ var oldEligible=upgradeEligible;upgradeEligible=function(u){if(u.pair&&(!ownsItem(u.pair[0])||!ownsItem(u.pair[1])))return false;return oldEligible(u)};
+ var oldWolves=updateWolves;updateWolves=function(dt){if(!S)return oldWolves(dt);var bonus=!!(S.owned.v51LoggingCrew&&ownsItem("chainsaw")&&S.chainsaw&&S.chainsaw.active>0&&S.wolf),base=bonus?S.wolf.damage:0;if(bonus)S.wolf.damage*=1.25;oldWolves(dt);if(bonus)S.wolf.damage=base;if(S.owned.v51HuntingParty&&S.v51PackHaste>0)for(var i=0;i<S.wolves.length;i++)S.wolves[i].atk=Math.max(0,S.wolves[i].atk-dt*.4)};
+ var oldDamage=damageEnemy;damageEnemy=function(e,n,k,sx,sy){if(S&&e&&S.owned.v51CaughtCamera&&e.exposedT>0&&ownsItem("bones")&&S.wolves&&S.wolves.some(function(w){return Math.hypot(w.x-sx,w.y-sy)<8}))n*=1.35;return oldDamage(e,n,k,sx,sy)};
+ var oldUpdate=update;update=function(dt){if(!S)return oldUpdate(dt);var catchCount=S.son&&S.son.count;oldUpdate(dt);if(!S||S.paused)return;
+  if(S.v51PackHaste>0)S.v51PackHaste=Math.max(0,S.v51PackHaste-dt);
+  if(S.v51LeagueT>0){S.v51LeagueT=Math.max(0,S.v51LeagueT-dt);S.h.atk=Math.max(0,S.h.atk-dt*.3)}
+  if(S.owned.v51HuntingParty&&S.mrs&&S.wolf&&S.en.length){S.v51PackTimer=(S.v51PackTimer==null?9:S.v51PackTimer)-dt;if(S.v51PackTimer<=0){S.v51PackTimer=9;S.v51PackHaste=3;for(var wi=0;wi<S.wolves.length;wi++)S.wolves[wi].atk=0;byId("status").textContent="HUNTING PARTY — Mrs. Bigfoot feeds the pack!"}}
+  if(S.owned.v51LittleLeague&&S.son&&S.mrs&&S.son.count>catchCount){S.v51LeagueT=3;byId("status").textContent="LITTLE LEAGUE — Mrs. Bigfoot cheers the catch!"}
+ };
+ syncPassiveChoices();
 })();
 </script>
 </body>
